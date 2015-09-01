@@ -4,7 +4,7 @@ title = "Patriz"
 lightbox = true
 
 [params]
-    sidebartitle = "Patriz"
+    sidebartitle = "Patriz{}"
     sidebartagline = "Developer, Runner, Homeboy"
     disqusShortname = "patriz"
 
