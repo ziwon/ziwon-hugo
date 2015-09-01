@@ -1,0 +1,15 @@
+box: debian
+build: 
+  steps: 
+    - arjen/hugo-build: 
+        config: config.toml
+        flags: "--buildDrafts=false"
+        theme: redlounge
+        version: "0.14"
+deploy: 
+  steps: 
+    - install-packages:
+        packages: git
+    - lukevivier/gh-pages@0.2.1:
+        token: $GIT_TOKEN
+        basedir: public

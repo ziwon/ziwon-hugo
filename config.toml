@@ -1,0 +1,33 @@
+baseurl = "https://patriz.github.io/"
+languageCode = "en-us"
+title = "Patriz"
+lightbox = true
+disqusShortname = "xpirator"
+
+[params]
+    sidebartitle = "Patriz"
+    sidebartagline = "Developer, Runner, Homeboy"
+
+[[menu.main]]
+    name = "Blog"
+    url = "/posts"
+
+[[menu.main]]
+    name = "About"
+    url = "/about"
+
+
+[[menu.social]]
+    pre = "<i class='fa fa-instagram'></i>"
+    url = "https://instagram.com/theluno"
+    identifier = "instagram"
+
+[[menu.social]]
+    pre = "<i class='fa fa-github'></i>"
+    url = "https://github.com/patriz"
+    identifier = "github"
+
+[[menu.social]] 
+    pre = "<i class='fa fa-twitter'></i>"
+    url = "https://www.twitter.com/theluno"
+    identifier = "twitter"
