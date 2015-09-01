@@ -16,7 +16,6 @@ disqusShortname = "xpirator"
     name = "About"
     url = "/about"
 
-
 [[menu.social]]
     pre = "<i class='fa fa-instagram'></i>"
     url = "https://instagram.com/theluno"
