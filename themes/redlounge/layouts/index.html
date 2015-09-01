@@ -10,7 +10,7 @@
           <div class="posts">
             {{ $Site := .Site }}
             {{ range .Site.Pages }}
-            {{ if not .Params.nopost }}
+            {{ if not .Params.floating }}
             <section  class="post">
                 <header class="post-header">
                     {{ if .Params.thumbnail }}

@@ -2,11 +2,11 @@ baseurl = "https://patriz.github.io/"
 languageCode = "en-us"
 title = "Patriz"
 lightbox = true
-disqusShortname = "xpirator"
 
 [params]
     sidebartitle = "Patriz"
     sidebartagline = "Developer, Runner, Homeboy"
+    disqusShortname = "patriz"
 
 [[menu.main]]
     name = "Blog"
