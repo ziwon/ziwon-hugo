@@ -4,9 +4,9 @@ build:
     - script:
         name: initialize git submodules
         code: |-
-            cd patriz-hugo
-            git submodule update --init --recursive
-            cd ..
+          cd patriz-hugo
+          git submodule update --init --recursive
+          cd ..
     - arjen/hugo-build: 
         config: config.toml
         flags: "--buildDrafts=false"
