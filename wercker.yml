@@ -1,7 +1,7 @@
 box: debian
 build: 
   steps: 
-    - samueldebruyn/hugo-theme-check@1.3.0
+    - samueldebruyn/hugo-theme-check:
         theme: redlounge
     - arjen/hugo-build: 
         config: config.toml
