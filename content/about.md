@@ -11,6 +11,7 @@ notoc       = true
 banner      = "../about.jpg"
 bannerfill  = true
 nocomment   = true
+floating    = true
 +++
 
 Just another developer who is bulding services with `go`, `python` and `java`
