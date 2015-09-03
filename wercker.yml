@@ -1,15 +1,11 @@
 box: debian
 build: 
   steps: 
-    - script:
-        name: initialize git submodules
-        code: |
-          git submodule update --init --recursive
     - arjen/hugo-build: 
         config: config.toml
         flags: "--buildDrafts=false"
         theme: redlounge
-        version: "0.14"
+        version: "1.5.0"
 deploy: 
   steps: 
     - install-packages:
