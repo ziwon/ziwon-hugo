@@ -1,6 +1,11 @@
 box: debian
 build: 
   steps: 
+    - script:
+        name: initialize git submodules
+        code: |
+            cd patriz-hugo
+            git submodule update --init --recursive
     - arjen/hugo-build: 
         config: config.toml
         flags: "--buildDrafts=false"
