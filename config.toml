@@ -2,6 +2,10 @@ baseurl = "https://patriz.github.io/"
 languageCode = "en-us"
 title = "Patriz"
 lightbox = true
+copyright = "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
+
+[author]
+    name = "Patrick Yoon"
 
 [params]
     sidebartitle = "Patriz{}"
@@ -30,3 +34,8 @@ lightbox = true
     pre = "<i class='fa fa-twitter'></i>"
     url = "https://www.twitter.com/theluno"
     identifier = "twitter"
+
+[[menu.social]]
+    pre = "<i class='fa fa-rss'></i>"
+    url = "https://patriz.github.io/index.xml"
+    identifier = "rss"
