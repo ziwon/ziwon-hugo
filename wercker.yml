@@ -5,9 +5,7 @@ build:
         name: initialize git submodules
         code: |
             echo "initialize git submodules"
-            cd patriz-hugo
             git submodule update --init --recursive
-            cd ..
 
     - arjen/hugo-build: 
         config: config.toml
