@@ -10,7 +10,7 @@ noread      = true
 notoc       = true
 banner      = "../about.jpg"
 bannerfill  = true
-floating    = true
+nocomment   = true
 +++
 
 Just another developer who is bulding services with `go`, `python` and `java`
