@@ -30,10 +30,10 @@ copyright = "This work is licensed under a Creative Commons Attribution-ShareAli
     url = "https://github.com/patriz"
     identifier = "github"
 
-[[menu.social]] 
-    pre = "<i class='fa fa-twitter'></i>"
-    url = "https://www.twitter.com/theluno"
-    identifier = "twitter"
+[[menu.social]]
+    pre = "<i class='fa fa-cube'></i>"
+    url = "https://projects.felixlab.io"
+    identifier = "projects"
 
 [[menu.social]]
     pre = "<i class='fa fa-rss'></i>"
