@@ -1,2 +1,5 @@
+User-agent: naverbot
+Disallow: /
 User-agent: *
 Disallow:
+Sitemap: https://patriz.github.io/sitemap.xml
