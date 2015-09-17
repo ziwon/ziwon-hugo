@@ -47,3 +47,18 @@ Requests/sec:   8713.78
 Transfer/sec:      1.19MB
 ```
 
+참고로 테스트 하드웨어 장비는 다음과 같다. (구린 내 아이맥ㅠ)
+```
+  Model Name:	iMac
+  Model Identifier:	iMac11,3
+  Processor Name:	Intel Core i5
+  Processor Speed:	2.8 GHz
+  Number of Processors:	1
+  Total Number of Cores:	4
+  L2 Cache (per Core):	256 KB
+  L3 Cache:	8 MB
+  Memory:	12 GB
+  Processor Interconnect Speed:	4.8 GT/s
+  Boot ROM Version:	IM112.0057.B01
+  SMC Version (system):	1.59f2
+```
