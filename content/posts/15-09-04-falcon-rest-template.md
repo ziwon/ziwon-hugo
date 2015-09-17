@@ -17,9 +17,10 @@ Cloud API와 백엔드 개발에 경량화된 파이썬 프레임워크인 [Falc
 ```
 pip install --upgrade cython falcon
 ```
+
 다음은 Go와 성능비교이다.
 
-- falcon rest api with gunicornt (-w 9 -k gevent)
+**falcon rest api with gunicornt (-w 9 -k gevent)**
 ```
 wrk -t10 -c100 -d30s http://localhost:5000
 Running 30s test @ http://localhost:5000
@@ -33,7 +34,7 @@ Requests/sec:   4636.13
 Transfer/sec:      1.10MB
 ```
 
-- sample http server with gogin only
+**sample http server with gogin only**
 ```
 wrk -t10 -c100 -d30s http://localhost:8080
 Running 30s test @ http://localhost:8080
