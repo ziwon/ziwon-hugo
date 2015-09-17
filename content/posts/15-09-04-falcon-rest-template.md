@@ -19,9 +19,8 @@ pip install --upgrade cython falcon
 ```
 다음은 Go와 성능비교이다.
 
-falcon rest api with gunicornt (-w 9 -k gevent)
-
-```shell
+- falcon rest api with gunicornt (-w 9 -k gevent)
+```
 wrk -t10 -c100 -d30s http://localhost:5000
 Running 30s test @ http://localhost:5000
   10 threads and 100 connections
@@ -34,8 +33,8 @@ Requests/sec:   4636.13
 Transfer/sec:      1.10MB
 ```
 
-sample http server with gogin only
-```shell
+- sample http server with gogin only
+```
 wrk -t10 -c100 -d30s http://localhost:8080
 Running 30s test @ http://localhost:8080
   10 threads and 100 connections
