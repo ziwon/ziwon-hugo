@@ -1,8 +1,6 @@
 box: debian
 build: 
   steps: 
-    - install-packages:
-        packages: git
     - script:
         name: initialize git submodules
         code: |
