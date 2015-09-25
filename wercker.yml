@@ -7,6 +7,13 @@ build:
             apt-get update
             apt-get install git -y
     - script:
+        name: install pip
+        code: |
+            apt-get install python-pip python3-pygments -y
+    - script: 
+        name: install pygments
+        code: pip install Pygments
+    - script:
         name: initialize git submodules
         code: |
             echo "initialize git submodules"
