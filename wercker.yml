@@ -1,16 +1,12 @@
 box: debian
-build: 
-  steps: 
+build:
+  steps:
     - script:
-        name: install git
+        name: install required packages
         code: |
             apt-get update
-            apt-get install git -y
+            apt-get install git python-pip python3-pygments -y
     - script:
-        name: install pip
-        code: |
-            apt-get install python-pip python3-pygments -y
-    - script: 
         name: install pygments
         code: pip install Pygments
     - script:
@@ -18,13 +14,13 @@ build:
         code: |
             echo "initialize git submodules"
             git submodule update --init --recursive
-    - arjen/hugo-build: 
+    - arjen/hugo-build:
         config: config.toml
         flags: "--buildDrafts=false"
         theme: redlounge
         version: "0.14"
-deploy: 
-  steps: 
+deploy:
+  steps:
     - script:
         name: install git
         code: |
