@@ -44,11 +44,11 @@ wrk -t10 -c100 -d30s http://localhost:8080
 Running 30s test @ http://localhost:8080
   10 threads and 100 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    11.85ms   10.12ms 250.01ms   74.03%
-    Req/Sec     0.88k   124.97     2.56k    75.99%
-  262302 requests in 30.10s, 35.77MB read
-Requests/sec:   8713.78
-Transfer/sec:      1.19MB
+    Latency     6.65ms    6.50ms  76.68ms   76.00%
+    Req/Sec     1.83k   402.97     5.40k    74.30%
+  547412 requests in 30.08s, 92.93MB read
+Requests/sec:  18199.96
+Transfer/sec:      3.09MB
 ```
 
 참고로 테스트 하드웨어 장비는 다음과 같다. (구린 내 아이맥ㅠ)
