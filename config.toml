@@ -9,7 +9,7 @@ pygmentsstyle = "native"
     name = "Philbert Yoon"
 
 [params]
-    sidebartitle = "Philbert{Startup}"
+    sidebartitle = "Philbert{}"
     sidebartagline = "Developer, Pianist, Runner, Mathematician"
 
     disqusShortname = "patriz"
@@ -25,19 +25,19 @@ pygmentsstyle = "native"
 [[menu.social]]
     pre = "<i class='fa fa-instagram'></i>"
     url = "https://instagram.com/luno77"
-    identifier = "instagram"
+    identifier = "3"
 
 [[menu.social]]
     pre = "<i class='fa fa-github'></i>"
     url = "https://github.com/patriz"
-    identifier = "github"
+    identifier = "2"
 
 [[menu.social]]
     pre = "<i class='fa fa-line-chart'></i>"
     url = "https://projects.felixlab.io"
-    identifier = "projects"
+    identifier = "1"
 
 [[menu.social]]
     pre = "<i class='fa fa-rss'></i>"
     url = "https://patriz.github.io/index.xml"
-    identifier = "rss"
+    identifier = "4"
