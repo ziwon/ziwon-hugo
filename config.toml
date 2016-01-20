@@ -1,16 +1,17 @@
 baseurl = "https://patriz.github.io/"
 languageCode = "en-us"
-title = "Patriz"
+title = "Philbert"
 lightbox = true
 copyright = "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
 pygmentsstyle = "native"
 
 [author]
-    name = "Patrick Yoon"
+    name = "Philbert Yoon"
 
 [params]
-    sidebartitle = "Patriz{}"
-    sidebartagline = "Developer, Runner, Homeboy"
+    sidebartitle = "Philbert{Startup}"
+    sidebartagline = "Developer, Pianist, Runner, Mathematician"
+
     disqusShortname = "patriz"
 
 [[menu.main]]
@@ -23,7 +24,7 @@ pygmentsstyle = "native"
 
 [[menu.social]]
     pre = "<i class='fa fa-instagram'></i>"
-    url = "https://instagram.com/theluno"
+    url = "https://instagram.com/luno77"
     identifier = "instagram"
 
 [[menu.social]]
@@ -32,7 +33,7 @@ pygmentsstyle = "native"
     identifier = "github"
 
 [[menu.social]]
-    pre = "<i class='fa fa-cube'></i>"
+    pre = "<i class='fa fa-line-chart'></i>"
     url = "https://projects.felixlab.io"
     identifier = "projects"
 
