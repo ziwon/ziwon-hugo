@@ -1,4 +1,4 @@
-Patriz Hugo
+Ziwon Hugo
 ===========
 My Hugo for Blogging with auto-deploying by Wercker.
 
