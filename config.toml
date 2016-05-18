@@ -1,4 +1,4 @@
-baseurl = "https://patriz.github.io/"
+baseurl = "https://ziwon.github.io/"
 languageCode = "en-us"
 title = "Philbert"
 lightbox = true
@@ -12,7 +12,7 @@ pygmentsstyle = "native"
     sidebartitle = "Philbert{}"
     sidebartagline = "Developer, Pianist, Runner, Mathematician"
 
-    disqusShortname = "patriz"
+    disqusShortname = "ziwon"
 
 [[menu.main]]
     name = "Blog"
@@ -29,7 +29,7 @@ pygmentsstyle = "native"
 
 [[menu.social]]
     pre = "<i class='fa fa-github'></i>"
-    url = "https://github.com/patriz"
+    url = "https://github.com/ziwon"
     identifier = "2"
 
 [[menu.social]]
@@ -39,5 +39,5 @@ pygmentsstyle = "native"
 
 [[menu.social]]
     pre = "<i class='fa fa-rss'></i>"
-    url = "https://patriz.github.io/index.xml"
+    url = "https://ziwon.github.io/index.xml"
     identifier = "4"
