@@ -18,7 +18,11 @@ build:
         config: config.toml
         flags: "--buildDrafts=false"
         theme: redlounge
-        version: "0.14"
+        version: "0.16"
+  after-steps:
+    - miaoxing/github-issue-notify:
+        token: $GITHUB_ISSUE_TOKEN
+        repo: ziwon/ziwon-hugo
 deploy:
   steps:
     - script:
