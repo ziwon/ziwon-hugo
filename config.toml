@@ -4,6 +4,7 @@ title = "Philbert"
 lightbox = true
 copyright = "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
 pygmentsstyle = "native"
+googleAnalytics = "UA-61678624-3"
 
 [author]
     name = "Philbert Yoon"
