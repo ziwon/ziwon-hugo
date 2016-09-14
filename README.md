@@ -1,8 +1,9 @@
 Ziwon Hugo
 ===========
-My Hugo for Blogging with auto-deploying by Wercker.
+My Hugo blog repository with auto-deploying by Wercker.
 
-Runs Hugo webserver to render the files.
+Run hugo with a specific theme:
 ```
 hugo server -t redlounge -w -v
 ```
+

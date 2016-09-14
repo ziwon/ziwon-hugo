@@ -20,6 +20,10 @@ build:
         theme: redlounge
         version: "0.16"
   after-steps:
+    - script:
+        name: install required packages
+        code: |
+            apt-get install git curl -y
     - miaoxing/github-issue-notify:
         token: $GITHUB_ISSUE_TOKEN
         repo: ziwon/ziwon-hugo
