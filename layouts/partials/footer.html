@@ -10,7 +10,7 @@
 
   <p>{{ with .Site.Params.Copyright }}{{ . | safeHTML }}{{ else }}&copy; {{.Now.Format "2006"}}. All rights reserved.{{end}}</p>
 </div>
-{{ template "_internal/google_analytics_async.html" . }}
+{{ template "_internal/google_analytics.html" . }}
 <script type="text/javascript"
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
