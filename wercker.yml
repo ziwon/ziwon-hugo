@@ -2,9 +2,12 @@ box: debian
 build:
   steps:
     - script:
-        name: install required packages
+        name: update packages
         code: |
             apt-get update
+    - script:
+        name: install required packages
+        code: |
             apt-get install git python-pip python3-pygments -y
     - script:
         name: install pygments
