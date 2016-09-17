@@ -11,8 +11,8 @@ googleAnalytics = "UA-61678624-3"
 
 [params]
     sidebartitle = "Philbert{}"
-    sidebartagline = "Developer, Pianist, Runner, Mathematician"
-
+    sidebartagline = "Python, Golang, Java, Scala"
+    sidebarphoto = "img/me.png"
     disqusShortname = "ziwon"
 
 [[menu.main]]
