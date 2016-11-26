@@ -34,11 +34,6 @@ googleAnalytics = "UA-61678624-3"
     identifier = "2"
 
 [[menu.social]]
-    pre = "<i class='fa fa-line-chart'></i>"
-    url = "https://projects.felixlab.io"
-    identifier = "1"
-
-[[menu.social]]
     pre = "<i class='fa fa-rss'></i>"
     url = "https://ziwon.github.io/index.xml"
     identifier = "4"
