@@ -1,39 +1,26 @@
 baseurl = "https://ziwon.github.io/"
 languageCode = "en-us"
-title = "Philbert"
+title = "ziwon"
 lightbox = true
 copyright = "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
-pygmentsstyle = "native"
+pygmentsstyle = "colorful"
 googleAnalytics = "UA-61678624-3"
 
 [author]
     name = "Philbert Yoon"
 
 [params]
-    sidebartitle = "Philbert{}"
-    sidebartagline = "Python, Golang, Java, Scala"
-    sidebarphoto = "img/me.png"
     disqusShortname = "ziwon"
+    hasCJKLanguage = true
 
-[[menu.main]]
-    name = "Blog"
-    url = "/posts"
+[[params.social]]
+url = "https://github.com/ziwon"
+fa_icon = "fa-github"
 
-[[menu.main]]
-    name = "About"
-    url = "/about"
+[[params.social]]
+url = "https://instagram.com/lunozz"
+fa_icon = "fa-instagram"
 
-[[menu.social]]
-    pre = "<i class='fa fa-instagram'></i>"
-    url = "https://instagram.com/lunozz"
-    identifier = "3"
-
-[[menu.social]]
-    pre = "<i class='fa fa-github'></i>"
-    url = "https://github.com/ziwon"
-    identifier = "2"
-
-[[menu.social]]
-    pre = "<i class='fa fa-rss'></i>"
-    url = "https://ziwon.github.io/index.xml"
-    identifier = "4"
+[[params.social]]
+url = "/index.xml"
+fa_icon = "fa-rss"

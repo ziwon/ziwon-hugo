@@ -20,8 +20,8 @@ build:
     - arjen/hugo-build:
         config: config.toml
         flags: "--buildDrafts=false"
-        theme: redlounge
-        version: "0.16"
+        theme: hemingway2
+        version: "HEAD"
   after-steps:
     - script:
         name: install required packages
