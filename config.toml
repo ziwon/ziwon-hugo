@@ -7,6 +7,7 @@ pygmentsstyle = "colorful"
 googleAnalytics = "UA-61678624-3"
 description = "Personal blogs about miscellaneous articles related to Python and Golang"
 keywords = ["gopher", "pythonist", "pianist", "ziwon"]
+theme = "hemingway2"
 
 [author]
     name = "Philbert Yoon"
