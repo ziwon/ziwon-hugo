@@ -5,6 +5,8 @@ lightbox = true
 copyright = "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
 pygmentsstyle = "colorful"
 googleAnalytics = "UA-61678624-3"
+description = "Personal blogs about miscellaneous articles related to Python and Golang"
+keywords = ["gopher", "pythonist", "pianist", "ziwon"]
 
 [author]
     name = "Philbert Yoon"

@@ -1,17 +1,10 @@
 box: debian
 build:
   steps:
-    - script:
-        name: update packages
-        code: |
-            apt-get update
-    - script:
-        name: install required packages
-        code: |
-            apt-get install git python-pip python3-pygments -y
-    - script:
-        name: install pygments
-        code: pip install Pygments
+    - install-packages:
+        packages: git python-pip python3-pygments
+    - pip-install:
+        packages_list: "Pygments"
     - script:
         name: initialize git submodules
         code: |
@@ -21,23 +14,19 @@ build:
         config: config.toml
         flags: "--buildDrafts=false"
         theme: hemingway2
-        version: "HEAD"
+        version: "0.17"
   after-steps:
-    - script:
-        name: install required packages
-        code: |
-            apt-get install git curl -y
+    - install-packages:
+        packages: git curl
     - miaoxing/github-issue-notify:
         token: $GITHUB_ISSUE_TOKEN
         repo: ziwon/ziwon-hugo
 deploy:
   steps:
-    - script:
-        name: install git
-        code: |
-            apt-get update
-            apt-get install git -y
-    - lukevivier/gh-pages@0.2.1:
-        token: $GIT_TOKEN
-        basedir: public
+    - install-packages:
+        packages: git ssh-client
+    - leipert/git-push:
+        gh_oauth: $GIT_TOKEN
         repo: ziwon/ziwon.github.io
+        branch: master
+        basedir: public
