@@ -4,6 +4,7 @@ build:
     - install-packages:
         packages: git python-pip python3-pygments
     - pip-install:
+        requirements_file: ""
         packages_list: "Pygments"
     - script:
         name: initialize git submodules
