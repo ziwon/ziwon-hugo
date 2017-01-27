@@ -1,21 +1,15 @@
 box: debian
 build:
   steps:
-    - install-packages:
-        packages: git python-pip python3-pygments
-    - pip-install:
-        requirements_file: ""
-        packages_list: "Pygments"
     - script:
         name: initialize git submodules
         code: |
-            echo "initialize git submodules"
             git submodule update --init --recursive
     - arjen/hugo-build:
         config: config.toml
         flags: "--buildDrafts=false"
         theme: hemingway2
-        version: "0.17"
+        version: "0.18"
   after-steps:
     - install-packages:
         packages: git curl
