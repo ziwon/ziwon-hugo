@@ -1,12 +1,14 @@
 baseurl = "https://ziwon.github.io/"
 languageCode = "en-us"
-title = "ziwon"
+title = "ziwon - 人生は儚く短い。"
 lightbox = true
 copyright = "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
 pygmentsstyle = "colorful"
 googleAnalytics = "UA-61678624-3"
 description = "Personal blogs about miscellaneous articles related to Python and Golang"
-keywords = ["gopher", "pythonist", "pianist", "ziwon"]
+keywords = ["pythonist", "gopher", "pianist", "cyclist", "programmer"]
+paginate = 5
+paginatePath = "pages"
 theme = "hemingway2"
 
 [author]
