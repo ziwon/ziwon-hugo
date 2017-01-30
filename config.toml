@@ -1,6 +1,6 @@
 baseurl = "https://ziwon.github.io/"
 languageCode = "en-us"
-title = "ziwon - 人生は儚く短い。"
+title = "人生は儚く短い。"
 lightbox = true
 copyright = "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
 pygmentsstyle = "colorful"
