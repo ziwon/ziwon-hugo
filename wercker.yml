@@ -10,9 +10,8 @@ build:
     - arjen/hugo-build:
         version: "0.50"
         config: config.toml
-        dev_flags: -D -F -v
         flags: --buildDrafts=false
-        theme: kiss
+        theme: hugo-paper
   after-steps:
     - install-packages:
         packages: git curl
