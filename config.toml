@@ -2,30 +2,40 @@ baseurl = "https://ziwon.github.io/"
 languageCode = "en-us"
 title = "人生は儚く短い。"
 lightbox = true
-copyright = "This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License."
+copyright = "&copy; <a href=\"https://github.com/ziwon\">Philbert Yoon</a> 2018"
 pygmentsstyle = "colorful"
 googleAnalytics = "UA-61678624-3"
+disqusShortname = "ziwon"
+enableRobotsTXT = true
 description = "Personal blogs about miscellaneous articles related to Python and Golang"
 keywords = ["pythonist", "gopher", "pianist", "cyclist", "programmer"]
 paginate = 5
 paginatePath = "pages"
-theme = "hemingway2"
+theme = "kiss"
 
-[author]
-    name = "Philbert Yoon"
+[params.rss] # Adding this tag enables RSS feed
+includeContent = true # Includes whole content in rss
+authorName = "Philbert Yoon" # Author full name
+authorEmail = "yngpil.yoon@gmail.com" # Author email
 
-[params]
-    disqusShortname = "ziwon"
-    hasCJKLanguage = true
+[params.info]
+adsense = "" # Adsense ID (ID only, without ca-pub-)
+enableSocial = true # Adds OpenGraph and Twitter cards
+homeTitle = "" # Title for home page
+poweredby = true # Adds powered by hugo and kiss below Copyright
+related = true # Includes related articles at the bottom of the article
 
-[[params.social]]
-url = "https://github.com/ziwon"
-fa_icon = "fa-github"
+[params.social]
+github = "ziwon"
+email = "yngpil.yoon@gmail.com"
+instagram = "ziwon.y"
+rss = "index.xml" # Add this to show RSS button in social.
 
-[[params.social]]
-url = "https://instagram.com/ziwon.y"
-fa_icon = "fa-instagram"
+[params.social.config]
+platforms = ["github","instagram","email"]
 
-[[params.social]]
-url = "/index.xml"
-fa_icon = "fa-rss"
+[taxonomies]
+tag ="tags"
+
+[blackfriday]
+hrefTargetBlank = true
