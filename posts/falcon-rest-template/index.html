@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en-us">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Falcon REST API | 人生は儚く短い。</title>
+
+<meta property='og:title' content='Falcon REST API - 人生は儚く短い。'>
+<meta property='og:description' content='Cloud API와 백엔드 개발에 경량화된 파이썬 프레임워크인 Falcon를 이용해 간단한 REST API 템플릿을 만들어 보았다.
+https://github.com/patriz/falcon-rest-api
+개발하는 느낌은 Flask와 비슷한데 (음.. Flask와 뭐가 다르지?) 미들웨어, 후킹 데코레이션 등을 이용해 HTTP 요청과 응답에 대해 체이닝 처리를 좀 더 직관적으로 할 수 있다. 성능이 Flask보다 좀 더 빠른 것으로 알려져 있다. Rackspace에서 밀고있는(?) Cloud API 전용 프레임워크인데, 최신 릴리즈 버전은 아직 0.3이다. 심플하고 미니멀한 걸 좋아한다면 해볼만하다.
+문서에도 나와있지만, Cython을 이용하면 약 20% 정도의 성능효과를 볼 수 있다.'>
+<meta property='og:url' content='https://ziwon.github.io/posts/falcon-rest-template/'>
+<meta property='og:site_name' content='人生は儚く短い。'>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/9a1e592d8d88f9e169804a4b62792646?s=256'><meta property='article:section' content='Posts'><meta property='article:tag' content='rest'><meta property='article:tag' content='python'><meta property='article:tag' content='falcon'><meta property='article:tag' content='api'><meta property='article:published_time' content='2015-09-04T00:27:35&#43;09:00'/><meta property='article:modified_time' content='2015-09-04T00:27:35&#43;09:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@'><meta name='twitter:creator' content='@'>
+
+<link href="https://ziwon.github.io/index.xml" rel="alternate" type="application/rss+xml" title="人生は儚く短い。" />
+
+<link rel="stylesheet" href="/css/style.css"/><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+</head>
+<body>
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://ziwon.github.io/">
+          <h1 class="title is-4">人生は儚く短い。</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile"><a class="level-item" aria-label="github" href='https://github.com/ziwon'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="instagram" href='https://instagram.com/ziwon.y'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+    <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="email" href='mailto:yngpil.yoon@gmail.com'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+    <polyline points="22,6 12,13 2,6"/>
+    
+  </svg></i>
+            </span>
+          </a></nav>
+      </div>
+    </nav>
+
+    <nav class="nav">
+      
+
+      
+    </nav>
+
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="subtitle tags is-6 is-pulled-right">
+      
+      
+<a class="subtitle is-6" href="/tags/rest">#rest</a>
+
+
+
+  
+  | <a class="subtitle is-6" href="/tags/python">#python</a>
+  
+  | <a class="subtitle is-6" href="/tags/falcon">#falcon</a>
+  
+  | <a class="subtitle is-6" href="/tags/api">#api</a>
+  
+
+      
+    </div>
+    <h2 class="subtitle is-6">September 4, 2015</h2>
+    <h1 class="title">Falcon REST API</h1>
+    
+    <div class="content">
+      <p>Cloud API와 백엔드 개발에 경량화된 파이썬 프레임워크인 <a href="http://falconframework.org" target="_blank">Falcon</a>를 이용해 간단한 REST API 템플릿을 만들어 보았다.</p>
+
+<p><a href="https://github.com/patriz/falcon-rest-api" target="_blank">https://github.com/patriz/falcon-rest-api</a></p>
+
+<p>개발하는 느낌은 Flask와 비슷한데 (음.. Flask와 뭐가 다르지?) 미들웨어, 후킹 데코레이션 등을 이용해 HTTP 요청과 응답에 대해 체이닝 처리를 좀 더 직관적으로 할 수 있다. 성능이 Flask보다 좀 더 빠른 것으로 알려져 있다. Rackspace에서 밀고있는(?) Cloud API 전용 프레임워크인데, 최신 릴리즈 버전은 아직 0.3이다. 심플하고 미니멀한 걸 좋아한다면 해볼만하다.</p>
+
+<p>문서에도 나와있지만, Cython을 이용하면 약 20% 정도의 성능효과를 볼 수 있다.</p>
+
+<pre><code>pip install --upgrade cython falcon
+</code></pre>
+
+<p>다음은 Go와 성능비교이다.</p>
+
+<p><strong>falcon rest api with gunicorn (-w 9 -k gevent)</strong></p>
+
+<pre><code>wrk -t10 -c100 -d30s http://localhost:5000
+Running 30s test @ http://localhost:5000
+  10 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   221.79ms  414.03ms   2.00s    85.43%
+    Req/Sec   755.94    486.41     2.77k    64.26%
+  139452 requests in 30.08s, 32.98MB read
+  Socket errors: connect 0, read 0, write 0, timeout 389
+Requests/sec:   4636.13
+Transfer/sec:      1.10MB
+</code></pre>
+
+<p><strong>sample http server with gogin only</strong></p>
+
+<pre><code>wrk -t10 -c100 -d30s http://localhost:8080
+Running 30s test @ http://localhost:8080
+  10 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     6.65ms    6.50ms  76.68ms   76.00%
+    Req/Sec     1.83k   402.97     5.40k    74.30%
+  547412 requests in 30.08s, 92.93MB read
+Requests/sec:  18199.96
+Transfer/sec:      3.09MB
+</code></pre>
+
+<p>참고로 테스트 하드웨어 장비는 다음과 같다. (구린 내 아이맥ㅠ)</p>
+
+<pre><code>  Model Name:	iMac
+  Model Identifier:	iMac11,3
+  Processor Name:	Intel Core i5
+  Processor Speed:	2.8 GHz
+  Number of Processors:	1
+  Total Number of Cores:	4
+  L2 Cache (per Core):	256 KB
+  L3 Cache:	8 MB
+  Memory:	12 GB
+  Processor Interconnect Speed:	4.8 GT/s
+  Boot ROM Version:	IM112.0057.B01
+  SMC Version (system):	1.59f2
+</code></pre>
+
+      
+      <div class="related">
+</div>
+      
+    </div>
+    
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <aside><div id="disqus_thread"></div></aside>
+    <script type="text/javascript">
+      var disqus_shortname = 'ziwon';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; <a href="https://github.com/ziwon">Philbert Yoon</a> 2018</p>
+  </div>
+</section>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js" integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-61678624-3', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+

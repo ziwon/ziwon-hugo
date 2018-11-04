@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en-us">
+<head>
+	<meta name="generator" content="Hugo 0.48" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title></title>
+
+<meta property='og:title' content='人生は儚く短い。'>
+<meta property='og:description' content=''>
+<meta property='og:url' content='https://ziwon.github.io/'>
+<meta property='og:site_name' content='人生は儚く短い。'>
+<meta property='og:type' content='website'><meta property='og:image' content='https://www.gravatar.com/avatar/9a1e592d8d88f9e169804a4b62792646?s=256'><meta property='article:section' content=''><meta property='og:updated_time' content='2017-01-30T03:37:00Z'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@'><meta name='twitter:creator' content='@'>
+
+<link href="https://ziwon.github.io/index.xml" rel="alternate" type="application/rss+xml" title="人生は儚く短い。" />
+
+<link rel="stylesheet" href="/css/style.css"/><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+</head>
+<body>
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://ziwon.github.io/">
+          <h1 class="title is-4">人生は儚く短い。</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile"><a class="level-item" aria-label="github" href='https://github.com/ziwon'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="instagram" href='https://instagram.com/ziwon.y'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+    <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="email" href='mailto:yngpil.yoon@gmail.com'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+    <polyline points="22,6 12,13 2,6"/>
+    
+  </svg></i>
+            </span>
+          </a></nav>
+      </div>
+    </nav>
+
+    <nav class="nav">
+      
+
+      
+    </nav>
+
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    
+    
+    <article>
+      <div class="subtitle tags is-6 is-pulled-right">
+        
+        
+<a class="subtitle is-6" href="/tags/python">#python</a>
+
+
+
+        
+      </div>
+      <h2 class="subtitle is-6">January 30, 2017</h2>
+      <h1 class="title"><a href="https://ziwon.github.io/posts/python_magic_methods/">[번역] 파이썬 매직 메소드 (Python&#39;s Magic Methods)</a></h1>
+      <div class="content">
+        A guide to Python&rsquo;s magic methods를 번역한 문서입니다.
+ 서론 이 가이드는 몇 달 간의 블로그 게시물의 정점입니다. 주제는 매직 메소드(magic methods) 입니다.
+매직 메소드가 뭘까요? 이들은 객체지향 파이썬의 모든 것입니다. 클래스에 &ldquo;마법&rdquo;을 추가하기 위해 정의할 수 있는 특수한 메소드입니다. 항상 두 개의 밑줄로 둘러싸입니다. (예: __init__ 또는 __lt__) 또한 필요한 만큼 문서화되지 않았습니다. 파이썬에 대한 모든 매직 메소드가 파이썬 문서의 동일한 섹션에 있지만, 흩어져 있고, 느슨하게 구성되어 있습니다.
+        
+        <a class="button is-link" href="https://ziwon.github.io/posts/python_magic_methods/" style="height:28px">
+          Read more
+          <span class="icon is-small">
+            <i class="fa fa-angle-double-right"></i>
+          </span>
+        </a>
+        
+      </div>
+    </article>
+    
+    <article>
+      <div class="subtitle tags is-6 is-pulled-right">
+        
+        
+<a class="subtitle is-6" href="/tags/python">#python</a>
+
+
+
+  
+  | <a class="subtitle is-6" href="/tags/django">#django</a>
+  
+
+        
+      </div>
+      <h2 class="subtitle is-6">December 9, 2016</h2>
+      <h1 class="title"><a href="https://ziwon.github.io/posts/using_custom_model_to_dict_in_django/">Using custom model_to_dict() in Django</a></h1>
+      <div class="content">
+        In Django, when converting a database model to a dictionary, I usually used to convert only the member variables corresponding to the column of the table to handle the response to the request in the form of Json and so on. But, whenever you encounter a member variable of type ManyToManyField, it would be too cumbersome to write three or four lines of code each time to loop around to get their values from the member variables of the ManyToManyField in a model object.
+        
+        <a class="button is-link" href="https://ziwon.github.io/posts/using_custom_model_to_dict_in_django/" style="height:28px">
+          Read more
+          <span class="icon is-small">
+            <i class="fa fa-angle-double-right"></i>
+          </span>
+        </a>
+        
+      </div>
+    </article>
+    
+    <article>
+      <div class="subtitle tags is-6 is-pulled-right">
+        
+        
+<a class="subtitle is-6" href="/tags/golang">#golang</a>
+
+
+
+  
+  | <a class="subtitle is-6" href="/tags/concurrency">#concurrency</a>
+  
+  | <a class="subtitle is-6" href="/tags/channel">#channel</a>
+  
+
+        
+      </div>
+      <h2 class="subtitle is-6">September 25, 2015</h2>
+      <h1 class="title"><a href="https://ziwon.github.io/posts/effective-go-concurrency/">[번역] Effective Go: Concurrency</a></h1>
+      <div class="content">
+        2016.10.04 - Effective Go의 한글화 작업이완료되었습니다. 아래 동시성 번역 역시 번역팀의 도움으로 갱신되었습니다.
+Effective Go 의 한글화 문서를 보던 중, Concurrency에 대한 부분이 빠져 있어서 해당 부분만 따로 번역했습니다. 원문의 출처는 여기입니다.
+ 통신에 의한 공유 (Share by communicating) 동시성 프로그래밍은 광범위한 주제이므로 여기에서는 Go에 한정된 중요한 것들에 대해서만 지면을 할애한다.
+다양한 환경에서 동시성 프로그래은 공유 변수에 대한 정확한 접근을 구현하기 위해 엄수해야 하는 세세한 내용들로 어려워졌다. Go는 공유 변수가 채널을 돌려가며 전달된다는 점에서 다른 접근을 권장한다.
+        
+        <a class="button is-link" href="https://ziwon.github.io/posts/effective-go-concurrency/" style="height:28px">
+          Read more
+          <span class="icon is-small">
+            <i class="fa fa-angle-double-right"></i>
+          </span>
+        </a>
+        
+      </div>
+    </article>
+    
+    <article>
+      <div class="subtitle tags is-6 is-pulled-right">
+        
+        
+<a class="subtitle is-6" href="/tags/rest">#rest</a>
+
+
+
+  
+  | <a class="subtitle is-6" href="/tags/python">#python</a>
+  
+  | <a class="subtitle is-6" href="/tags/falcon">#falcon</a>
+  
+  | <a class="subtitle is-6" href="/tags/api">#api</a>
+  
+
+        
+      </div>
+      <h2 class="subtitle is-6">September 4, 2015</h2>
+      <h1 class="title"><a href="https://ziwon.github.io/posts/falcon-rest-template/">Falcon REST API</a></h1>
+      <div class="content">
+        Cloud API와 백엔드 개발에 경량화된 파이썬 프레임워크인 Falcon를 이용해 간단한 REST API 템플릿을 만들어 보았다.
+https://github.com/patriz/falcon-rest-api
+개발하는 느낌은 Flask와 비슷한데 (음.. Flask와 뭐가 다르지?) 미들웨어, 후킹 데코레이션 등을 이용해 HTTP 요청과 응답에 대해 체이닝 처리를 좀 더 직관적으로 할 수 있다. 성능이 Flask보다 좀 더 빠른 것으로 알려져 있다. Rackspace에서 밀고있는(?) Cloud API 전용 프레임워크인데, 최신 릴리즈 버전은 아직 0.3이다. 심플하고 미니멀한 걸 좋아한다면 해볼만하다.
+문서에도 나와있지만, Cython을 이용하면 약 20% 정도의 성능효과를 볼 수 있다.
+        
+        <a class="button is-link" href="https://ziwon.github.io/posts/falcon-rest-template/" style="height:28px">
+          Read more
+          <span class="icon is-small">
+            <i class="fa fa-angle-double-right"></i>
+          </span>
+        </a>
+        
+      </div>
+    </article>
+    
+    <article>
+      <div class="subtitle tags is-6 is-pulled-right">
+        
+        
+<a class="subtitle is-6" href="/tags/programming">#Programming</a>
+
+
+
+  
+  | <a class="subtitle is-6" href="/tags/scala">#Scala</a>
+  
+
+        
+      </div>
+      <h2 class="subtitle is-6">August 30, 2014</h2>
+      <h1 class="title"><a href="https://ziwon.github.io/posts/generics-of-a-higher-kind/">Generics of a Higher Kind</a></h1>
+      <div class="content">
+        1. Introduction 일차 매개변수적 다형성과 고차 타입 생성자 다형성  일차 매개변수적 다형성은 정적 타입 프로그래밍 언어의 표준 요소임 일차 매개변수적 다형성은 제네릭(generic)이라고 부름 제네릭의 한 가지 응용 분야는 콜렉션(collection)  예) List[A] 타입은 주어진 요소 A 타입의 리스트를 표현, A는 자유롭게 선택됨  일차 매개변수적 다형성은 List와 같은 타입 생성자를 도출하며 타입을 추상화 함 그러나 결과로 나온 타입 생성자는 그들 자신을 추상화할 수 없음  예) List와 같은 타입 생성자를 다른 타입 생성자의 타입 인자로 전달할 수 없음  이런 제한은 자연스러운 추상를 정형화하는데 방해가 되며 불필요한 중복 코드로 이어짐  고차 타입 생성자 다형성와 카인드  고차 타입 생성자 다형성을 통해 더 많은 제네럴티를 확보할 수 있음 이 논문에서는 Scala 프로그래밍 언어의 타입 생성자 다형성의 설계와 구현에 대해 살펴봄 Scala 2.
+        
+        <a class="button is-link" href="https://ziwon.github.io/posts/generics-of-a-higher-kind/" style="height:28px">
+          Read more
+          <span class="icon is-small">
+            <i class="fa fa-angle-double-right"></i>
+          </span>
+        </a>
+        
+      </div>
+    </article>
+    
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <nav class="level is-mobile">
+      <div class="level-left">
+        <div class="level-item">
+          
+        </div>
+      </div>
+      <div class="level-right is-marginless">
+        <div class="level-item">
+          
+          <a class="button" href="/pages/2/">
+            Older
+            <span class="icon is-small is-marginless">
+              <svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <polyline points="14 6 20 12 14 18"/>
+    
+  </svg>
+            </span>
+          </a>
+          
+        </div>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; <a href="https://github.com/ziwon">Philbert Yoon</a> 2018</p>
+  </div>
+</section>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js" integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-61678624-3', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+

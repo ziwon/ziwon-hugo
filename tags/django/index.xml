@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Django on 人生は儚く短い。</title>
+    <link>https://ziwon.github.io/tags/django/</link>
+    <description>Recent content in Django on 人生は儚く短い。</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; &lt;a href=&#34;https://github.com/ziwon&#34;&gt;Philbert Yoon&lt;/a&gt; 2018</copyright>
+    <lastBuildDate>Fri, 09 Dec 2016 11:00:25 +0900</lastBuildDate>
+    
+	<atom:link href="https://ziwon.github.io/tags/django/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Using custom model_to_dict() in Django</title>
+      <link>https://ziwon.github.io/posts/using_custom_model_to_dict_in_django/</link>
+      <pubDate>Fri, 09 Dec 2016 11:00:25 +0900</pubDate>
+      
+      <guid>https://ziwon.github.io/posts/using_custom_model_to_dict_in_django/</guid>
+      <description>In Django, when converting a database model to a dictionary, I usually used to convert only the member variables corresponding to the column of the table to handle the response to the request in the form of Json and so on. But, whenever you encounter a member variable of type ManyToManyField, it would be too cumbersome to write three or four lines of code each time to loop around to get their values from the member variables of the ManyToManyField in a model object.</description>
+    </item>
+    
+  </channel>
+</rss>

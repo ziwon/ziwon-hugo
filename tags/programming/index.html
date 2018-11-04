@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en-us">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Programming | 人生は儚く短い。</title>
+
+<meta property='og:title' content='Tag: Programming - 人生は儚く短い。'>
+<meta property='og:description' content=''>
+<meta property='og:url' content='https://ziwon.github.io/tags/programming/'>
+<meta property='og:site_name' content='人生は儚く短い。'>
+<meta property='og:type' content='website'><meta property='og:image' content='https://www.gravatar.com/avatar/9a1e592d8d88f9e169804a4b62792646?s=256'><meta property='article:section' content='Tags'><meta property='og:updated_time' content='2017-01-30T03:37:00Z'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@'><meta name='twitter:creator' content='@'>
+
+<link href="https://ziwon.github.io/index.xml" rel="alternate" type="application/rss+xml" title="人生は儚く短い。" />
+
+<link rel="stylesheet" href="/css/style.css"/><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+</head>
+<body>
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://ziwon.github.io/">
+          <h1 class="title is-4">人生は儚く短い。</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile"><a class="level-item" aria-label="github" href='https://github.com/ziwon'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="instagram" href='https://instagram.com/ziwon.y'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+    <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="email" href='mailto:yngpil.yoon@gmail.com'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+    <polyline points="22,6 12,13 2,6"/>
+    
+  </svg></i>
+            </span>
+          </a></nav>
+      </div>
+    </nav>
+
+    <nav class="nav">
+      
+
+      
+    </nav>
+
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    
+    
+    <article>
+      <div class="subtitle tags is-6 is-pulled-right">
+        
+        
+<a class="subtitle is-6" href="/tags/programming">#Programming</a>
+
+
+
+  
+  | <a class="subtitle is-6" href="/tags/scala">#Scala</a>
+  
+
+        
+      </div>
+      <h2 class="subtitle is-6">August 30, 2014</h2>
+      <h1 class="title"><a href="https://ziwon.github.io/posts/generics-of-a-higher-kind/">Generics of a Higher Kind</a></h1>
+      <div class="content">
+        1. Introduction 일차 매개변수적 다형성과 고차 타입 생성자 다형성  일차 매개변수적 다형성은 정적 타입 프로그래밍 언어의 표준 요소임 일차 매개변수적 다형성은 제네릭(generic)이라고 부름 제네릭의 한 가지 응용 분야는 콜렉션(collection)  예) List[A] 타입은 주어진 요소 A 타입의 리스트를 표현, A는 자유롭게 선택됨  일차 매개변수적 다형성은 List와 같은 타입 생성자를 도출하며 타입을 추상화 함 그러나 결과로 나온 타입 생성자는 그들 자신을 추상화할 수 없음  예) List와 같은 타입 생성자를 다른 타입 생성자의 타입 인자로 전달할 수 없음  이런 제한은 자연스러운 추상를 정형화하는데 방해가 되며 불필요한 중복 코드로 이어짐  고차 타입 생성자 다형성와 카인드  고차 타입 생성자 다형성을 통해 더 많은 제네럴티를 확보할 수 있음 이 논문에서는 Scala 프로그래밍 언어의 타입 생성자 다형성의 설계와 구현에 대해 살펴봄 Scala 2.
+        
+        <a class="button is-link" href="https://ziwon.github.io/posts/generics-of-a-higher-kind/" style="height:28px">
+          Read more
+          <span class="icon is-small">
+            <i class="fa fa-angle-double-right"></i>
+          </span>
+        </a>
+        
+      </div>
+    </article>
+    
+    <article>
+      <div class="subtitle tags is-6 is-pulled-right">
+        
+        
+<a class="subtitle is-6" href="/tags/programming">#Programming</a>
+
+
+
+  
+  | <a class="subtitle is-6" href="/tags/calculus">#Calculus</a>
+  
+
+        
+      </div>
+      <h2 class="subtitle is-6">October 22, 2013</h2>
+      <h1 class="title"><a href="https://ziwon.github.io/posts/lambda-calculus/">Lambda Calculus</a></h1>
+      <div class="content">
+        람다 대수는 결정문제(decision problem)를 풀기 위해, 계산가능성(computability)의 개념을 정의한 수학적 모델로 1936년 알로존 처치(Alonzo Church)가 고안하였다.
+좀 더 구체적으로는 소프트웨어에서 &lsquo;알고리즘이란 무엇인가?&lsquo;를 정의한 클래스(class)나 객체(object)가 아닌 값(function) 중심 언어, 즉 함수형 언어의 계산 모델이다. (같은 해에 처치의 제자였던, 앨런 튜닝은 튜링 머신의 개념으로 계산 모델을 정의했다. Lisp를 만든 존 매카시
+람다 대수는 그 자체가 이미 하나의 언어로 많은 함수형 프로그래밍 언어가 람다대수에 기초하고 있다.
+ functional language = lambda calcus + sugars (ex.
+        
+        <a class="button is-link" href="https://ziwon.github.io/posts/lambda-calculus/" style="height:28px">
+          Read more
+          <span class="icon is-small">
+            <i class="fa fa-angle-double-right"></i>
+          </span>
+        </a>
+        
+      </div>
+    </article>
+    
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <nav class="level is-mobile">
+      <div class="level-left">
+        <div class="level-item">
+          
+        </div>
+      </div>
+      <div class="level-right is-marginless">
+        <div class="level-item">
+          
+        </div>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; <a href="https://github.com/ziwon">Philbert Yoon</a> 2018</p>
+  </div>
+</section>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js" integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-61678624-3', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+

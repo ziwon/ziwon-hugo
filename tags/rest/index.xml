@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rest on 人生は儚く短い。</title>
+    <link>https://ziwon.github.io/tags/rest/</link>
+    <description>Recent content in Rest on 人生は儚く短い。</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; &lt;a href=&#34;https://github.com/ziwon&#34;&gt;Philbert Yoon&lt;/a&gt; 2018</copyright>
+    <lastBuildDate>Fri, 04 Sep 2015 00:27:35 +0900</lastBuildDate>
+    
+	<atom:link href="https://ziwon.github.io/tags/rest/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Falcon REST API</title>
+      <link>https://ziwon.github.io/posts/falcon-rest-template/</link>
+      <pubDate>Fri, 04 Sep 2015 00:27:35 +0900</pubDate>
+      
+      <guid>https://ziwon.github.io/posts/falcon-rest-template/</guid>
+      <description>Cloud API와 백엔드 개발에 경량화된 파이썬 프레임워크인 Falcon를 이용해 간단한 REST API 템플릿을 만들어 보았다.
+https://github.com/patriz/falcon-rest-api
+개발하는 느낌은 Flask와 비슷한데 (음.. Flask와 뭐가 다르지?) 미들웨어, 후킹 데코레이션 등을 이용해 HTTP 요청과 응답에 대해 체이닝 처리를 좀 더 직관적으로 할 수 있다. 성능이 Flask보다 좀 더 빠른 것으로 알려져 있다. Rackspace에서 밀고있는(?) Cloud API 전용 프레임워크인데, 최신 릴리즈 버전은 아직 0.3이다. 심플하고 미니멀한 걸 좋아한다면 해볼만하다.
+문서에도 나와있지만, Cython을 이용하면 약 20% 정도의 성능효과를 볼 수 있다.</description>
+    </item>
+    
+  </channel>
+</rss>

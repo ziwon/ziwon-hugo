@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en-us">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Generics of a Higher Kind | 人生は儚く短い。</title>
+
+<meta property='og:title' content='Generics of a Higher Kind - 人生は儚く短い。'>
+<meta property='og:description' content='1. Introduction 일차 매개변수적 다형성과 고차 타입 생성자 다형성  일차 매개변수적 다형성은 정적 타입 프로그래밍 언어의 표준 요소임 일차 매개변수적 다형성은 제네릭(generic)이라고 부름 제네릭의 한 가지 응용 분야는 콜렉션(collection)  예) List[A] 타입은 주어진 요소 A 타입의 리스트를 표현, A는 자유롭게 선택됨  일차 매개변수적 다형성은 List와 같은 타입 생성자를 도출하며 타입을 추상화 함 그러나 결과로 나온 타입 생성자는 그들 자신을 추상화할 수 없음  예) List와 같은 타입 생성자를 다른 타입 생성자의 타입 인자로 전달할 수 없음  이런 제한은 자연스러운 추상를 정형화하는데 방해가 되며 불필요한 중복 코드로 이어짐  고차 타입 생성자 다형성와 카인드  고차 타입 생성자 다형성을 통해 더 많은 제네럴티를 확보할 수 있음 이 논문에서는 Scala 프로그래밍 언어의 타입 생성자 다형성의 설계와 구현에 대해 살펴봄 Scala 2.'>
+<meta property='og:url' content='https://ziwon.github.io/posts/generics-of-a-higher-kind/'>
+<meta property='og:site_name' content='人生は儚く短い。'>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/9a1e592d8d88f9e169804a4b62792646?s=256'><meta property='article:section' content='Posts'><meta property='article:tag' content='Programming'><meta property='article:tag' content='Scala'><meta property='article:published_time' content='2014-08-30T17:23:11&#43;09:00'/><meta property='article:modified_time' content='2014-08-30T17:23:11&#43;09:00'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@'><meta name='twitter:creator' content='@'>
+
+<link href="https://ziwon.github.io/index.xml" rel="alternate" type="application/rss+xml" title="人生は儚く短い。" />
+
+<link rel="stylesheet" href="/css/style.css"/><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+</head>
+<body>
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://ziwon.github.io/">
+          <h1 class="title is-4">人生は儚く短い。</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile"><a class="level-item" aria-label="github" href='https://github.com/ziwon'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="instagram" href='https://instagram.com/ziwon.y'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+    <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="email" href='mailto:yngpil.yoon@gmail.com'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+    <polyline points="22,6 12,13 2,6"/>
+    
+  </svg></i>
+            </span>
+          </a></nav>
+      </div>
+    </nav>
+
+    <nav class="nav">
+      
+
+      
+    </nav>
+
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="subtitle tags is-6 is-pulled-right">
+      
+      
+<a class="subtitle is-6" href="/tags/programming">#Programming</a>
+
+
+
+  
+  | <a class="subtitle is-6" href="/tags/scala">#Scala</a>
+  
+
+      
+    </div>
+    <h2 class="subtitle is-6">August 30, 2014</h2>
+    <h1 class="title">Generics of a Higher Kind</h1>
+    
+    <div class="content">
+      
+
+<h2 id="1-introduction">1. Introduction</h2>
+
+<h3 id="일차-매개변수적-다형성과-고차-타입-생성자-다형성">일차 매개변수적 다형성과 고차 타입 생성자 다형성</h3>
+
+<ul>
+<li>일차 매개변수적 다형성은 정적 타입 프로그래밍 언어의 표준 요소임</li>
+<li>일차 매개변수적 다형성은 제네릭(generic)이라고 부름</li>
+<li>제네릭의 한 가지 응용 분야는 콜렉션(collection)
+
+<ul>
+<li>예) <code>List[A]</code> 타입은  주어진 요소 A 타입의 리스트를 표현,  A는 자유롭게 선택됨</li>
+</ul></li>
+<li>일차 매개변수적 다형성은 <code>List</code>와 같은 타입 생성자를 도출하며 타입을 추상화 함</li>
+<li>그러나 결과로 나온 타입 생성자는 그들 자신을 추상화할 수 없음
+
+<ul>
+<li>예) <code>List</code>와 같은 타입 생성자를 다른 타입 생성자의 타입 인자로 전달할 수 없음</li>
+</ul></li>
+<li>이런 제한은 자연스러운 추상를 정형화하는데 방해가 되며 불필요한 중복 코드로 이어짐</li>
+</ul>
+
+<h3 id="고차-타입-생성자-다형성와-카인드">고차 타입 생성자 다형성와 카인드</h3>
+
+<ul>
+<li>고차 타입 생성자 다형성을 통해 더 많은 제네럴티를 확보할 수 있음</li>
+<li>이 논문에서는 Scala 프로그래밍 언어의 타입 생성자 다형성의 설계와 구현에 대해 살펴봄</li>
+<li>Scala 2.5 버전부터 고차 타입 제네릭을 이용할 수 있음</li>
+<li>고차 타입 제네릭에서는 타입과 타입 생성자를 특정 지우기 위해 개발한 카인드 시스템을 사용함</li>
+<li>카인드는 &lsquo;어떤 타입 혹은 타입 생성자가 추상화에서 허용될 수 있는 인스턴스&rsquo; 인지를 표현함</li>
+<li>즉, 카인드의 타입에 대한 역할은 타입이 변수에 대해 하는 역할임</li>
+<li>카인드는 타입이나 타입 생성자의 3가지를 캡쳐함:  쉐이프, 하위/상위 바운드, 변성</li>
+</ul>
+
+<h3 id="추상-타입-멤버를-지닌-타입-vs-타입-생성자">추상 타입 멤버를 지닌 타입 vs 타입 생성자</h3>
+
+<ul>
+<li>가상 타입이나 가상 클래스를 지닌 언어는 추상 타입 멤버를 통해 타입 생성자 다형성을 코드화할 수 있음, Scala가 이런 부류의 언어에 속함</li>
+
+<li><p>예) Scala에서는 타입 매개변수화된 클래스 대신 추상 타입 멤버를 지닌 클래스로 <code>List</code>를 정의할 수 있음</p>
+
+<pre><code>abstract class List { type Elem }
+</code></pre></li>
+
+<li><p><code>List</code>의 구체적인 구현은 <code>List { type Elem - String }</code> 처럼 타입 재정의를 통해 모델링할 수 있음</p></li>
+
+<li><p>결정적인 것은 이렇게 코드화된 <code>List</code>가 타입 생성자가 아닌 타입이라는 점. 따라서, <code>List</code>를 일차 다형성의 타입 인자나 추상 타입 인스턴스로 전달할 수 있음</p></li>
+
+<li><p>타입 생성자 다형성과 비교하면, 이런 코드화는 3가지 단점이 있음</p>
+
+<ul>
+<li>첫째, 다소 장황하게 느껴짐</li>
+<li>둘째, 요소 타입을 나타내는 명명된 멤버의 정의가 필요한데, 이는 클래스 상속 계층에서 이름 충돌의 위험을 유발할 수 있음</li>
+<li>셋째, 이런 코드화는 이후 구체적인 변수로 인스턴스화될 수 없는 어떤 무의미한 타입의 추상화를 정의하도록 허용함</li>
+</ul></li>
+
+<li><p>반대로 타입 생성자 다형성은 카인드 안정성를 지님, 잘 카인드된 타입의 적용하면 무의미한 타입을 만들지 않음</p></li>
+
+<li><p>이는 객체지향 프로그래밍의 타입 생성자 다형성 포함을 찬성하는 논증의 3가지 이유임</p></li>
+</ul>
+
+<h2 id="2-reducing-code-duplication-with-type-constructor-polymorphism">2. Reducing Code Duplication with Type Constructor Polymorphism</h2>
+
+<h3 id="코드-중복">코드 중복</h3>
+
+<ul>
+<li><p>다음은 Scala의 <code>Iterable[T]</code> 트레이트의 구현체로 혼합 구성(mixin composition)을 지원하는 추상 클래스임</p>
+
+<pre><code>trait Iterable[T] {
+    def filter(p: T =&gt; Boolean): Iterable[T]
+    def remove(p: T =&gt; Boolean): Iterable[T] = filter (x =&gt; !p(x))
+}
+
+trait List[T] extends Iterable[T] {
+    def filter(p: T =&gt; Boolean): List[T]
+    override def remove(p: T =&gt; Boolean): List[T] = filter (x =&gt; !p(x))
+}
+</code></pre></li>
+
+<li><p><code>Iterable</code>은 추상 메소드 <code>filter</code>와 편의 메소드 <code>remove</code>를 포함</p></li>
+
+<li><p>하위 클래스는 <code>filter</code>를 구현해야 현재 콜렉션의 술부 <code>p</code>를 만족하는 요소를 지닌 콜렉션를 생성할 수 있음</p></li>
+
+<li><p><code>remove</code>는 <code>filter</code>에 의해 구현되는데, 단순히 술부를 반전한 것임</p></li>
+
+<li><p>리스트를 필터링할 경우, 리스트를 반환케 될 것을 기대할 수 있음</p></li>
+
+<li><p>따라서, <code>List</code>는 자신의 결과 타입을 공변하게 재정의하기 위해 <code>filter</code>를 오버라이딩해야 함 (세부 구현은 생략)</p></li>
+
+<li><p>일관성을 위해 <code>remove</code>는 같은 결과 타입을 지녀야 하는데, 마찬가지로 오버라이딩 하는 거외에는 방법이 없음.</p></li>
+
+<li><p>메소드 모두가 <code>List</code>에서 반복되므로 코드 중복은 명확함</p></li>
+</ul>
+
+<h3 id="타입-생성자를-통한-해법">타입 생성자를 통한 해법</h3>
+
+<ul>
+<li><p>해법은 <code>filter</code>와 <code>remove</code>의 결과 컨테이너를 나타내는 타입 생성자로 추상화하는 것임</p>
+
+<pre><code>trait iterable[T, Container[X]] {
+    def filter(p: T =&gt; Boolean): Container[T]
+    def remove(p: T =&gt; Boolean): Container[T] = filter (x =&gt; !p(x))
+}
+
+trait List[T] extends Iterable[T, List]
+</code></pre></li>
+
+<li><p>개선된 <code>Iterable</code>은 두 개의 타입 매개변수를 취함: <code>[T, Container[X]]</code></p></li>
+
+<li><p>첫 번째 <code>T</code>는 자신의 요소 타입을 나타내고, 두 번째 <code>Container</code>는 <code>filter</code>와 <code>remove</code> 메소드의 결과 타입을 결정하는 타입 생성자임</p></li>
+
+<li><p><code>Container</code>는 타입 매개변수 하나를 취함</p></li>
+</ul>
+
+<h3 id="2-1-type-constructors-and-kinds">2.1 Type constructors and kinds</h3>
+
+<ul>
+<li>타입 생성자와 적당한 타입을 구별하기 위해 카인드(kind, 함수형 프로그래밍에서 차용한 용어)를 사용함</li>
+
+<li><p>카인드는 변수에 대한 타입처럼 타입에 대한 것임, 이는 3가지 레벨로 언어를 구성함</p></li>
+
+<li><p>객체는 타입으로 분류되고, 타입은 카인드로 분류됨</p></li>
+
+<li><p>타입과 달리, 카인드는 순수하게 구조적임: 타입에 기대되는 타입의 매개변수의 종류를 반영함</p></li>
+
+<li><p>적합한 타입들은 모두 타입 매개변수의 수가 같으므로 동일한 카인드 <code>*</code>로 분류됨</p></li>
+
+<li><p>타입 생성자를 분류하기 위해, 카인드 생성자 <code>From → To</code>를 사용함</p></li>
+
+<li><p><code>From</code>은 기대되는 타입 인자의 카인드이며 <code>To</code>는 인자에 타입 생성자를 적용할 때의 결과 타입의 카인드임</p></li>
+
+<li><p>예) <code>class List[T]</code>는 적합한 타입을 도출하는 적합한 타입에 대해 적용하며 <code>* → *</code>로 분류되는 <code>List</code> 타입 생성자로 이루어 짐</p></li>
+
+<li><p>카인드 레벨의 초기 모델은 다음과 같은 문법으로 기술됨</p>
+
+<pre><code>K ::= * | K  → K
+</code></pre></li>
+
+<li><p>타입 생성자 다형성없이 언어 타입의 정형성(well-formedness)을 정의하는 규칙은 타입에 할당하는 카인드 규칙과 일치함</p></li>
+
+<li><p>이 규칙을 타입이 변수와 표현식에 타입 체킹을 하는 것처럼 카인드 체킹으로 일반화하여 확장시킴</p></li>
+
+<li><p>클래스나 언바운드 타입 매개변수 혹은 추상 타입 멤버는 하나의 K&rsquo;  카인드의 타입 매개변수가 있을 경우 , K&rsquo; → * 인 카인드를 받음</p></li>
+
+<li><p>바운드 타입 매개변수나 추상 멤버는 K&rsquo; → K인 카인드를 할당받음, 이 때 K는 바운드 타입과 일치함</p></li>
+</ul>
+
+<h3 id="타입-커링">타입 커링</h3>
+
+<ul>
+<li>다중 타입 매개변수를 다루기 위해 이 스킴을 일반화하는데 커링을 사용함</li>
+<li>T[T&rsquo;] 타입을 적용하면 T가 K&rsquo; → K인 카인드를 가지며 T&rsquo;가 K&rsquo; 카인드로 분류될 때, K인 카인드를 지님</li>
+<li>타입 생성자 다형성으로 인한 Scala 확장의 문법적인 영향은 마이너함</li>
+<li>클래스와 타입 알리어스만 형식적인 타입 매개변수를 선언할 수 있었으나 타입 매개변수와 추상 멤버 타입을 포함하기 위해 확장됨</li>
+
+<li><p>다음은 추상 타입 생성자 멤버를 사용한 선택적인 형태임</p>
+
+<pre><code>trait Iterable[T] {
+    type Container[X]
+
+    def filter(p: T =&gt; Boolean): Container[T]
+}
+</code></pre></li>
+</ul>
+
+<h3 id="2-2-improving-iterable">2.2 Improving Iterable</h3>
+
+<ul>
+<li>타입 생성자 다형성은 설계 제약사항을 표현하는 데 필수적인 역할을 함</li>
+
+<li><p>Iterable의 map, filter, flatMap의 시그너쳐과 구현에 대해 논의함</p>
+
+<ul>
+<li>map은 요소를 그 함수에 의해 지정된 요소로 변환함</li>
+<li>filter는 술부인 함수를 해석해서 이를 만족하는 요소만 유지함</li>
+<li>flatMap은 주어진 함수를 적용, 원본 콜렉션의 모든 요소에 대해 요소의 콜렉션을 만들고, 이런 콜렉션 내의 요소들을 수집해서 한 콜렉션으로 만듦 (<a href="https://raw.github.com/wiki/Netflix/RxJava/images/rx-operators/flatMap.png" target="_blank">참고</a>)
+<br /></li>
+</ul></li>
+
+<li><p>다음은 콜렉션의 반복을 캡슐화한 잘 알려진 Iterator 추상과 쌍으로 고려되는 Builder 추상임</p>
+
+<pre><code>trait Builder[Container[X], T] {
+    def +=(el: T): Unit
+    def finalise(): Container[T]
+}
+
+trait Iterator[T] {
+    def next() : T
+    def hasNext: Boolean
+
+    def foreach(op: T =&gt; Unit): Unit = while(hasNext) op(next())
+}
+</code></pre></li>
+
+<li><p>Builder는 빌드하는 콜렉션을 나타내는 타입 생성자를 추상화함</p></li>
+
+<li><p><code>+=</code>  메소드는 콜렉션에 나타나야 하는 순서로 요소를 공급하는데 사용됨</p></li>
+
+<li><p>콜렉션 자체는 <code>finalize</code>에 반환됨</p></li>
+
+<li><p>예) <code>Builder[List, Int]</code>는 <code>ListBuffer[Int]</code>로 생각할 수 있고, 이들 모두 <code>List[Int]</code>를 만드는데 사용될 수 있음</p></li>
+
+<li><p>다음은 mapTo/fiilterTo/flatMapTo가 어떻게 좀 더 유연하게 구현될 수 있는지 나타냄</p>
+
+<pre><code>trait Buildable[Context[X]] {
+    def build[T]: Builder[Container, T]
+}
+
+trait Iterable[T] {
+    type Container[X] &lt;: Iterable[X]
+
+    def elements: Iterator[T]
+
+    def mapTo[U, C[X]](f: T =&gt; U)(b: Buildable[C]): C[U] = {
+        val buff = b.build[T]
+        val elems = elements
+
+        while(elems.hasNext) {
+            val el = elems.next
+            if(p(el)) buff += el
+        }
+
+        buff.finalise()
+    }
+
+    def filterTo[C[X]](p: T =&gt; Boolean)(b: Buildable[C]): C[T] = {
+        val buff = b.build[T]
+        val elems = elements
+
+        while(elems.hasNext) {
+            val el = elems.next
+            if(p(el)) buff += el
+        }
+
+        buff.finalize()
+    }
+
+    def flatMapTo[U, C[X]] (f: T =&gt; Iterable[U])(b: Buildable[C]): C[U] = {
+        val buff = b.build[U]
+        val elems = elements
+
+        while(elems.hasNext) {
+            f(elems.next).elements.foreach{ el =&gt; buff += el }
+        }
+
+        buff.finalize()
+    }
+
+    def map[U](f: T =&gt; U)(b: Buildable[Container]): Container[U] = 
+        mapTo[U, Container](f)(b)
+
+    def filter(p: T =&gt; Boolean)(b: Buildable[Container]):Container[T] = 
+        filterTo[Container](p)(b)
+
+    def flatMap[U](f: T =&gt; Container[U])(b: Buildable[Container]): Container[U] = 
+        flatMapTo[U, Container](f)(b)
+</code></pre></li>
+
+<li><p>만들어진 콜렉션과 원본 콜렉션을 디커플링하는 것으로 제네릭화 함 - 이들은 같을 필요가 없음</p></li>
+
+<li><p>콜렉션을 반복하는 것과 콜렉션을 만드는 것은 서로 직교함 (의역: 연관성이 없음)</p></li>
+
+<li><p>즉, 콜렉션의 요소를 반복하기 위해 콜렉션을 빌드할 수 있어야 할 필요는 없음</p></li>
+
+<li><p>mapTo와 같은 좀 더 복잡한 연산의 경우, <code>Buildable[C]</code>의 인스턴스가 필요함</p></li>
+
+<li><p>따라서, 콜렉션 C를 빌드하는 Iterable의 메소드는 <code>Buildable[C]</code> 타입의 추가 매개변수를 취함</p></li>
+
+<li><p>섹션 3에서 Scala의 직교적인(orthogonal) 특징이 이 매개변수의 실제 인자를 공급하는데 있어 콜러(caller)를 어떻게 해방시키는지 살펴볼 것임</p></li>
+</ul>
+
+<h3 id="용어">용어</h3>
+
+<table>
+<thead>
+<tr>
+<th>국문</th>
+<th align="left">영문</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>일차 매개변수적 다형성</td>
+<td align="left">First-order parametric Polymorphism</td>
+</tr>
+
+<tr>
+<td>타입 생성자</td>
+<td align="left">Type Constructor</td>
+</tr>
+
+<tr>
+<td>타입 생성자 다형성</td>
+<td align="left">Type Constructor Polymorphism</td>
+</tr>
+
+<tr>
+<td>타입 매개변수화 클래스</td>
+<td align="left">Type Parametised Class</td>
+</tr>
+
+<tr>
+<td>제네럴티</td>
+<td align="left">Generality</td>
+</tr>
+
+<tr>
+<td>카인드</td>
+<td align="left">Kind</td>
+</tr>
+
+<tr>
+<td>추상 타입 멤버</td>
+<td align="left">Abstract Type Member</td>
+</tr>
+
+<tr>
+<td>카인드 안정성</td>
+<td align="left">Kind soundness</td>
+</tr>
+</tbody>
+</table>
+
+      
+      <div class="related">
+
+<h3>Similar articles:</h3>
+<ul>
+	
+	<li><a href="/posts/lambda-calculus/">Lambda Calculus</a></li>
+	
+</ul>
+</div>
+      
+    </div>
+    
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <aside><div id="disqus_thread"></div></aside>
+    <script type="text/javascript">
+      var disqus_shortname = 'ziwon';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; <a href="https://github.com/ziwon">Philbert Yoon</a> 2018</p>
+  </div>
+</section>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js" integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-61678624-3', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+

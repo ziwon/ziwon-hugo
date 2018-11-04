@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  lang="en-us">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>[번역] 파이썬 매직 메소드 (Python&#39;s Magic Methods) | 人生は儚く短い。</title>
+
+<meta property='og:title' content='[번역] 파이썬 매직 메소드 (Python&#39;s Magic Methods) - 人生は儚く短い。'>
+<meta property='og:description' content='A guide to Python&rsquo;s magic methods를 번역한 문서입니다.
+ 서론 이 가이드는 몇 달 간의 블로그 게시물의 정점입니다. 주제는 매직 메소드(magic methods) 입니다.
+매직 메소드가 뭘까요? 이들은 객체지향 파이썬의 모든 것입니다. 클래스에 &ldquo;마법&rdquo;을 추가하기 위해 정의할 수 있는 특수한 메소드입니다. 항상 두 개의 밑줄로 둘러싸입니다. (예: __init__ 또는 __lt__) 또한 필요한 만큼 문서화되지 않았습니다. 파이썬에 대한 모든 매직 메소드가 파이썬 문서의 동일한 섹션에 있지만, 흩어져 있고, 느슨하게 구성되어 있습니다.'>
+<meta property='og:url' content='https://ziwon.github.io/posts/python_magic_methods/'>
+<meta property='og:site_name' content='人生は儚く短い。'>
+<meta property='og:type' content='article'><meta property='og:image' content='https://www.gravatar.com/avatar/9a1e592d8d88f9e169804a4b62792646?s=256'><meta property='article:section' content='Posts'><meta property='article:tag' content='python'><meta property='article:published_time' content='2017-01-30T03:37:00Z'/><meta property='article:modified_time' content='2017-01-30T03:37:00Z'/><meta name='twitter:card' content='summary'><meta name='twitter:site' content='@'><meta name='twitter:creator' content='@'>
+
+<link href="https://ziwon.github.io/index.xml" rel="alternate" type="application/rss+xml" title="人生は儚く短い。" />
+
+<link rel="stylesheet" href="/css/style.css"/><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+</head>
+<body>
+<section class="section">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-left">
+        <a class="nav-item" href="https://ziwon.github.io/">
+          <h1 class="title is-4">人生は儚く短い。</h1>
+        </a>
+      </div>
+      <div class="nav-right">
+        <nav class="nav-item level is-mobile"><a class="level-item" aria-label="github" href='https://github.com/ziwon'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="instagram" href='https://instagram.com/ziwon.y'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+    <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/>
+    
+  </svg></i>
+            </span>
+          </a><a class="level-item" aria-label="email" href='mailto:yngpil.yoon@gmail.com'
+            target='_blank' rel='noopener'>
+            <span class="icon">
+              <i class><svg viewbox='0 0 24 24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' aria-hidden='true'>
+    
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+    <polyline points="22,6 12,13 2,6"/>
+    
+  </svg></i>
+            </span>
+          </a></nav>
+      </div>
+    </nav>
+
+    <nav class="nav">
+      
+
+      
+    </nav>
+
+  </div>
+</section>
+<section class="section">
+  <div class="container">
+    <div class="subtitle tags is-6 is-pulled-right">
+      
+      
+<a class="subtitle is-6" href="/tags/python">#python</a>
+
+
+
+      
+    </div>
+    <h2 class="subtitle is-6">January 30, 2017</h2>
+    <h1 class="title">[번역] 파이썬 매직 메소드 (Python&#39;s Magic Methods)</h1>
+    
+    <div class="content">
+      
+
+<blockquote>
+<p><a href="https://github.com/RafeKettler/magicmethods" target="_blank">A guide to Python&rsquo;s magic methods</a>를 번역한 문서입니다.</p>
+</blockquote>
+
+<h2 id="서론">서론</h2>
+
+<p>이 가이드는 몇 달 간의 블로그 게시물의 정점입니다. 주제는 <strong>매직 메소드(magic methods)</strong> 입니다.</p>
+
+<p>매직 메소드가 뭘까요? 이들은 객체지향 파이썬의 모든 것입니다. 클래스에 &ldquo;마법&rdquo;을 추가하기 위해 정의할 수 있는 특수한 메소드입니다. 항상 두 개의 밑줄로 둘러싸입니다. (예: <code>__init__</code> 또는 <code>__lt__</code>) 또한 필요한 만큼 문서화되지 않았습니다. 파이썬에 대한 모든 매직 메소드가 파이썬 문서의 동일한 섹션에 있지만, 흩어져 있고, 느슨하게 구성되어 있습니다. 섹션에서 예제는 거의 찾기 어렵습니다. (그리고 모두 지루한 문법 설명과 함께 언어 레퍼런스에 자세히 설명되어 있으므로 잘 설계되어 있을 것입니다.)</p>
+
+<p>그래서, 파이썬의 문서에서 제가 인지한 바를 수정하기 위해 저는 파이썬의 매직 메소드에 대한 좀 더 일반화된 예제 중심의 문서를 제공하기 시작했습니다. 저는 주간 블로그 포스트로 시작했는데, 이제 그 연재가 끝나서 이 가이드를 만들었습니다.</p>
+
+<p>여러분 마음에 들었으면 좋겠습니다. 이를 튜토리얼, 리프레셔 또는 레퍼런스로 사용하시길 바랍니다. 왜냐하면, 파이썬의 매직 메소드에 대한 사용자 친화적인 가이드로 만들었기 때문입니다.</p>
+
+<h2 id="생성-및-초기화">생성 및 초기화</h2>
+
+<p>가장 기본적인 매직 메소드인 <code>__init__</code>는 모두 알고 있습니다. 우리가 객체의 초기화 동작을 정의할 수 있는 방법이죠. 그러나 <code>x = SomeClass()</code> 를 호출하면 <code>__init__</code>이 먼저 호출되지 않습니다. 사실, 이는 <code>__new__</code>라는 메소드로, 실제로 인스턴스를 생성한 다음 생성시에 인수를 초기화 프로그램에 전달합니다. 객체 수명의 다른 끝에는 <code>__del__</code>이 있습니다. 이 3가지 방법을 자세히 살펴 보겠습니다.</p>
+
+<p><code>__new __ (cls, [...)</code> : <code>__new__</code>은 객체의 인스턴스화에서 호출되는 첫 번째 메소드입니다. 클래스를 취한 다음 <code>__init__</code>에 전달할 다른 인수를 취합니다. <code>__new__</code>는 거의 사용되지 않지만 튜플이나 문자열과 같은 불변 유형을 서브 클래싱하는 경우에는 그 용도가 있습니다. 아주 유용하지는 않기 때문에 <code>__new__</code>에 대해 너무 자세히 설명하고 싶지는 않지만
+<a href="http://www.python.org/download/releases/2.2/descrintro/#__new__" target="_blank">파이썬 문서</a>에서 자세히 다루고 있습니다.</p>
+
+<p><code>__init __ (self, [...)</code> : 클래스 이니셜라이저. 기본 생성자가 호출된 것과 관계없이 전달됩니다. (예를 들어, x = SomeClass (10, &lsquo;foo&rsquo;)를 호출하면 <code>__init__</code>은 인수로 &lsquo;10&rsquo;과 &lsquo;foo&rsquo;를 전달합니다.) <code>__init__</code>은 파이썬 클래스
+정의에서 거의 보편적으로 사용됩니다.</p>
+
+<p><code>_del __ (self)</code> : <code>__new__</code>와 <code>__init__</code>이 객체의 생성자를 구성한다면, <code>__del__</code>이 소멸자입니다. <code>del x</code>에 대한 동작을 구현하지 않기 때문에 코드는 <code>x .__ del __ ()</code>로 변환되지 않습니다. 오히려, 객체가 가비지 수집되는 경우에 대한 동작을 정의합니다. 소켓이나 파일 객체와 같이 삭제시 추가 정리가 필요할 수 있는 객체에 매우 유용할 수 있습니다. 그러나 인터프리터가 종료될 때 개체가 아직 살아 있다면 <code>__del__</code>이 실행된다는 보장이 없으므로 주의하시길 바립니다. 따라서 <code>__del__</code>은 좋은 코딩 방법의 대안으로 사용할 수 없습니다 (예: 작업이 끝나면 항상 연결을 닫는 등). 사실, <code>__del__</code>은 불리한 환경 때문에 거의 절대 사용되어서는 안 됩니다. 그러니 주의해서 사용하십시오!</p>
+
+<p>정리해보겠습니다. 다음은 <code>__init__</code>와 <code>__del__</code>의 실제 예제입니다.</p>
+
+<pre><code class="language-python">from os.path import join
+
+class FileObject:
+    '''파일 삭제될 때 파일 닫기를 보장하는 파일 객체에 대한 래퍼'''
+
+    def __init__(self, filepath='~', filename='sample.txt'):
+        # 읽기 쓰기 모드로 파일 경로의 파일을 엽니다.
+        self.file = open(join(filepath, filename), 'r+')
+
+    def __del__(self):
+        self.file.close()
+        del self.file
+</code></pre>
+
+<h2 id="사용자-정의-클래스에서-연산자-만들기">사용자 정의 클래스에서 연산자 만들기</h2>
+
+<p>파이썬의 매직 메소드를 사용하는 가장 큰 장점 중 하나는 객체가 내장 타입처럼 동작하도록 하는 간단한 방법을 제공한다는 것입니다. 즉, 기본 운영자를 수행하는 경우 보기 흉하고, 직관적이지 않은 비표준 방식을 피할 수 있습니다. 일부 언어에서는 다음과 같이하는 것이 일반적입니다.</p>
+
+<pre><code class="language-python">if instance.equals(other_instance):
+    # do something
+</code></pre>
+
+<p>물론 파이썬에서도 이 작업을 수행할 수는 있지만 혼란이 일어나고 불필요하게 자세한 정보가 표시됩니다. 다른 라이브러리는 같은 작업에 대해 다른 이름을 사용할 수 있으므로, 클라이언트가 필요한 것보다 더 많은 일을 합니다. 그러나 매직 매소드의 힘으로 우리는 하나의 메소드(이 경우에는 <code>__eq__</code>)를 정의할 수 있으며 대신에 우리가 의미하는 바를 말할 수 있습니다.</p>
+
+<pre><code class="language-python">if instance == other_instance:
+    #do something
+</code></pre>
+
+<p>이는 매직 매소드 힘의 일부입니다. 이들 대다수는 연산자에게 의미를 정의할 수 있도록 해서, 내장 타입인 것처럼 클래스에서 이들을 사용할 수 있습니다.</p>
+
+<h3 id="매직-매소드-비교">매직 매소드 비교</h3>
+
+<p>파이썬에는 연산자를 사용하여 객체 간에 직관적인 비교를 구현하도록 설계된 수많은 매직 메소드가 있습니다. 이상한 메소드 호출이 아닙니다. 또한 객체 비교를 위한 기본 파이썬 동작을 재정의하는 방법을 제공합니다 (참조 기준). 다음은 메소드의 목록과 메소드가 하는 일입니다.</p>
+
+<p><code>__cmp __ (self, other)</code> : <code>__cmp__</code>는 비교 매직 메소드의 가장 기본입니다. 모든 비교 연산자 (&lt;, ==,! = 등)에 대해 실제로 동작을 구현하지만 원하는대로 수행되지 못할 수 있습니다 (예를 들어, 한 인스턴스가 다른 인스턴스와 동일한 지 여부가 하나의 기준에 의해 결정되고 인스턴스가 다른 인스턴스보다 큰지 아닌지가 다른 것으로 결정되는 경우) <code>__cmp__</code>은 <code>self &lt; other</code>이면 음수를 반환하고 <code>self == other</code>이면 0을 반환하고 <code>self &gt; other</code>이면 양수를 반환해야합니다. 일반적으로 한 번에 정의할 필요없이 각 비교를 정의하는 것이 가장 좋지만, <code>__cmp__</code>은 비슷한 기준으로 구현된 모든 비교가 필요할 때 반복을 저장하고 명확성을 향상시키는 좋은 방법이 될 수 있습니다.</p>
+
+<p><code>__eq __ (self, other)</code> : 항등 연산자, <code>==</code> 에 대한 동작을 정의합니다.</p>
+
+<p><code>__ne __ (self, other)</code> : 부등호 연산자, <code>!=</code> 에 대한 동작을 정의합니다.</p>
+
+<p><code>__lt __ (self, other)</code> : 보다 작음 연산자, <code>&lt;</code> 에 대한 동작을 정의합니다.</p>
+
+<p><code>__gt __ (self, other)</code> : 보다 큼 연산자, <code>&gt;</code> 에 대한 동작을 정의합니다.</p>
+
+<p><code>__le __ (self, other)</code> : 보다 작거나 같음 연산자, <code>&lt;=</code> 에 대한 동작을 정의합니다.</p>
+
+<p><code>__ge __ (self, other)</code> : 크거나 같음 연산자, <code>&gt;=</code> 에 대한 동작을 정의합니다.</p>
+
+<p>예를 들어, 단어를 모델링 하는 클래스를 생각해보세요. 문자열에 대한 비교 동작인 단어를 사전식으로 (알파벳 기준) 비교할 수도 있지만, 길이 또는 음절의 수와 같이 다른 기준에 따라 비교할 수도 있습니다. 예제에서는 길이를 비교합니다. 구현 방법은 다음과 같습니다.</p>
+
+<pre><code class="language-python">class Word(str):
+    '''단어에 대한 클래스로, 단어 길이에 따라 비교를 정의합니다.'''
+
+    def __new__(cls, word):
+        # __new__ 를 사용해야 합니다. 왜냐하면 str은 불변형이므로,
+        # 초기에 (생성시에) 초기화해야 합니다.
+        if ' ' in word:
+            print &quot;Value contains spaces. Truncating to first space.&quot;
+            word = word[:word.index(' ')] # Word는 이제 첫 번째 공백 앞에 모든 문자가 있습니다.
+        return str.__new__(cls, word)
+
+    def __gt__(self, other):
+        return len(self) &gt; len(other)
+    def __lt__(self, other):
+        return len(self) &lt; len(other)
+    def __ge__(self, other):
+        return len(self) &gt;= len(other)
+    def __le__(self, other):
+        return len(self) &lt;= len(other)
+</code></pre>
+
+<p>이제 <code>Word('foo')</code>와 <code>Word('bar')</code>를 사용하여 두 단어를 만들고 길이에 따라 비교할 수 있습니다. 그러나 <code>__eq__</code> 및 <code>__ne__</code>은 정의하지 않았습니다. 이는 <code>Word('foo') == Word ('bar')</code>가 참으로 평가된다는 이상한 행동으로 이어질 수 있기 때문입니다. 길이에 기반한 동일성을 테스트하는 것은 의미가 없으므로 <code>str</code>의 동일성 구현에 의존합니다.</p>
+
+<p>이제 다채로운 비교를 획득하기 위하여 모든 비교 매직 메소드를 정의할 필요가 없다는 것을 알아두면 좋을 것입니다. 표준 라이브러리는 <code>functools</code> 모듈에 클래스 장식자를 제공하여 여러분이 <code>__eq__</code> 및 기타 (예 : <code>__gt__</code>, <code>__lt__</code> 등) 만 정의하면, 모든 다양한 비교 방법을 정의해줍니다. 이 기능은 파이썬 2.7에서만 사용할 수 있지만 여러분에게 많은 시간과 노력을 절약할 기회를 줍니다. 여러분의 클래스 정의 위에 <code>@total_ordering</code>을 두어 이를 사용할 수 있습니다.</p>
+
+<h3 id="숫자-매직-메소드">숫자 매직 메소드</h3>
+
+<p>비교 연산자와 비교될 클래스의 인스턴스에 대한 방법을 만들 수 있는 것처럼 숫자 연산자에 대한 동작을 정의할 수 있습니다. 좌석 벨트 버클, 사람들 &hellip; 등 숫자들은 많이 있습니다. 조직화하기 위해 숫자 매직 메소드를 단항 연산자, 일반 산술 연산자, 리플렉트 산술 연산자 (자세한 내용은 나중에 설명함), 추가 할당 및 유형 변환 등 다섯 가지 범주로 나눴습니다.</p>
+
+<h4 id="단항-연산자와-함수">단항 연산자와 함수</h4>
+
+<p>단항 연산자 및 함수는 부정, 절댓값 등 하나의 피연산자만을 갖습니다.</p>
+
+<p><code>__pos__(self)</code> : 단항 긍정 (예 : <code>+some_object</code>)에 대한 동작을 구현합니다.</p>
+
+<p><code>__neg__(self)</code> : 부정 (예 : <code>-some_object</code>)에 대한 동작을 구현합니다.</p>
+
+<p><code>__abs__(self)</code> : 내장된 <code>abs()</code> 함수의 동작을 구현합니다.</p>
+
+<p><code>__invert__(self)</code> : <code>~</code> 연산자를 사용하여 반전에 대한 동작을 구현합니다. 이 작업에 대한 설명은 <a href="http://en.wikipedia.org/wiki/Bitwise_operation#NOT" target="_blank">비트 연산에 대한 Wikipedia 기사</a>를 참조하세요.</p>
+
+<p><code>__round__(self, n)</code> : 내장된 <code>round()</code> 함수의 동작을 구현합니다. <code>n</code>은 반올림할 소수 자릿수입니다.</p>
+
+<p><code>__floor __(self)</code> : <code>math.floor()</code>에 대한 동작을 구현합니다. 즉, 가장 가까운 정수로 반올림합니다.</p>
+
+<h4 id="일반-산술-연산자">일반 산술 연산자</h4>
+
+<p>이제 우리는 전형적인 바이너리 연산자 +, -, * 등을 다룹니다. 이들은 대부분 꽤 자명합니다.</p>
+
+<p><code>__add__(self, other)</code> : 덧셈을 구현합니다.</p>
+
+<p><code>__sub__(self, other)</code> : 뺄셈을 구현합니다.</p>
+
+<p><code>__mul__(self, other)</code> : 곱셈을 구현합니다.</p>
+
+<p><code>__floordiv__(self, other)</code> : <code>//</code> 연산자를 사용하여 정수 나눗셈을 구현합니다.</p>
+
+<p><code>__div__(self, other)</code> : <code>/</code> 연산자를 사용하여 나눗셈을 구현합니다.</p>
+
+<p><code>__truediv__(self, other)</code> : 진짜 <em>정확한</em> 나눗셈을 구현합니다. 이것은 <code>__future__ import division</code> 이 유효한 경우에만 동작합니다.</p>
+
+<p><code>__mod__(self, other)</code> : <code>%</code> 연산자를 사용하여 나머지를 구현합니다.</p>
+
+<p><code>__divmod__(self, other)</code> : <code>divmod()</code> 내장 함수를 사용하여 <code>long</code> 나눗셈을 위한 동작을 구현합니다.</p>
+
+<p><code>__pow__</code> : <code>**</code> 연산자를 사용하여 지수에 대한 동작을 구현합니다.</p>
+
+<p><code>__lshift__(self, other)</code> : <code>&lt;&lt;</code> 연산자를 사용하여 왼쪽 비트 시프트를 구현합니다.</p>
+
+<p><code>__rshift__(self, other)</code> : <code>&gt;&gt;</code> 연산자를 사용하여 오른쪽 비트 시프트를 구현합니다.</p>
+
+<p><code>__and__(self, other)</code> : <code>&amp;</code> 연산자를 사용하여 비트간 논리곱을 구현합니다.</p>
+
+<p><code>__or__(self, other)</code> : <code>|</code> 연산자를 사용하여 비트간 논리합을 구현합니다.</p>
+
+<p><code>__xo __(self, other)</code> : <code>^</code> 연산자를 사용하여 비트간 배타적 논리합을 구현합니다.</p>
+
+<h4 id="뒤집힌-산술-연산자">뒤집힌 산술 연산자</h4>
+
+<p>여러분은 제가 어떻게 뒤집힌 산술 연산자 (Reflected arithmetic operators)라는 개념에 도달할 것인지 아시나요? 여러분 중 일부는 크고 무서운 외래 개념이라고 생각할 수 있습니다. 사실, 아주 간단합니다. 다음은 예제입니다.</p>
+
+<pre><code class="language-python">some_object + other
+</code></pre>
+
+<p>이는 일반적인 덧셈입니다. 뒤집힌 동치는 다음과 같이 피연산자가 전환된 경우를 제외하고는 같은 것입니다.</p>
+
+<pre><code class="language-python">other + some_object
+</code></pre>
+
+<p>따라서 이러한 모든 매직 메소드는 other를 첫 번째 피연산자로 사용하고, self를 두 번째 피연산자로 사용하는 것 외에는 일반적인 동치에 해당하는 것들과 같은 작업을 수행합니다. 대부분의 경우 뒤집힌 결과는 일반적인 것과 동일하므로 <code>__add__</code>를 호출하는 것으로 <code>__radd__</code>를 정의하는 결과가 발생할 수 있습니다. 연산자의 왼쪽에 있는 객체 (예제에서 other)는 뒤집히지 않은 버전의 연산자에 대해 정의하거나 반환하지 않아야 합니다 (또는 NotImplemented를 반환). 예를 들어, 이 예에서 <code>some_object.__ radd__</code>은 <code>__add__</code> 을 정의하지 않은 경우에만 호출됩니다.</p>
+
+<p><code>__radd__(self, other)</code> : 뒤집힌 덧셈을 구현합니다.</p>
+
+<p><code>__rsub__(self, other)</code> : 뒤집힌 뺄셈을 구현합니다.</p>
+
+<p><code>__rmul__(self, other)</code> : 뒤집힌 곱셈을 구현합니다.</p>
+
+<p><code>__rfloordiv__(self, other)</code> : <code>//</code> 연산자를 사용하여 뒤집힌 정수 나눗셈을 구현합니다.</p>
+
+<p><code>__rdiv __(self, other)</code> : <code>/</code> 연산자를 사용하여 뒤집힌 나눗셈을 구현합니다.</p>
+
+<p><code>__rtruediv__(자기, 기타)</code> : 뒤집힌 정확한 나눗셈을 구현합니다. 이것은 <code>__future__ import division</code> 이 유효한 경우에만 작동합니다.</p>
+
+<p><code>__rmod__(self, other)</code> : <code>%</code> 연산자를 사용하여 뒤집힌 나머지를 구현합니다.</p>
+
+<p><code>__rdivmod__(self, other)</code> : <code>divmod(other, self)</code>가 호출될 때 <code>divmod()</code> 내장 함수를 사용하여 long 나눗셈에 대한 동작을 구현합니다.</p>
+
+<p><code>__rpow__</code> : <code>**</code> 연산자를 사용하여 뒤집힌 지수에 대한 동작을 구현합니다.</p>
+
+<p><code>__rlshift__(self, other)</code> : <code>&lt;&lt;</code> 연산자를 사용하여 뒤집힌 왼쪽 비트 시프트를 구현합니다.</p>
+
+<p><code>__rrshift__(self, other)</code> : <code>&gt;&gt;</code> 연산자를 사용하여 뒤집힌 오른쪽 비트 시프트를 구현합니다.</p>
+
+<p><code>__rand__(self, other)</code> : <code>&amp;</code> 연산자를 사용하여 뒤집힌 비트간 논리곱을 구현합니다.</p>
+
+<p><code>__ror__(self, other)</code> : <code>|</code> 연산자를 사용하여 뒤집힌 비트간 논리합을 구현합니다.</p>
+
+<p><code>__rxor__(self, other)</code> : <code>^</code> 연산자를 사용하여 뒤집힌 비트간 배타논리합을 구현합니다</p>
+
+<h4 id="증가된-할당">증가된 할당</h4>
+
+<p>파이썬은 또한 커스텀 비헤이비어가 증가된 할당(augmented assignment)을 위해 정의될 수 있도록 하는 다양한 방법을 가지고 있습니다. 여러분은 아마도 이미 증가된 할당에 익숙할 것입니다. 이는 &ldquo;일반적인&rdquo; 연산자와 할당을 결합합니다. 아직도 제가 무슨 소린지 하는지 모르겠다면, 다음은 그 예제입니다.</p>
+
+<pre><code class="language-python">x = 5
+x += 1 # 다른 표현으로 x = x + 1
+</code></pre>
+
+<p>이 메소드들 각각은 왼쪽에 있는 변수가 할당되어야 하는 값을 반환해야합니다 (예를 들어, <code>+= b</code> 일 경우 <code>__iadd__</code>는 <code>a</code>에 지정된 <code>+b</code>를 반환할 수 있습니다). 다음은 목록입니다.</p>
+
+<p><code>__iadd__(self, other)</code> : 할당된 덧셈을 구현합니다.</p>
+
+<p><code>__isub__(self, other)</code> : 할당된 뺄셈을 구현합니다.</p>
+
+<p><code>__imul__(self, other)</code> : 할당된 곱셈을 구현합니다.</p>
+
+<p><code>__ifloordiv__(self, other)</code> : <code>//</code> 연산자를 사용하여 할당된 정수 나눗셈을 구현합니다.</p>
+
+<p><code>__idiv__(self, other)</code> : <code>/=</code> 연산자를 사용하여 할당된 나눗셈를 구현합니다.</p>
+
+<p><code>__itruediv __ (self, other)</code> : 할당된 정확한 나눗셈을 구현합니다. 이것은 <code>__future__ import division</code> 이 유효한 경우에만 작동합니다.</p>
+
+<p><code>__imod__(self, other)</code> : <code>%=</code> 연산자를 사용하여 할당된 나머지를 구현합니다.</p>
+
+<p><code>__ipow__</code> : <code>**=</code> 연산자를 사용하여 할당된 지수의 동작을 구현합니다.</p>
+
+<p><code>__ilshift__(self, other)</code> : <code>&lt;&lt;=</code> 연산자를 사용하여 할당된 왼쪽 비트 시프트를 구현합니다.</p>
+
+<p><code>__irshift__(self, other)</code> : <code>&gt;&gt;=</code> 연산자를 사용하여 할당된 오른쪽 비트 시프트를 구현합니다.</p>
+
+<p><code>__iand__(self, other)</code> : <code>&amp;=</code> 연산자를 사용하여 할당된 비트간 논리곱을 구현합니다.</p>
+
+<p><code>__ior__(self, other)</code> : <code>|=</code> 연산자를 사용하여 할당된 비트간 논리합을 구현합니다.</p>
+
+<p><code>__ixor__(self, other)</code> : <code>^=</code> 연산자를 사용하여 할당된 비트간 배타논리합을 구현합니다.</p>
+
+<h4 id="타입-변환-매직-메소드">타입 변환 매직 메소드</h4>
+
+<p>파이썬은 또한 <code>float()</code> 같은 내장 타입 변환 함수의 동작을 구현하도록 설계된 일련의 매직 메소드를 가지고 있습니다. 다음과 같습니다.</p>
+
+<p><code>__int__(self)</code> : int로 타입 변환을 구현합니다.</p>
+
+<p><code>__long__(self)</code> : long으로 타입 변환을 구현합니다.</p>
+
+<p><code>__float__(self)</code> : float로 타입 변환을 구현합니다.</p>
+
+<p><code>__complex__(self)</code> : complex로 타입 변환을 구현합니다.</p>
+
+<p><code>__oct__(self)</code> : 8진수로 타입 변환을 구현합니다.</p>
+
+<p><code>__hex__(self)</code> : 16진수로 타입 변환을 구현합니다.</p>
+
+<p><code>__index__(self)</code> : 슬라이스 표현식에서 객체가 사용될 때 타입 변환을 int로 구현합니다. 슬라이싱에 사용할 수 있는 사용자 지정 숫자 타입을 정의하는 경우, <code>__index__</code>를 정의해야 합니다.</p>
+
+<p><code>__trunc__(self)</code> : <code>math.trunc(self)</code> 가 호출될 때 호출됩니다. <code>__trunc__</code>는 <code>self</code>의 값을 정수형 (대개 long)으로 반환해야 합니다.</p>
+
+<p><code>__coerce __(self, other)</code> : 혼합 모드 산술을 구현하는 메소드. 타입 변환이 불가능할 경우 <code>__coerce__</code>은 <code>None</code>을 반환해야 합니다. 그렇지 않으면 동일한 타입을 갖도록 조작된 <code>self</code>와 <code>other</code>의 쌍 (2-tuple)을 반환해야 합니다.</p>
+
+<h2 id="클래스-표현하기">클래스 표현하기</h2>
+
+<p>클래스를 문자열로 표현하는 것이 종종 유용합니다. 파이썬에는 클래스 정의에서 구현할 수 있는 몇 가지 메소드가 있으며, 클래스의 표현을 반환하는 내장 함수의 작동 방식을 사용자 정의합니다.</p>
+
+<p><code>__str__(self)</code> : 클래스의 인스턴스에서 <code>str()</code>이 호출될 때의 동작을 정의합니다.</p>
+
+<p><code>__repr__(self)</code> : 클래스의 인스턴스에서 <code>repr()</code>이 호출될 때의 동작을 정의합니다. <code>str()</code>과 <code>repr()</code> 사이의 주요 차이점은 만들어진 대상입니다. <code>repr()</code>은 주로 기계가 읽을 수 있는 출력(대부분의 경우, 유효한 파이썬 코드일 수도 있습니다)을 생성하기 위한 것이며, 반면에 <code>str()</code>은 사람이 읽을 수 있도록 만들어졌습니다.</p>
+
+<p><code>__unicode__(self)</code> : 클래스의 인스턴스에서 <code>unicode()</code>가 호출될 때의 동작을 정의합니다. <code>unicode()</code>는 <code>str()</code>과 비슷하지만 유니코드 문자열을 반환합니다. 주의하십시오 : 클라이언트가 클래스의 인스턴스에서 <code>str()</code>을 호출하고 <code>__unicode__()</code> 만 정의한 경우 작동하지 않습니다. 누군가 유니 코드를 사치스럽게 사용하지 못하는 경우를 대비하여 항상 <code>__str__()</code>을 정의해야합니다.</p>
+
+<p><code>__format__(self, formatstr)</code> : 클래스의 인스턴스가 새로운 스타일 문자열 포맷으로 사용될 때의 동작을 정의합니다. 예를 들어 <code>&quot;Hello, {0 : abc}!&quot;.format(a)</code>은 <code>a.__format__(&quot;abc&quot;)</code>를 호출합니다. 특수 서식 옵션을 제공하려는 고유한 숫자 또는 문자열 유형을 정의할 때 유용할 수 있습니다.</p>
+
+<p><code>__hash__(self)</code> : 클래스의 인스턴스에서 <code>hash()</code>가 호출될 때의 동작을 정의합니다. 이 메소드는 정수를 반환해야 하며 그 결과는 사전에서 빠른 키 비교에 사용됩니다. 보통 <code>__eq__</code>도 구현해야 함을 주의하십시오. <code>a == b</code>는 <code>hash (a) == hash (b)</code>를 의미한다는 규칙을 따릅니다.</p>
+
+<p><code>__nonzero__(self)</code> : 클래스의 인스턴스에서 <code>bool()</code>이 호출될 때의 동작을 정의합니다. 인스턴스를 <code>True</code> 또는 <code>False</code>로 간주할지에 따라 <code>True</code> 또는 <code>False</code>를 반환해야합니다.</p>
+
+<p><code>__dir __(self)</code> : 클래스의 인스턴스에서 <code>dir()</code>이 호출 될 때의 동작을 정의합니다. 이 메소드는 사용자의 속성 목록을 반환해야 합니다. 일반적으로 <code>__dir__</code>을 구현하는 것은 불필요하지만 <code>__getattr__</code> 또는 <code>__getattribute__</code> (다음 섹션 참조)를 재정의하거나 그렇지 않으면 동적으로 속성을 생성하는 경우 클래스를 대화식으로 사용하는 것이 매우 중요할 수 있습니다.</p>
+
+<p><code>__sizeof__(self)</code> : 클래스의 인스턴스에서 <code>sys.getsizeof()</code>가 호출될 때의 동작을 정의합니다. 이 메소드는 객체의 크기를 바이트 단위로 반환해야 합니다. 이것은 일반적으로 C확장으로 구현된 Python 클래스에 더 유용하지만, 이를 인식하는 데 도움이됩니다.</p>
+
+<p>우리는 매직 메소드 가이드의 지루하고 (그리고 예제가 없는) 부분으로 끝내고 있습니다. 이제는 좀 더 기본적인 매직 메소드에 대해 살펴 보았으니 이제는 더 고급 자료로 이동할 때입니다.</p>
+
+<h2 id="속성-접근-제어하기">속성 접근 제어하기</h2>
+
+<p>다른 언어로부터 파이썬에 온 많은 사람들은 클래스에 대한 진정한 캡슐화가 부족하다고 불평합니다. 즉, 공용 <code>getter</code> 및 <code>setter</code> 를 사용하여 개인 속성을 정의할 수 있는 방법이 없습니다. 이는 사실과 다릅니다. 파이썬은 메소드나 필드에 대한 명시적 변경자 대신 &ldquo;매직&rdquo;을 통해 많은 양의 캡슐화를 그냥 수행한다는  것입니다. 보세요:</p>
+
+<p><code>__getattr__(self, name)</code> : 사용자가 존재하지 않는 속성에 액세스하려고 시도할 때의 행위를 정의할 수 있습니다. 이는 일반적인 맞춤법 오류를 포착하고 리다이렉트하고, 더 이상 사용되지 않는 속성 (원하는 경우 해당 속성을 계산하고 반환하도록 선택할 수 있음) 사용에 대한 경고를 제공하거나, <code>AttributeError</code>를 손쉽게 전달할 때 유용할 수 있습니다. 그러나 존재하지 않는 속성에 액세스할 때만 호출되므로 실제 캡슐화 솔루션이 아닙니다.</p>
+
+<p><code>__setattr__(self, name, value)</code> : <code>__getattr__</code>과 달리 <code>__setattr__</code>은 캡슐화 솔루션입니다. 이 속성을 사용하면 특성값의 변경 사항에 대한 사용자 지정 규칙을 정의할 수 있으므로 해당 특성의 존재 여부에 관계없이 특성에 할당할 동작을 정의할 수 있습니다. 그러나 목록 끝에 있는 예제가 보여주고 있듯이 <code>__setattr__</code>을 사용하는 방법에 주의를 기울여야합니다.</p>
+
+<p><code>__delattr__(self, name)</code> : 이것은 <code>__setattr__</code>과 완전히 동일하지만 속성을 설정하는 대신 삭제하는 것입니다. 무한 재귀(<code>__delattr__</code> 구현시 <code>del self.name</code>을 호출하면 무한 재귀가 발생합니다)를 방지하기 위해 <code>__setattr__</code>과 동일한 예방 조치를 취해야합니다.</p>
+
+<p><code>__getattribute__(self, name)</code> : <code>__getattribute__</code>는 <code>__setattr__</code> 및 <code>__delattr__</code>와 매우 잘 어울립니다. 그러나, 사용하지 않는 것이 좋습니다. <code>__getattribute__</code>는 새로운 스타일의 클래스에서만 사용할 수 있습니다. 모든 클래스는 최신 버전의 파이썬에서 새로운 스타일이며, 이전 버전에서는 객체를 서브클래싱하여 새로운 스타일을 만들 수 있습니다. 이 메소드는 속성값에 액세스할 때마다 규칙을 정의할 수 있습니다. 이 메소드는 그들의 공범자와 같이 비슷한 무한재귀 문제를 겪습니다. (이번에는 베이스 클래스의 <code>__getattribute__</code> 메소드를 호출하여 이것을 방지합니다). 또한 <code>__getattr__</code>에 대한 필요성을 제거합니다. <code>__getattribute__</code>가 구현되면 명시적으로 호출되거나 <code>AttributeError</code>가 발생하는 경우에만 호출됩니다. 이 메소드를 사용할 수는 있지만 (결국 사용자의 선택사항입니다.) 사용 사례가 적기 때문에 권장하지 않습니다. (값을 할당하는 것보다 값을 획득할 때 특별한 조작이 필요한 상황은 훨씬 더 드뭅니다. (역자: 보통 값을 set할 때보다 get할 때에는 별다른 코드가 필요없다는 뜻인 것 같아요) 왜냐하면 버그없이 구현하는 것은 정말로 어렵기 때문입니다.</p>
+
+<p>속성 액세스를 제어하는 메소드를 정의하는데, 쉽게 문제가 발생할 수 있습니다. 다음 예제를 고려하십시오.</p>
+
+<pre><code class="language-python">def __setattr__(self, name, value):
+    self.name = value
+    # 속성이 할당될 때마다 __setattr__()이 호출됩니다. 이것은 재귀입니다.
+    # 그래서 이것은 정말로 self.__setattr__('name', value)를 의미합니다. 이 메서드는
+    # 계속 호출하므로 이 재귀는 영원히 계속 충돌합니다
+
+def __setattr__(self, name, value):
+    self.__dict__[name] = value # 클래스의 dict의 이름에 할당
+    # 커스텀 동작을 정의
+</code></pre>
+
+<p>다시 말하지만, 파이썬의 매직 메소드는 믿을 수 없을 정도로 강력합니다. 그리고 큰 힘에는 큰 책임이 따릅니다. 코드가 손상되지 않도록 매직 메소드를 사용하는 제대로 된 방법을 아는 것이 중요합니다.</p>
+
+<p>자, 파이썬에서 사용자 정의 속성 액세스에 대해 배웠던 것은 무엇입니까? 속성 액세스는 가볍게 사용되지 않습니다. 사실 과도하게 강력하고 반직관적인 경향이 있습니다. 그러나 이들이 존재하는 이유는 특정한 가려움을 긁어주기 때문입니다. 파이썬은 나쁜 일을 불가능하게 만들려고 하지 않고 단지 어렵게 만듭니다. 자유가 가장 중요한 것인 것처럼, 여러분은 여러분이 원하는 것이라면 무엇이든지 할 수 있습니다. 다음은 특수한 속성 액세스 메소드의 예제입니다 (모든 클래스가 <code>__dict__</code> 속성을 가지고 있지 않기 때문에 <code>super</code>를 사용합니다).</p>
+
+<pre><code class="language-python">class AccessCounter(object):
+    ''' 값을 지니고 있고 액세스 카운터를 구현하는 클래스입니다.
+    값이 변경 될 때마다 카운터가 증가합니다.'''
+
+    def __init__(self, val):
+        super(AccessCounter, self).__setattr__('counter', 0)
+        super(AccessCounter, self).__setattr__('value', val)
+
+    def __setattr__(self, name, value):
+        if name == 'value':
+            super(AccessCounter, self).__setattr__('counter', self.counter + 1)
+        # 무조건 이렇게 합니다.
+        # 다른 속성을 설정하지 않으려면, AttributeError 오류를 발생시킵니다.
+        super(AccessCounter, self).__setattr__(name, value)
+
+    def __delattr__(self, name):
+        if name == 'value':
+            super(AccessCounter, self).__setattr__('counter', self.counter + 1)
+        super(AccessCounter, self).__delattr__(name)
+</code></pre>
+
+<h2 id="커스텀-시퀀스-만들기">커스텀 시퀀스 만들기</h2>
+
+<p>파이썬 클래스가 내장 시퀀스(dict, tuple, list, str 등)처럼 동작하도록 하는 방법은 여러 가지가 있습니다. 이들은 파이썬에서 제가 가장 좋아하는 매직 메소드입니다. 왜냐하면 여러분에게 주는 터무니없는 통제력과 마법처럼 배열의 (글로벌) 함수 전체를 여러분 클래스의 인스턴스에서 아름답게 동작하도록 만드는 방식 때문입니다. 그러나 우리가 좋은 물건에 관심을 가지기 전에, 요구사항에 관한 것들을 신속하게 말씀드리겠습니다.</p>
+
+<h3 id="요구사항">요구사항</h3>
+
+<p>자, 우리는 파이썬에서 자신의 시퀀스를 만드는 것에 대해 말하고 있는데, 프로토콜에 대해 이야기할 차례입니다. 프로토콜은 사용자가 정의해야 하는 일련의 메소드를 제공한다는 점에서 다른 언어의 인터페이스와 다소 유사합니다. 그러나 파이썬 프로토콜은 완전히 비공식적이므로 명시적 선언을 구현할 필요가 없습니다. 오히려 그들은 가이드 라인과 같습니다.</p>
+
+<p>왜 지금 프로토콜에 대해 이야기하고 있습니까? 파이썬에서 사용자 정의 컨테이너 타입을 구현하려면 이러한 프로토콜 중 일부가 필요합니다. 첫째, 불변 컨테이너를 정의하는 프로토콜이 있습니다. 불변 컨테이너를 만들기 위해서는 <code>__len__</code>과 <code>__getitem__</code>(나중에 자세히 설명)만 정의하면 됩니다. 가변 컨테이너 프로토콜에는 불변 컨테이너에 필요한 모든 항목과 <code>__setitem__</code> 및 <code>__delitem__</code>이 필요합니다. 마지막으로, 객체를 반복할 수 있게 하려면 반복자를 반환하는 <code>__iter__</code>를 정의해야 합니다. 이 반복자는 반복자 프로토콜을 준수해야 합니다. 반복자에는 <code>__iter__(자체를 반환)</code>와 <code>next</code>라는 메서드가 있어야 합니다.</p>
+
+<h3 id="컨테이너-뒤의-마법">컨테이너 뒤의 마법</h3>
+
+<p>컨테이너가 사용하는 매직 메소드는 다음과 같습니다.</p>
+
+<p><code>__len__(self)</code> : 컨테이너의 길이를 반환합니다. 불변 및 가변 컨테이너에 대한 프로토콜의 일부입니다.</p>
+
+<p><code>__getitem__(self, key)</code> : <code>self[key]</code> 표기법을 사용하여 항목에 액세스할 때의 동작을 정의합니다. 이것은 가변 컨테이너 프로토콜과 불변 컨테이너 프로토콜의 일부이기도 합니다. 또한 적절한 예외를 발생시켜야합니다. 즉, 키의 유형이 잘못된 경우 <code>TypeError</code>를, 키에 해당하는 값이 없는 경우 <code>KeyError</code>를 지정하십시오.</p>
+
+<p><code>__setitem__(self, key, value)</code> : <code>self[nkey] = value</code> 표기법을 사용하여 항목이 할당된 경우의 동작을 정의합니다. 이것은 가변 컨테이너 프로토콜의
+일부입니다. 다시, <code>KeyError</code>와 <code>TypeError</code>를 적절히 발생시켜야 합니다.</p>
+
+<p><code>__delitem__(self, key)</code> : 항목이 삭제 된 경우의 동작을 정의합니다(예 : <code>del self[key]</code>). 이것은 가변 컨테이너 프로토콜의 일부일뿐입니다. 유효하지 않은 키가 사용되면 적절한 예외를 발생시켜야합니다.</p>
+
+<p><code>__iter__(self)</code> : 컨테이너에 대한 반복자를 반환해야합니다. 반복자는 많은 컨텍스트에서 반환됩니다. 특히 <code>iter()</code> 내장 함수와 <code>for x in container:</code> 형태를 사용하여 컨테이너가 반복될 때 가장 많이 볼 수 있습니다. 반복자는 자체가 객체이며 자체를 반환하는 <code>__iter__</code> 메서드를 정의해야 합니다.</p>
+
+<p><code>__reversed__(self)</code> : <code>reversed()</code> 내장 함수의 동작을 구현하기 위해 호출됩니다. 시퀀스의 반대 버전을 반환해야합니다. 시퀀스 클래스가 <code>list</code> 또는 <code>tuple</code>과 같이 정렬된 경우에만 이를 구현하시길 바랍니다.</p>
+
+<p><code>__contains__(self, item)</code> : <code>__contains__</code>는 <code>in</code>과 <code>not in</code>을 사용하여 멤버십 테스트에 대한 동작을 정의합니다. 이 부분이 시퀀스 프로토콜의 일부가 아닌 이유를 물으신다면, <code>__contains__</code>가 정의되어 있지 않을 때, 파이썬은 그냥 시퀀스를 반복하며 찾고 있는 항목을 발견할 경우 <code>True</code>를 반환하기 때문입니다.</p>
+
+<p><code>__missing__(self, key)</code> : <code>__missing__</code>은 <code>dict</code>의 서브 클래스에서 사용됩니다. 사전에 존재하지 않는 키에 액세스 할 때마다 동작을 정의합니다 (예를 들어, 딕셔러니 <code>d</code>가 있고 <code>&quot;george&quot;</code>가 <code>dict</code>에서 키가 아닌데 <code>d[&quot;george&quot;]</code>라고 말한 경우, <code>d.__missing__(&quot;george&quot;)</code>가 호출됩니다.</p>
+
+<h3 id="예제">예제</h3>
+
+<p>예를 들어, 다른 언어에서 익숙해질 수 있는 몇 가지 함수형 생성자를 구현하는 리스트를 살펴보겠습니다. (예, 하스켈)</p>
+
+<pre><code class="language-python">class FunctionalList:
+    '''head, tail, init, last, drop 및 take와 같은 추가적인 함수형 매직으로
+    목록을 래핑하는 클래스입니다.'''
+
+
+    def __init__(self, values=None):
+        if values is None:
+            self.values = []
+        else:
+            self.values = values
+
+    def __len__(self):
+        return len(self.values)
+
+    def __getitem__(self, key):
+        # key의 타입이나 값이 유효하지 않은 경우,리스트의 값은 에러를 발생시킵니다.
+        return self.values[key]
+
+    def __setitem__(self, key, value):
+        self.values[key] = value
+
+    def __delitem__(self, key):
+        del self.values[key]
+
+    def __iter__(self):
+        return iter(self.values)
+
+    def __reversed__(self):
+        return reversed(self.values)
+
+    def append(self, value):
+        self.values.append(value)
+    def head(self):
+        # 첫 번째 요소를 가져옵니다.
+        return self.values[0]
+    def tail(self):
+        # 첫 번째 이후의 모든 요소들을 가져옵니다.
+        return self.values[1:]
+    def init(self):
+        # 마지막 까지의 직전 요소들을 가져옵니다.
+        return self.values[:-1]
+    def last(self):
+        # 마지막 요소를 가져옵니다.
+        return self.values[-1]
+    def drop(self, n):
+        # 처음 n개를 제외한 모든 요소를 가져옵니다.
+        return self.values[n:]
+    def take(self, n):
+        # 처음 n개의 요소를 가져옵니다.
+        return self.values[:n]
+</code></pre>
+
+<p>바로 자신만의 시퀀스를 구현하는 방법에 대한 유용한 예제였습니다. 물론 사용자 정의 시퀀스의 보다 유용한 응용 프로그램이 있지만, <code>Counter</code>, <code>OrderedDict</code> 및 <code>NamedTuple</code>과 같이 그들 중 일부는 표준 라이브러리 (배터리 포함)에 이미 구현되어 있습니다.</p>
+
+<h2 id="리플렉션">리플렉션</h2>
+
+<p>또한 여러분은 내장함수 <code>isinstance()</code>와 <code>issubclass()</code>로  매직 메서드를 정의하여 리플렉션이 동작하는 방식을 제어할 수 있습니다. 매직 메소드는 다음과 같습니다.</p>
+
+<p><code>__instancecheck__(self, instance)</code> : 인스턴스가 정의한 클래스의 인스턴스인지 확인합니다 (예 : <code>isinstance(instance, class)</code>).</p>
+
+<p><code>__subclasscheck__(self, subclass)</code> : 클래스가 정의한 클래스의 하위 클래스인지 확인합니다 (예 : <code>issubclass(subclass, class)</code>).</p>
+
+<p>이 매직 메소드의 유즈케이스는 미미해 보일 수 있으며, 이는 사실일 수 있습니다. 리플렉션 매직 메소드에 너무 많은 시간을 할애하지는 않겠지만, 파이썬과 파이썬에서 객체지향 프로그래밍에 대해 중요한 것을 반영합니다. 설령 필요하지 않더라도, 뭔가를 하기 위한 쉬운 방법이 거의 항상 있다는 것입니다. 이 매직 메소드는 유용하지 않을 수도 있지만, 필요할 때면 그들이 거기에 있다는 것을 알게 될 것입니다 (그리고 이 가이드를 읽었으니깐요!).</p>
+
+<h2 id="호출-가능한-객체">호출 가능한 객체</h2>
+
+<p>이미 알고 있겠지만, 파이썬에서는 함수가 일급객체입니다. 즉, 마치 다른 종류의 객체인 것처럼 함수와 메소드에 전달할 수 있습니다. 이것은 매우 강력한 기능입니다.</p>
+
+<p>파이썬의 특별한 매직 메소드는 클래스의 인스턴스가 마치 함수인 것처럼 동작하게 할 수 있으므로, 인스턴스를 &ldquo;호출&rdquo;할 수 있고 함수를 인수로 사용하는 함수에  인스턴스를 전달할 수 있습니다. 이것은 파이썬 프로그래밍을 훨씬 더 매력적으로 만드는 또 다른 강력한 기능입니다.</p>
+
+<p><code>__call__(self, [args ...])</code> : 클래스의 인스턴스를 함수로 호출할 수 있습니다. 본질적으로 이것은 <code>x()</code> 가 <code>x .__ call__()</code>과 동일하다는 것을 의미합니다. <code>__call__</code>은 가변 개수의 인수(argument)를 취합니다. 이는 다른 함수처럼 <code>__call__</code>을 정의한다는 것을 의미합니다. 그러나 원하는 많은 인수를 취합니다.</p>
+
+<p><code>__call__</code>은 종종 상태를 변경해야 하는 인스턴스가 있는 클래스에서 유용할 수 있습니다. 객체의 상태를 변경하기 위해 인스턴스를 &ldquo;호출&rdquo;하는 것은 직관적이고 우아한 방법입니다. 예제는 비행기에서 엔티티의 위치를 나타내는 클래스일 수 있습니다.</p>
+
+<pre><code class="language-python">class Entity:
+    '''엔티티를 나타내는 클래스입니다. 엔터티의 위치를 업데이트하기 위해 호출 가능함.''
+
+    def __init__(self, size, x, y):
+        self.x, self.y = x, y
+        self.size = size
+
+    def __call__(self, x, y):
+        ''' 엔티티의 위치를 변경합니다.'''
+        self.x, self.y = x, y
+
+    # 생략...
+</code></pre>
+
+<h2 id="컨텍스트-매니저">컨텍스트 매니저</h2>
+
+<p>파이썬 2.5에서는 코드 재사용을 위한 새로운 메소드와 새로운 키워드가 도입되었습니다. 바로 <code>with</code> 문입니다. 컨텍스트 관리자의 개념은 파이썬에서 거의 새로운 개념이 아니었습니다 (이전에는 라이브러리 일부로 구현되었지만). <a href="http://www.python.org/dev/peps/pep-0343/" target="_blank">PEP 343</a>이 받아 들여지기 전에는 일급 언어 구성자로서의 지위를 얻지 못했습니다. 다음과 같이 여러분은 이전에 <code>with</code> 문을 본 적이 있을 겁니다.</p>
+
+<pre><code class="language-python">with open('foo.txt') as bar:
+    # bar로 어떤 액션을 수행합니다.
+</code></pre>
+
+<p>객체 생성을 <code>with</code> 문으로 래핑할 때, 객체에 대한 셋업 및 클린업 조치를 할 수 있게 됩니다. 컨텍스트 관리자의 동작은 두 가지 방법으로 결정됩니다.</p>
+
+<p><code>__enter__(self)</code> : with 문에 의해 생성된 블록의 시작 부분에서 컨텍스트 관리자가 수행해야 하는 작업을 정의합니다. <code>__enter__</code>의 반환값은 <code>with</code> 문의 대상 또는 <code>as</code> 다음의 이름에 바인딩됩니다.</p>
+
+<p><code>__exit __(self, exception_type, exception_value, traceback)</code> : 블록이 실행(또는 종료) 된 후에 컨텍스트 관리자가 해야할 일을 정의합니다. 예외를 처리하거나, 클린업을 실행하거나 또는 블록의 실행 직후에 항상 수행되는 작업을 진행할 수 있습니다. 블록이 성공적으로 실행되면 <code>exception_type</code>, <code>exception_value</code> 및 <code>traceback</code>은 <code>None</code>이 됩니다. 그렇지 않으면 예외를 처리하도록 선택하거나 사용자가 처리하도록 선택할 수 있습니다. 여러분이 (별도로) 처리하고 싶다면, <code>__exit__</code>이 모두 진술되고 완료된 후에 <code>True</code>를 반환하는지 확인하세요. 컨텍스트 관리자가 예외를 처리하지 못하게 하려면 그냥 그대로 두면 됩니다.</p>
+
+<p><code>__enter__</code> 및 <code>__exit__</code>은 셋업과 및 클린업에 대해 잘 정의되고 공통된 동작을 하는 특정 클래스에 유용할 수 있습니다. 이 메소드를 사용하여 다른 객체를 래핑하는 일반 컨텍스트 매니저를 작성할 수도 있습니다. 다음은 그 예제입니다.</p>
+
+<pre><code class="language-python">class Closer:
+    '''with 문에서 close 메소드를 사용하여 객체를 자동으로 닫는 컨텍스트
+    관리자입니다.'''
+
+    def __init__(self, obj):
+        self.obj = obj
+
+    def __enter__(self):
+        return self.obj # bound to target
+
+    def __exit__(self, exception_type, exception_val, trace):
+        try:
+           self.obj.close()
+        except AttributeError: # 객체를 닫을 수 없는 경우입니다.
+           print 'Not closable.'
+           return True # 예외가 성공적으로 처리되었습니다.
+</code></pre>
+
+<p>다음은 FTP 연결을 사용한, 클로저 가능한 클로저의 예입니다 (클로저 가능한 소켓).</p>
+
+<pre><code class="language-pythonconsole">&gt;&gt;&gt; from magicmethods import Closer
+&gt;&gt;&gt; from ftplib import FTP
+&gt;&gt;&gt; with Closer(FTP('ftp.somesite.com')) as conn:
+...     conn.dir()
+...
+# 길어서 출력은 생략
+&gt;&gt;&gt; conn.dir()
+# 긴 AttributeError 메세지, 닫힌 연결은 사용할 수 없습니다.
+&gt;&gt;&gt; with Closer(int(5)) as i:
+...     i += 1
+...
+Not closable.
+&gt;&gt;&gt; i
+6
+</code></pre>
+
+<p>래퍼가 적절하고 부적절한 사용을 어떻게 우아하게 처리하는지 보셨나요? 이것이 바로 컨텍스트 매니저와 매직 메소드의 힘입니다. 파이썬 표준 라이브러리에는 거의 같은 작업을 하는, <code>contextlib.closing()</code>라는 컨텍스트 매니저를 지닌 <code>contextlib</code>가 포함되어 있습니다 (객체에 <code>close()</code> 메서드가 없는 경우는 다루지 않음).</p>
+
+<h2 id="추상-베이스-클래스">추상 베이스 클래스</h2>
+
+<p><a href="http://docs.python.org/2/library/abc.html" target="_blank">http://docs.python.org/2/library/abc.html</a> 를 참조하세요.</p>
+
+<h2 id="디스크립터-객체-만들기">디스크립터 객체 만들기</h2>
+
+<p>디스크립터는 가져 오기, 설정 또는 삭제를 통해 액세스할 때 다른 객체를 변경할 수 있는 클래스입니다. 디스크립터는 단독으로 존재하지 않습니다. 오히려, 이들은 소유자 클래스에 의해 소유됩니다. 디스크립터는 값이 서로 의존하는 속성을 가진 객체지향 데이터베이스 또는 클래스를 빌드할 때 유용할 수 있습니다. (역자 주: 어떤 변수나 함수에 접근, 변경, 삭제하는 것을 제어하거나 로그 출력 등의 이벤트를 걸고 싶을 때에도 유용합니다.) 디스크립터는 특히 여러 측정 단위로 속성을 표현하거나 계산된 속성(클래스의 원점에서 그리드의 한 점을 나타내는 거리와 같은)을 나타낼 때 특히 유용합니다.</p>
+
+<p>디스크립터가 되려면 클래스에 <code>__get__</code>, <code>__set__</code> 및 <code>__delete__</code> 중 하나 이상이 구현되어 있어야 합니다. 이들의 매직 메소드를 살펴봅시다.</p>
+
+<p><code>__get__(self, instance, owner)</code> : 디스크립터의 값이 회수될 때의 동작을 정의합니다. <code>instance</code>는 소유자 객체의 인스턴스입니다. <code>owner</code>는 소유자 클래스 자체입니다.</p>
+
+<p><code>__set__(self, instance, value)</code> : 디스크립터의 값이 변경될 때의 동작을 정의합니다. <code>instance</code>는 소유자 클래스의 인스턴스이고 <code>value</code>는 디스크립터에 설정하는 값입니다.</p>
+
+<p><code>__delete__(self, instance)</code> : 디스크립터의 값이 삭제될 때의 동작을 정의합니다. <code>instance</code>는 소유자 객체의 인스턴스입니다.</p>
+
+<p>자, 디스크립터의 유용한 응용 예제, 단위 변환입니다.</p>
+
+<pre><code class="language-python">class Meter(object):
+    '''meter에 대한 디스크립터 '''
+
+    def __init__(self, value=0.0):
+        self.value = float(value)
+    def __get__(self, instance, owner):
+        return self.value
+    def __set__(self, instance, value):
+        self.value = float(value)
+
+class Foot(object):
+    '''footer에 대한 디스크립터'''
+
+    def __get__(self, instance, owner):
+        return instance.meter * 3.2808
+    def __set__(self, instance, value):
+        instance.meter = float(value) / 3.2808
+
+class Distance(object):
+    '''feet 와 meter에 대한 두 개의 디스크립터를 나타내는 클래스입니다.'''
+    meter = Meter()
+    foot = Foot()
+</code></pre>
+
+<h2 id="복사하기">복사하기</h2>
+
+<p>때로는 변경 가능한 객체를 처리할 때, 특히 복사한 객체에 영향을 주지 않고 객체를 복사하고 변경할 수 있기를 원합니다. 이것은 파이썬의 <code>[copy](http://docs.python.org/library/copy.html)</code>가 나온 배경입니다. 그러나 (다행스럽게도) 파이썬 모듈은 민감하지 않으므로 리눅스 기반의 로봇의 폭동 (a Linux-based robot uprising)에 대해 걱정할 필요는 없지만, 파이썬에게 효율적으로 복사하는 방법을 알려줘야합니다.</p>
+
+<p><code>__copy__(self)</code> : 클래스의 인스턴스에 대해 <code>copy.copy()</code>에 대한 동작을 정의합니다. <code>copy.copy()</code>는 객체의 단순 복사본을 반환합니다. 즉, 인스턴스 자체가 새 인스턴스이지만 모든 데이터가 참조됩니다. 즉, 객체 자체는 복사되지만 데이터는 계속 참조됩니다. 따라서 얕은 사본의 데이터가 변경되면 원본이 변경 될 수 있습니다.</p>
+
+<p><code>__deepcopy__(self, memodict = {})</code> : 클래스의 인스턴스에 대해 <code>copy.deepcopy()</code>에 대한 동작을 정의합니다. <code>copy.deepcopy()</code>는 객체의 전체 복사본을 반환합니다. 객체와 그 데이터는 모두 복사됩니다. <code>memodict</code>는 이전에 복사된 객체의 캐시입니다.이 방법은 복사를 최적화하고 재귀적 데이터 구조를 복사할 때 무한 재귀를 방지합니다. 개별 속성을 깊이 복사하려면, <code>memdeict</code>를 첫 번째 인수로 사용하여 해당 속성에 대해 <code>copy.deepcopy()</code>를 호출하시면 됩니다.</p>
+
+<p>이 매직 메소드의 유즈케이스는 무엇일까요? 언제나 그렇듯이 기본 동작이 제공하는 것보다 세분화된 제어가 필요한 경우가 있습니다. 예를 들어, 딕셔너리에 캐시를 저장하는 객체를 복사하려고 시도하면 (크기가 클 수 있음), 캐시를 복사하는 것이 적절하지 않을 수 있습니다. 인스턴스간에 메모리에서 캐시를 공유할 수 있다면 그렇게 해야합니다.</p>
+
+<h2 id="객체-피클링하기">객체 피클링하기</h2>
+
+<p>다른 파이썬 프로그래머와 함께 시간을 보내고 있다면, 적어도 피클링에 대해 들어 본 적이 있을 것입니다. 피클링은 파이썬 데이터 구조의 직렬화 프로세스이며, 객체를 저장하고 나중에 검색해야 할 때 (대개 캐싱을 위해) 매우 유용할 수 있습니다. 또한 걱정과 혼란의 주요 원인이기도 합니다.</p>
+
+<p>피클링은 매우 중요하므로 자체 모듈(<code>pickle</code>)이 아니라 자체 프로토콜과 함께 사용하는 매직 메소드가 필요합니다. 그러나 먼저 기존 유형을 피클링하는 방법에 대한 간단한 것들을 말씀드리겠습니다 (이미 알고있는 경우 건너 뛸 수 있음).</p>
+
+<h3 id="피클링-소금물에-빨리-절이기">피클링: 소금물에 빨리 절이기</h3>
+
+<p>피클링에 빠져 보죠. 나중에 저장하고 조회하고 싶은 딕셔너리가 있다고 합시다. 내용을 파일에 쓸 수 있으며, 올바른 구문을 작성했는지 확인한 다음 <code>exec()</code> 또는 파일 입력 처리를 사용하여 내용을 조회할 수 있습니다. 그러나 이것은 매우 위험합니다. 중요한 데이터를 일반 텍스트로 저장하면 프로그램이 충돌하거나 악성 코드가 컴퓨터에서 실행되도록 다양한 방법으로 손상되거나 변경될 수 있습니다. 대신, 우리는 그것을 피클하려고합니다 :</p>
+
+<pre><code class="language-python">import pickle
+
+data = {'foo': [1, 2, 3],
+        'bar': ('Hello', 'world!'),
+        'baz': True}
+jar = open('data.pkl', 'wb')
+pickle.dump(data, jar) # jar 파일에 피클된 데이터를 기록합니다.
+jar.close()
+</code></pre>
+
+<p>몇 시간 후, 우리는 되돌리기 원합니다. 우리가 해야 할 일은 언피클하는 것입니다.</p>
+
+<pre><code class="language-python">import pickle
+
+pkl_file = open('data.pkl', 'rb') # 피클한 데이터에 연결합니다.
+data = pickle.load(pkl_file) # 데이터를 변수로 로드합니다.
+print data
+pkl_file.close()
+</code></pre>
+
+<p>도대체 무슨 일이 일어난 걸까요? 정확히 여러분이 기대하는 것이죠. 우리가 데이터를 모두 가지고 있었던 것과 같습니다.</p>
+
+<p>자, 주의 사항을 말씀드리겠습니다. 피클링은 완벽하지 않습니다. 피클 파일은 실수로 또는 고의로 쉽게 손상됩니다. 피클링은 무난한 텍스트 파일을 사용하는 것보다 안전할 수 있지만 악성 코드를 실행하는 데에 여전히 사용될 수 있습니다. 다른 버전의 파이썬에서도 호환되지 않으므로 피클링된 객체를 배포하고 사람들이 이를 열 수 있을 것으로 기대하지 마세요. 그러나 캐싱 및 기타 일반적인 직렬화 작업을 위한 강력한 도구가 될 수도 있습니다.</p>
+
+<h3 id="자신의-객체-피클링하기">자신의 객체 피클링하기</h3>
+
+<p>피클링은 내장 타입을 위한 것이 아닙니다. 피클 프로토콜을 따르는 모든 클래스를 위한 것입니다. 피클 프로토콜에는 파이썬 객체가 동작하는 방식을 사용자 정의할 수 있는 4가지 선택적 메소드가 있습니다 (C 확장의 경우에는 약간 다르지만 범위에는 포함되지 않습니다).</p>
+
+<p><code>__getinitargs__(self)</code> : 클래스가 언피클되었을 때 <code>__init__</code>을 호출하고 싶다면, <code>__getinitargs__</code>를 정의할 수 있습니다. 이 <code>__getinitargs__</code>는 <code>__init__</code>에 전달할 인수의 튜플을 반환해야 합니다. 이 메소드는 구식 클래스에서만 작동합니다.</p>
+
+<p><code>__getnewargs__(self)</code> : 새로운 스타일의 클래스의 경우, 언피클링을 할 때 <code>__new__</code>에 전달되는 인수에 영향을 줄 수 있습니다. 이 메소드는 <code>__new__</code>로 전달되는 인수 튜플을 반환해야합니다.</p>
+
+<p><code>__getstate__(self)</code> : 객체의 <code>__dict__</code> 속성이 저장되는 대신 객체가 피클될 때 저장할 수 있는 사용자 정의 상태를 반환할 수 있습니다. 그 상태는 객체가 언피클 되었을 때 <code>__setstate__</code>에 의해 사용됩니다.</p>
+
+<p><code>__setstate__(self, state)</code> : 객체가 언피클 되었을 때 <code>__setstate__</code>가 정의 되었다면, 객체의 상태는 객체의 <code>__dict__</code>에 직접 적용되지 않고 전달됩니다. 이것은 <code>__getstate__</code>와 함께 사용됩니다 : 둘 다 정의되면 객체의 피클된 상태를 여러분이 원하는대로 나타낼 수 있습니다.</p>
+
+<p><code>__reduce__(self)</code> : 확장 타입(즉, 파이썬의 C API를 사용하여 구현된 타입)을 정의 할 때 파이썬에서 피클링하려는 경우 피클링 방법을 지정해야합니다. <code>__reduce__()</code>는 정의된 객체가 피클될 때 호출됩니다. 파이썬이 찾고 피클하는 전역 이름을 나타내는 문자열 또는 튜플을 반환할 수 있습니다. 튜플은 2 ~ 5 개의 요소를 포함합니다. 객체를 다시 생성하기 위해 호출되는 호출 가능 객체, 호출 가능 객체에 대한 인수의 튜플, <code>__setstate__</code>에 전달될 상태 (선택 사항), 피클링될 리스트 항목을 생성하는 반복자(선택 사항), 피클링할 딕셔너리 항목을 생성하는 반복자 (선택 사항)가 있습니다.</p>
+
+<p><code>__reduce_ex__(self)</code> : <code>__reduce_ex__</code>은 호환성을 위해 존재합니다. 정의된 경우, <code>__reduce_ex__</code>는 피클링시에 <code>__reduce__</code>를 통해 호출됩니다. <code>__reduce__</code>는 <code>__reduce_ex__</code>을 지원하지 않는 이전 버전의 피클링 API에 대해서도 정의할 수 있습니다.</p>
+
+<h3 id="예제-1">예제</h3>
+
+<p>예제는 슬레이트(Slate)로, 그 값이 무엇인지, 그 값이 쓰여졌을 때를 기억합니다. 그러나 이 특정 슬레이트는 피클될 때마다 공백으로 표시됩니다. 현재 값은 저장되지 않습니다.</p>
+
+<pre><code class="language-python">import time
+
+class Slate:
+    '''문자열과 변경 로그를 저장하고 피클될 때 값을 잊어 버리는 클래스'''
+
+    def __init__(self, value):
+        self.value = value
+        self.last_change = time.asctime()
+        self.history = {}
+
+    def change(self, new_value):
+        # 값을 변경합니다. 히스토리에 마지막 값을 커밋합니다.
+        self.history[self.last_change] = self.value
+        self.value = new_value
+        self.last_change = time.asctime()
+
+    def print_changes(self):
+        print 'Changelog for Slate object:'
+        for k, v in self.history.items():
+            print '%s\t %s' % (k, v)
+
+    def __getstate__(self):
+        # 의도적으로 self.value 또는 self.last_change를 반환하지 마세요.
+        # 픽업할 때 빈 슬레이트를 갖길 원하니깐요.
+        return self.history
+
+    def __setstate__(self, state):
+        # self.history = salte 하고  last_change 와 value가 정의되지
+        않게 합니다.
+        self.history = state
+        self.value, self.last_change = None, None
+</code></pre>
+
+<h2 id="결론">결론</h2>
+
+<p>이 가이드의 목적은 파이썬 또는 객체지향 프로그래밍 경험에 관계없이, 읽는 사람에게 무언가를 가져다주는 것입니다. 파이썬을 처음 시작하는 분이라면 기능이 풍부하고 우아하며 사용하기 쉬운 클래스를 작성하는 기본 지식에 대한 지식을 얻었을 것입니다. 파이썬 프로그래머라면 중급의 새로운 개념과 전략, 그리고 여러분과 클라이언트가 작성한 코드의 양을 줄이는 좋은 방법을 발견했을 것입니다. 파이셔니스타(Pythonista)의 전문가라면 잊어버린 것들을 새롭게 하고 어쩌면 몇 가지 새로운 트릭을 발견했을 것입니다. 여러분의 경험 수준에 관계없이, 파이썬의 특별한 메소드를 통한 이 여행이 정말로 마법적이었기를 바랍니다.</p>
+
+      
+      <div class="related">
+
+<h3>Similar articles:</h3>
+<ul>
+	
+	<li><a href="/posts/using_custom_model_to_dict_in_django/">Using custom model_to_dict() in Django</a></li>
+	
+	<li><a href="/posts/falcon-rest-template/">Falcon REST API</a></li>
+	
+</ul>
+</div>
+      
+    </div>
+    
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <aside><div id="disqus_thread"></div></aside>
+    <script type="text/javascript">
+      var disqus_shortname = 'ziwon';
+      (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container has-text-centered">
+    <p>&copy; <a href="https://github.com/ziwon">Philbert Yoon</a> 2018</p>
+  </div>
+</section>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js" integrity="sha256-KbfTjB0WZ8vvXngdpJGY3Yp3xKk+tttbqClO11anCIU=" crossorigin="anonymous"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-61678624-3', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
