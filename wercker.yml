@@ -10,8 +10,7 @@ build:
     - arjen/hugo-build:
         config: config.toml
         flags: "--buildDrafts=false"
-        theme: hemingway2
-        version: "0.18"
+        theme: kiss
   after-steps:
     - install-packages:
         packages: git curl
