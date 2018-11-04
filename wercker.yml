@@ -8,8 +8,9 @@ build:
         code: |
             git submodule update --init --recursive
     - arjen/hugo-build:
+        version: "0.17"
         config: config.toml
-        flags: "--buildDrafts=false"
+        flags: --buildDrafts=false
         theme: kiss
   after-steps:
     - install-packages:
