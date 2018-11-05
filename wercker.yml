@@ -11,7 +11,7 @@ build:
         version: "0.50"
         config: config.toml
         flags: --buildDrafts=false
-        theme: hugo-paper
+        theme: even
   after-steps:
     - install-packages:
         packages: git curl
