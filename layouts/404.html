@@ -24,7 +24,7 @@
       var randomVideoUrl = videos[Math.floor(Math.random() * videos.length)];
       player.setAttribute('width', '640');
       player.setAttribute('height', '390');
-      player.setAttribute('src', randomVideoUrl);
+      player.setAttribute('src', randomVideoUrl + "?autoplay=1");
       playerDiv.appendChild(player);
     };
 </script>
