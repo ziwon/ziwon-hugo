@@ -5,8 +5,8 @@
   <h1 class="error-emoji"></h1>
   <p class="error-text">/* 404 page not found. */</p>
   <p class="error-link"><a href="{{ "/" | relLangURL }}">↑ Back Home ↑</a></p>
+  <div id="random_player" />
 </div>
-<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/17301025&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
 <script>
   var errorEmojiContainer = document.getElementsByClassName('error-emoji')[0];
   var emojiArray = [
@@ -16,5 +16,16 @@
   ];
   var errorEmoji = emojiArray[Math.floor(Math.random() * emojiArray.length)];
   errorEmojiContainer.appendChild(document.createTextNode(errorEmoji));
+
+  var videos = ["https://www.youtube-nocookie.com/embed/z3wa89TU3WU", "https://www.youtube.com/embed/FAzZQ9_HX4M" , "https://www.youtube.com/embed/yKJnxA_3AY8"];
+    window.onload = function () {
+      var playerDiv = document.getElementById("random_player");
+      var player = document.createElement("IFRAME");
+      var randomVideoUrl = videos[Math.floor(Math.random() * videos.length)];
+      player.setAttribute('width', '640');
+      player.setAttribute('height', '390');
+      player.setAttribute('src', randomVideoUrl);
+      playerDiv.appendChild(player);
+    };
 </script>
 {{ end }}
