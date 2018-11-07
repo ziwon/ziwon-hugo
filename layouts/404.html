@@ -1,0 +1,20 @@
+{{ define "title" }}404 page not found - {{ .Site.Title }}{{ end }}
+
+{{ define "content" }}
+<div class="not-found">
+  <h1 class="error-emoji"></h1>
+  <p class="error-text">/* 404 page not found. */</p>
+  <p class="error-link"><a href="{{ "/" | relLangURL }}">↑ Back Home ↑</a></p>
+</div>
+<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/17301025&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
+<script>
+  var errorEmojiContainer = document.getElementsByClassName('error-emoji')[0];
+  var emojiArray = [
+    'ヾ(≧∇≦*)ゝ', '(˚Δ˚)b', '(◑‿◐✿)', '(≥o≤)', '(✿◠‿◠)', '⁽(◍˃̵͈̑ᴗ˂̵͈̑)', '(*≧▽≦)', 'ﾍ(=￣∇￣)ﾉ', '∩(︶▽︶)∩',
+    '٩(●˙▿˙●)۶…⋆ฺ', '(◍•ᴗ•◍)❤', '(ᗒᗨᗕ)', '∠( ᐛ 」∠)＿', '\\(^Д^)/', 'ᕕ( ᐛ )ᕗ', '(=^-ω-^=)', '( ﾉ^ω^)ﾉﾟ',
+    '୧| ͡ᵔ ﹏ ͡ᵔ |୨', '(๑˃̵ᴗ˂̵)و', 'ヽ(⌐■_■)ノ♪♬', '(╬ಠ益ಠ)', 'ᕙ(⇀‸↼‶)ᕗ', '(⊙︿⊙✿)', '(●´⌓`●)', '工ｴｴｪｪ(;╹⌓╹)ｪｪｴｴ工',
+  ];
+  var errorEmoji = emojiArray[Math.floor(Math.random() * emojiArray.length)];
+  errorEmojiContainer.appendChild(document.createTextNode(errorEmoji));
+</script>
+{{ end }}
