@@ -1,31 +1,58 @@
 {{ define "title" }}404 page not found - {{ .Site.Title }}{{ end }}
 
 {{ define "content" }}
+
 <div class="not-found">
   <h1 class="error-emoji"></h1>
   <p class="error-text">/* 404 page not found. */</p>
   <p class="error-link"><a href="{{ "/" | relLangURL }}">↑ Back Home ↑</a></p>
   <div id="random_player" />
 </div>
+
 <script>
-  var errorEmojiContainer = document.getElementsByClassName('error-emoji')[0];
-  var emojiArray = [
-    'ヾ(≧∇≦*)ゝ', '(˚Δ˚)b', '(◑‿◐✿)', '(≥o≤)', '(✿◠‿◠)', '⁽(◍˃̵͈̑ᴗ˂̵͈̑)', '(*≧▽≦)', 'ﾍ(=￣∇￣)ﾉ', '∩(︶▽︶)∩',
-    '٩(●˙▿˙●)۶…⋆ฺ', '(◍•ᴗ•◍)❤', '(ᗒᗨᗕ)', '∠( ᐛ 」∠)＿', '\\(^Д^)/', 'ᕕ( ᐛ )ᕗ', '(=^-ω-^=)', '( ﾉ^ω^)ﾉﾟ',
-    '୧| ͡ᵔ ﹏ ͡ᵔ |୨', '(๑˃̵ᴗ˂̵)و', 'ヽ(⌐■_■)ノ♪♬', '(╬ಠ益ಠ)', 'ᕙ(⇀‸↼‶)ᕗ', '(⊙︿⊙✿)', '(●´⌓`●)', '工ｴｴｪｪ(;╹⌓╹)ｪｪｴｴ工',
-  ];
+  var errorEmojiContainer = document.getElementsByClassName('error-emoji')[0],
+      emojiArray = [
+        'ヾ(≧∇≦*)ゝ', '(˚Δ˚)b', '(◑‿◐✿)', '(≥o≤)', '(✿◠‿◠)', '⁽(◍˃̵͈̑ᴗ˂̵͈̑)', '(*≧▽≦)', 'ﾍ(=￣∇￣)ﾉ', '∩(︶▽︶)∩',
+        '٩(●˙▿˙●)۶…⋆ฺ', '(◍•ᴗ•◍)❤', '(ᗒᗨᗕ)', '∠( ᐛ 」∠)＿', '\\(^Д^)/', 'ᕕ( ᐛ )ᕗ', '(=^-ω-^=)', '( ﾉ^ω^)ﾉﾟ',
+        '୧| ͡ᵔ ﹏ ͡ᵔ |୨', '(๑˃̵ᴗ˂̵)و', 'ヽ(⌐■_■)ノ♪♬', '(╬ಠ益ಠ)', 'ᕙ(⇀‸↼‶)ᕗ', '(⊙︿⊙✿)', '(●´⌓`●)', '工ｴｴｪｪ(;╹⌓╹)ｪｪｴｴ工'
+      ];
+   
   var errorEmoji = emojiArray[Math.floor(Math.random() * emojiArray.length)];
   errorEmojiContainer.appendChild(document.createTextNode(errorEmoji));
-
-  var videos = ["https://www.youtube-nocookie.com/embed/z3wa89TU3WU", "https://www.youtube.com/embed/FAzZQ9_HX4M" , "https://www.youtube.com/embed/XHuyxdVshQY"];
-    window.onload = function () {
-      var playerDiv = document.getElementById("random_player");
-      var player = document.createElement("IFRAME");
-      var randomVideoUrl = videos[Math.floor(Math.random() * videos.length)];
-      player.setAttribute('width', '640');
-      player.setAttribute('height', '390');
-      player.setAttribute('src', randomVideoUrl + "?autoplay=1");
-      playerDiv.appendChild(player);
-    };
+  
+  var videos = [
+    "https://www.youtube-nocookie.com/embed/z3wa89TU3WU",
+    "https://www.youtube-nocookie.com/embed/FAzZQ9_HX4M",
+    "https://www.youtube-nocookie.com/embed/XHuyxdVshQY"
+  ];
+  
+  window.onload = function () {
+    var width = 640,
+        height = 390,
+        frameborder = 0,
+        playerDiv = document.getElementById("random_player"),
+        player = document.createElement("IFRAME"),
+        randomVideoUrl = videos[Math.floor(Math.random() * videos.length)],
+        queryStringParams = {
+          "rel": 0,
+          "modestbranding": 1,
+          "autohide": 0,
+          "mute": 1,
+          "showinfo": 0,
+          "controls": 1,
+          "autoplay": 1
+        }
+      
+    var qs = Object.keys(queryStringParams)
+          .map(function(k){return k + '=' + queryStringParams[k];})
+          .join('&');
+    player.setAttribute('width', width);
+    player.setAttribute('height', height);
+    player.setAttribute('frameborder', frameborder);
+    player.setAttribute('allow', 'autoplay');
+    player.setAttribute('src', randomVideoUrl + qs);
+    playerDiv.appendChild(player);
+  };
 </script>
+
 {{ end }}
