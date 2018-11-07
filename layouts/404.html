@@ -21,36 +21,39 @@
   errorEmojiContainer.appendChild(document.createTextNode(errorEmoji));
   
   var videos = [
-    "https://www.youtube-nocookie.com/embed/z3wa89TU3WU",
-    "https://www.youtube-nocookie.com/embed/FAzZQ9_HX4M",
-    "https://www.youtube-nocookie.com/embed/XHuyxdVshQY"
+    "https://www.youtube-nocookie.com/embed/z3wa89TU3WU", // Sing of Your Glory
+    "https://www.youtube-nocookie.com/embed/FAzZQ9_HX4M", // Von Guten Machte
+    "https://www.youtube-nocookie.com/embed/XHuyxdVshQY", // You're my King
   ];
   
   window.onload = function () {
+    var playerDiv = document.getElementById("random_player"),
+        player = document.createElement("IFRAME");
+
     var width = 640,
         height = 390,
         frameborder = 0,
-        playerDiv = document.getElementById("random_player"),
-        player = document.createElement("IFRAME"),
         randomVideoUrl = videos[Math.floor(Math.random() * videos.length)],
-        queryStringParams = {
+        params = {
           "rel": 0,
           "modestbranding": 1,
           "autohide": 0,
           "mute": 1,
           "showinfo": 0,
           "controls": 1,
-          "autoplay": 1
+          "autoplay": 1,
         }
       
-    var qs = Object.keys(queryStringParams)
-          .map(function(k){return k + '=' + queryStringParams[k];})
+    var queryString = '?';
+    queryString += Object.keys(params)
+          .map(function(k){return k + '=' + params[k];})
           .join('&');
+
     player.setAttribute('width', width);
     player.setAttribute('height', height);
     player.setAttribute('frameborder', frameborder);
     player.setAttribute('allow', 'autoplay');
-    player.setAttribute('src', randomVideoUrl + qs);
+    player.setAttribute('src', randomVideoUrl + queryString);
     playerDiv.appendChild(player);
   };
 </script>
