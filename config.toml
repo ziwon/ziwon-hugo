@@ -64,7 +64,6 @@ copyright = "<a href=\"https://github.com/ziwon\">Philbert Yoon</a>"
   postMetaInFooter = false
   linkToMarkDown = false
 
-  # Link custom CSS and JS assets
   customCSS = []
   customJS = []
 
@@ -81,19 +80,18 @@ copyright = "<a href=\"https://github.com/ziwon\">Philbert Yoon</a>"
     timeagoJS = '<script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>'
     timeagoLocalesJS = '<script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>'
 
-  # Display a message at the beginning of an article to warn the readers that it's content may be outdated.
   [params.outdatedInfoWarning]
     enable = false
     hint = 30    
     warn = 180          
 
-  [params.flowchartDiagrams]# see https://blog.olowolo.com/example-site/post/js-flowchart-diagrams/
+  [params.flowchartDiagrams]
     enable = true
 
-  [params.sequenceDiagrams] # see https://blog.olowolo.com/example-site/post/js-sequence-diagrams/
+  [params.sequenceDiagrams]
     enable = true
 
   [params.social]
-    a-email = "mailto:your@email.com"
+    a-email = "mailto:yngpil.yoon@gmail.com"
     b-github = "https://github.com/ziwon"
     c-instagram = "https://instagram.com/ziwon.y"
