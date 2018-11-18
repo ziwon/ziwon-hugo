@@ -1,6 +1,6 @@
 baseurl = "https://ziwon.github.io/"
 languageCode = "en"
-defaultContentLanguage = "en"                            
+defaultContentLanguage = "en"
 title = "人生は儚く短い。"
 enableRobotsTXT = true
 enableEmoji = true
@@ -8,7 +8,7 @@ theme = "even"
 reserveTaxonomyNames = true
 hasCJKLanguage = true
 paginate = 5
-googleAnalytics = "UA-61678624-3"
+googleAnalytics = "UA-129419926-1"
 disqusShortname = "ziwon"
 copyright = "<a href=\"https://github.com/ziwon\">Philbert Yoon</a>"
 
@@ -42,9 +42,9 @@ copyright = "<a href=\"https://github.com/ziwon\">Philbert Yoon</a>"
   url = "/categories/"
 
 [params]
-  version = "3.x"    
+  version = "3.x"
   debug = false
-  since = "2014"
+  since = "2013"
 
   # site info (optional)
   logoTitle = "Ziwon"
@@ -82,8 +82,8 @@ copyright = "<a href=\"https://github.com/ziwon\">Philbert Yoon</a>"
 
   [params.outdatedInfoWarning]
     enable = false
-    hint = 30    
-    warn = 180          
+    hint = 30
+    warn = 180
 
   [params.flowchartDiagrams]
     enable = true
