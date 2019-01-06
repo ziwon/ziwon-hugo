@@ -1,0 +1,62 @@
+.content h1:not(:first-child),
+.content h2:not(:first-child),
+.content h3:not(:first-child),
+.content h4:not(:first-child),
+.content h5:not(:first-child),
+.content h6:not(:first-child),
+article + article {
+  margin-top: 40px;
+}
+
+.post-nav {
+    margin: 2em 0
+}
+
+.post-nav:after,.post .post-footer .post-nav:before {
+    content: " ";
+    display: table
+}
+
+.post-nav:after {
+    clear: both
+}
+
+.post-nav .next, .post-nav .prev {
+    color: #000000;
+    font-weight: 200;
+    font-size: 18px;
+    -webkit-transition-property: -webkit-transform;
+    transition-property: -webkit-transform;
+    transition-property: transform;
+    transition-property: transform,-webkit-transform;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+    -webkit-transition-duration: .3s;
+    transition-duration: .3s
+}
+
+.post-nav .prev {
+    float: left
+}
+
+.post-nav .prev:hover {
+    color: #c05b4d;
+    -webkit-transform: translateX(-4px);
+    -ms-transform: translateX(-4px);
+    transform: translateX(-4px)
+}
+
+.post-nav .next {
+    float: right
+}
+
+.post-nav .next:hover {
+    color: #c05b4d;
+    -webkit-transform: translateX(4px);
+    -ms-transform: translateX(4px);
+    transform: translateX(4px)
+}
+
+.post-nav .nav-mobile {
+    display: none
+}

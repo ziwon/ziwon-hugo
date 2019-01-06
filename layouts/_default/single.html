@@ -1,0 +1,46 @@
+{{ partial "header" . }}
+{{ partial "nav" . }}
+<section class="section">
+  <div class="container">
+    <div class="subtitle tags is-6 is-pulled-right">
+      {{ if .Params.tags }}
+      {{ partial "tags" .Params.tags }}
+      {{ end }}
+    </div>
+    {{if not .Date.IsZero }}<h2 class="subtitle is-6">{{ .Date.Format "January 2, 2006" }}</h2>{{ end }}
+    <h1 class="title">{{ .Title }}</h1>
+    {{ if and (.Site.Params.Info.adsense) (.Params.adsenseTop) }}
+    {{ partial "adsense" . }}
+    {{ end }}
+    <div class="content">
+      {{ .Content }}
+      {{ if .Site.Params.Info.related }}
+      <div class="related">{{ partial "related" . }}</div>
+      {{ end }}
+    </div>
+    {{ if and (.Site.Params.Info.adsense)  (.Params.adsenseBottom) }}
+    {{ partial "adsense" . }}
+    {{ end}}
+
+    <!-- Post Pagination -->
+    <nav class="post-nav">
+        {{ with .NextInSection }}
+        <a class="prev" href="{{ .URL }}">
+            < <span class="prev-text nav-default">{{ .Title }}</span>
+                <span class="prev-text nav-mobile">{{ T "prevPost" }}</span>
+        </a>
+        {{- end }}
+        {{ with .PrevInSection }}
+        <a class="next" href="{{ .URL }}">
+            <span class="next-text nav-default">{{ .Title }}</span>
+            <span class="next-text nav-mobile">{{ T "nextPost" }}</span>
+            >
+        </a>
+        {{- end }}
+    </nav>
+
+  </div>
+ 
+</section>
+{{ partial "disqus" . }}
+{{ partial "footer" . }}
