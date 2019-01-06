@@ -8,6 +8,28 @@ article + article {
   margin-top: 40px;
 }
 
+.not-found {
+    text-align: center
+}
+
+.not-found .error-emoji {
+    color: #363636;
+    font-size: 3rem
+}
+
+.not-found .error-text {
+    color: #797979;
+    font-size: 1.25rem
+}
+
+.not-found .error-link {
+    margin-top: 2rem
+}
+
+.not-found .error-link a {
+    color: #c05b4d
+}
+
 .post-nav {
     margin: 2em 0
 }
