@@ -4,8 +4,30 @@
 .content h4:not(:first-child),
 .content h5:not(:first-child),
 .content h6:not(:first-child),
-article + article {
-  margin-top: 40px;
+article+article
+{
+    margin-top: 10px;
+}
+
+.title:not(:last-child)
+{
+    margin-bottom:0;
+}
+
+.subtitle {
+    display: inline;
+}
+
+.content {
+    margin-top:1.8em;
+}
+
+article {
+    padding: 1.5em 0;
+}
+
+article+article {
+    border-top: 1px solid #e6e6e6;
 }
 
 .not-found {
@@ -31,16 +53,18 @@ article + article {
 }
 
 .post-nav {
-    margin: 2em 0
+    margin: 2em 0;
+    padding: 10px 0;
+    border-top: 1px solid #e6e6e6;
 }
 
 .post-nav:after,.post .post-footer .post-nav:before {
     content: " ";
-    display: table
+    display: table;
 }
 
 .post-nav:after {
-    clear: both
+    clear: both;
 }
 
 .post-nav .next, .post-nav .prev {
@@ -54,11 +78,11 @@ article + article {
     -webkit-transition-timing-function: ease-out;
     transition-timing-function: ease-out;
     -webkit-transition-duration: .3s;
-    transition-duration: .3s
+    transition-duration: .3s;
 }
 
 .post-nav .prev {
-    float: left
+    float: left;
 }
 
 .post-nav .prev:hover {
@@ -69,7 +93,7 @@ article + article {
 }
 
 .post-nav .next {
-    float: right
+    float: right;
 }
 
 .post-nav .next:hover {
@@ -80,5 +104,5 @@ article + article {
 }
 
 .post-nav .nav-mobile {
-    display: none
+    display: none;
 }
