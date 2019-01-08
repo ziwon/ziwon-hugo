@@ -16,7 +16,7 @@ enableRobotsTXT = true
 disqusOnDemand = false  # Load Disqus comments on click
 
 [params.assets]
-customCSS = ["css/custom.css", "css/syntax.css"]
+customCSS = ["css/custom.css", "css/syntax-hybrid.css"]
 
 [params.rss]
 
