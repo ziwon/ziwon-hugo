@@ -6,12 +6,6 @@
     {{ range sort .Paginator.Pages }}
     <article>
       <h1 class="title"><a href="{{ .Permalink }}">{{ .Title }}</a>{{ if .Draft }} ::Draft{{ end }}</h1>
-      <h2 class="subtitle is-6">{{ .Date.Format "2006-01-02 " }}</h2>
-      <div class="subtitle tags is-6 is-pulled-right">
-        {{ if .Params.tags }}
-        {{ partial "tags" .Params.tags }}
-        {{ end }}
-      </div>
       <div class="content">
         {{ .Summary | plainify | safeHTML }}
         {{ if .Truncated }}

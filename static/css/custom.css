@@ -4,14 +4,34 @@
 .content h4:not(:first-child),
 .content h5:not(:first-child),
 .content h6:not(:first-child),
-article+article
-{
+article+article {
     margin-top: 10px;
 }
 
-.title:not(:last-child)
-{
+.title:not(:last-child) {
     margin-bottom:0;
+}
+
+*:not(a) > .title:hover {
+    -webkit-transform: translateY(-4px);
+    -ms-transform: translateY(-4px);
+    transform: translateY(-4px)
+}
+
+.title:hover a {
+    color: #b52323;
+}
+
+.title {
+    color: #000000;
+    -webkit-transition-property: -webkit-transform;
+    transition-property: -webkit-transform;
+    transition-property: transform;
+    transition-property: transform,-webkit-transform;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+    -webkit-transition-duration: .3s;
+    transition-duration: .3s;
 }
 
 .subtitle {
@@ -19,7 +39,7 @@ article+article
 }
 
 .content {
-    margin-top:1.8em;
+    margin-top:1.0em;
 }
 
 article {
@@ -31,7 +51,8 @@ article+article {
 }
 
 .not-found {
-    text-align: center
+    text-align: center;
+	padding: 20px;
 }
 
 .not-found .error-emoji {
@@ -86,7 +107,7 @@ article+article {
 }
 
 .post-nav .prev:hover {
-    color: #c05b4d;
+    color: #b52323;
     -webkit-transform: translateX(-4px);
     -ms-transform: translateX(-4px);
     transform: translateX(-4px)
