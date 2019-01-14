@@ -10,7 +10,7 @@ socialsharing = true
 nocomment     = false
 +++
 
-지난 2017년부터 Kubernetes라는 주제로 Heptio에서 매주 금요일마다 라이브 스트리밍을 하고 있다는 것을 알게 되었다. 아무래도 제한적인 실무 경험이나 개인적인 스터디만으로는 한계가 있기 때문에, 하나씩 팔로우업 해보고자 한다.
+유튜브를 검색하다, 지난 2017년부터 Kubernetes라는 주제로 Heptio에서 매주 금요일마다 라이브 스트리밍을 하고 있다는 것을 알게 되었다. 아무래도 제한적인 실무 경험이나 개인적인 스터디만으로는 한계가 있기 때문에, 하나씩 팔로우업 해보고자 한다.
  
  - [TGIK 깃헙 리포지토리](https://github.com/heptio/tgik)
  - [TGIK 유트브 공식채널](https://www.youtube.com/playlist?list=PLvmPtYZtoXOENHJiAQc6HmV2jmuexKfrJ)
@@ -23,7 +23,7 @@ nocomment     = false
 
  - https://github.com/heptio/tgik/tree/master/episodes/001
  
-내용은 kubeadm을 기반으로 AWS에 Kubernetes 클러스터를 구동해보는 것이다. 이 내용은 APN(AWS Partner Network)의 기술 파트너인 Heptio가 AWS에 작성한 쿠버네티스 가이드 문서인 [Quick Start for Kubernetes by Heptio](https://aws.amazon.com/quickstart/architecture/heptio-kubernetes/)에 소개되어 있다. 
+내용은 `kubeadm`을 기반으로 AWS에 Kubernetes 클러스터를 구동해보는 것이다. 이 내용은 APN(AWS Partner Network)의 기술 파트너인 Heptio가 AWS에 작성한 쿠버네티스 가이드 문서인 [Quick Start for Kubernetes by Heptio](https://aws.amazon.com/quickstart/architecture/heptio-kubernetes/)에 소개되어 있다. 
  
 영상에서 진행하는 데모의 깃헙 저장소와 단계별 상세 디플로이 문서의 링크는 다음과 같다.
  
@@ -52,10 +52,9 @@ nocomment     = false
 - 클러스터 DNS에 대한 CoreDNS 또는 KubeDNS 기본값은 CoreDNS이며, CoreDNS는 CoreDNS로 대체되며, CoreDNS를 지원할 수 없는 환경에만 제공.
 - SSH 액세스를 위해 포트 22를 허용하는 스택 전용 security group, HTTPS 액세스를 위한 포트 6443 및 모든 포트의 노드 간 연결을 허용하는 단일 security group.
 
-깃헙에 공개된 [아래 스크립트](https://github.com/aws-quickstart/quickstart-heptio/blob/master/bin/boot-master-branch.sh)를 이용하면 CloudFormation을 이용해 바로 디플로이 할 수 있다. 
+깃헙의 다음 스크립트를 이용하면 CloudFormation 기반으로 바로 디플로이 할 수 있다.
 
-> 실제로 따라 해보지는 않았다. 테스트 클러스터라고 해도 Kops나 EKS를 사용할 것 같다. 영상에서도 CloudFormation과 Kops 중 어떤 게 더 좋냐고 물어보고 있는데, 이 예제는 익숙한 툴을 이용해 Kubernetes를 재빨리 디플로이 하기 위해 만든 것이며, (보안적인 어떤 면에서는 이 예제의 방식보다 덜 안전할 수도 있지만) Kops가 프로덕션에서 적절하게 튜닝할 수 있는 부가 기능이 많다고 한다. 또한, HA 클러스터 등 좀 더 안정적이기 때문에 프로덕션 레벨에서는 Kops를 사용할 수 있다고 한다. [11:10](https://youtu.be/9YYeE-bMWv8?t=670)
-
+- https://github.com/aws-quickstart/quickstart-heptio/blob/master/bin/boot-master-branch.sh
 
 ```shell
 
@@ -90,6 +89,8 @@ aws cloudformation create-stack \
     ParameterKey=QSS3KeyPrefix,ParameterValue=${S3_PREFIX} \
   --capabilities=CAPABILITY_IAM
   ```
+
+> 실제로 따라 해보지는 않았다. 테스트 클러스터라고 해도 Kops나 EKS를 사용할 것 같다. 영상에서도 CloudFormation과 Kops 중 어떤 게 더 좋냐고 물어보고 있는데, 이 예제는 익숙한 툴을 이용해 Kubernetes를 재빨리 디플로이 하기 위해 만든 것이며, (보안적인 어떤 면에서는 이 예제의 방식보다 덜 안전할 수도 있지만) Kops가 프로덕션에서 적절하게 튜닝할 수 있는 부가 기능이 많다고 한다. 또한, HA 클러스터 등 좀 더 안정적이기 때문에 프로덕션 레벨에서는 Kops를 사용할 수 있다고 한다. - [11:10](https://youtu.be/9YYeE-bMWv8?t=670)
 
 Kubernetes 클러스터가 구성된 후에는 Pod 등을 설명하고 스케쥴링하는 Kubernetes 관리자라면 비교적 익숙한 기본 명령어들을 다루고 있다.
 
@@ -149,7 +150,7 @@ kubectl delete deployment,service kuard
 
 ## sig-scalability
 
-2000대 워커 노드 제한에 대한 병목은 무엇인가라는 질문이 있었는데, 5000대까지 테스트해보았으며, etcd의 확장성 가장 중요하다고 한다. 즉, 노드 간의 일관된 코디네이션을 할 수 있는 양이 관건이라고 한다. etcd의 클러스터 크기별 하드웨어 구성의 예는 다음 문서를 참고한다. 50개 노드의 소규모, 250개 노드의 중규모, 1000개 노드의 대규모, 3000개 노드의 초대규모 클러스터 구성에 따른 하드웨어 구성을 참고할 수 있다.
+2000대 워커 노드 제한에 대한 병목은 무엇인가라는 질문이 있었는데, 5000대까지 테스트해보았으며, etcd의 확장성 가장 중요하다고 한다. 즉, 노드 간의 일관된 코디네이션을 할 수 있는 양이 관건이라고 한다. etcd의 클러스터 크기별 하드웨어 구성의 예는 다음 문서를 참고한다. 50개 노드의 소규모, 250개 노드의 중규모, 1000개 노드의 대규모, 3000개 노드의 초대규모 클러스터 구성에 따른 하드웨어 구성을 기술하고 있다.
 
 - [Hardware recommendations](https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/hardware.md)
 
@@ -165,7 +166,7 @@ Kubernetes의 확장성에 관한 자세한 내용은 [Kubernetes Scaling and Pe
 
 ## Kubernetes 1.7
 
-그리고 [Kubernetes 1.7 릴리즈 노트](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.7.md#major-themes)를 간략히 설명해준다. 1.7의 내용은 확장성과 보안이 두가지 주요 주제였다고 한다. 시스템의 커널, 즉 시스템의 핵심을 변경하지 않고, 각 컴포넌트를 플러그인하고 서로 빌드해가는 확장성을 계속해서 개선해 나갔으며, 또한 처음부터 여러 컴포넌트, 여러 어플리케이션, 여러 팀들이 개발을 해왔기 때문에 보안 이슈가 다른 컴포넌트 등으로 전파되지 않도록 해왔다고 한다. 이상, 다소 오래된 내용이라 넘어가기로 한다. 
+그리고 [Kubernetes 1.7 릴리즈 노트](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.7.md#major-themes)를 간략히 설명하고 있다. 1.7의 내용은 확장성과 보안이 두가지 주요 주제였다고 한다. 시스템의 커널, 즉 시스템의 핵심을 변경하지 않고, 각 컴포넌트를 플러그인하고 서로 빌드해가는 확장성을 계속해서 개선해 나갔으며, 또한 처음부터 여러 컴포넌트, 여러 어플리케이션, 여러 팀들이 개발을 해왔기 때문에 보안 이슈가 다른 컴포넌트 등으로 전파되지 않도록 해왔다고 한다. 이상, 다소 오래된 내용이라 넘어가기로 한다. 
 
 > Kubernetes 1.7은 Kubernetes의 광범위한 생산 사용에 의해 동기화된 보안, 뛰어난 애플리케이션 및 확장성 기능을 추가하는 릴리스다. 이 릴리스의 보안 강화에는 암호화된 시크릿(alpha), Pod간 통신을 위한 네트워크 정책, API 리소스에 대한 Kubelet 액세스를 제한하는 노드 작성자, Kubelet 클라이언트/서버 TLS 인증서 로테이션(alpha)이 포함된다. 상태 저장 애플리케이션의 주요 기능에는 StatefulSet 자동 업데이트, DaemonSet의 향상된 업데이트, 보다 빠른 StatefulSet 확장을 위한 버스트 모드,  (alpha) 로컬 스토리지에 대한 지원이 포함된다. 확장성 기능에는 API 집계(beta), ThirdPartyResources를 위한 CustomResourceDefinitions(beta), 확장 가능한 Admission controller(alpha), 플러그형 cloud provider(alpha) 및 CRI(컨테이너 런타임 인터페이스) 개선이 포함된다.
 
@@ -173,7 +174,7 @@ Kubernetes의 확장성에 관한 자세한 내용은 [Kubernetes Scaling and Pe
 
 ## ksonnet
 
-시간 관계상 다루지 못한 것 같다. 홈페이지에 소개된 것처럼, 다양한 클러스터 및 환경에서 설정을 관리하는 cli 툴인 것으로 보인다.
+`ksonnet`은 시간 관계상 다루지 못한 것 같다. 링크된 홈페이지에 소개된 것처럼, 다양한 클러스터 및 환경에서 설정을 관리하는 cli 툴인 것으로 보인다.
 
 > Built on the JSON templating language Jsonnet, ksonnet provides an organizational structure and specialized features for managing configurations across different clusters and environments.
 
