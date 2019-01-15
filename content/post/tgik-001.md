@@ -150,16 +150,19 @@ kubectl delete deployment,service kuard
 
 ## sig-scalability
 
-2000대 워커 노드 제한에 대한 병목은 무엇인가라는 질문이 있었는데, 5000대까지 테스트해보았으며, etcd의 확장성 가장 중요하다고 한다. 즉, 노드 간의 일관된 코디네이션을 할 수 있는 양이 관건이라고 한다. etcd의 클러스터 크기별 하드웨어 구성의 예는 다음 문서를 참고한다. 50개 노드의 소규모, 250개 노드의 중규모, 1000개 노드의 대규모, 3000개 노드의 초대규모 클러스터 구성에 따른 하드웨어 구성을 기술하고 있다.
+### etcd
+2000대 워커 노드 제한에 대한 병목은 무엇인가라는 질문이 있었는데, 5000대까지 테스트해보았으며, etcd의 확장성 가장 중요하다고 한다. 즉, 노드 간의 일관된 코디네이션을 할 수 있는 양이 관건이라고 한다. 클라이언트 수, 초당 요청수, 저장 데이터 크기에 따른 클러스터 크기별 etcd의 하드웨어 구성은 다음 문서를 참고한다. 문서에 따르면, 일반적인 클러스터의 경우 2~4개의 코어, 8GB 메모리면 충분하며, 디스크는 50개의 순차적인 IOPS가 필요하다. (디스크는 etcd 클러스터 배치 성능 및 안정성에 있어서 가장 중요한 요인이다. etcd의 합의 프로토콜은 메터데이터를 로그에 지속적으로 저장하는 것에 달려 있으므로, etcd 클러스터 멤버는 모든 요청을 디스크에 기록해야 한다. 따라서, 쓰기 지연이 발생하지 않고, 하트비트가 타임아웃이 되지 않고 일렉션이 발생하지 않도록 해야 한다. 장애 발생시, Disk 대역폭이 많을수록 복구 시간이 단축된다.)
 
 - [Hardware recommendations](https://github.com/etcd-io/etcd/blob/master/Documentation/op-guide/hardware.md)
 
+### 메트릭 목표
 Kubernetes의 확장성에 관한 자세한 내용은 [Kubernetes Scaling and Performance Goals](https://github.com/kubernetes/community/blob/master/sig-scalability/goals.md)를 참고하라고 한다. 간단히 살펴보면, 주 메트릭과 파생 메트릭으로 나뉜다. 
 
 주 메트릭의 경우, 클러스터별 최대 코어 수는 20만이, 코어별 최대 Pod 수는 10개가 목표이다. 코어 비율은 1:1에서 4:1(GB/코어)라고 가정한다. 경험상 평균적으로 많은 Pod/프로세스가 코어별 1~4GB RAM이 필요한 것으로 나타났다고 한다. 노드별 관리 오버헤드는 최소 0.5코어, 1GB RAM으로 5% 미만이 목표이며,  Docker, KubeProxy, Kubelet, 메트릭 수집, 커널 제외한 수치이다. (예: 32개 코어, 64GB 머신, 1.6개 코어, 노드 관리를 위한 3.2GB RAM), 그리고 클러스터별 오버헤드는 1% 미만, 코어 2개 이상, 4GB RAM가 목표이며, apiserver, 스케줄러, 컨트롤러 등을 포함한 모든 비노드별 구성 요소 포함하고 DNS, 힙스터 등, HA 제외한 수치이다. 
 
 파생 메트릭의 경우, 노드별 최대 코어수는 현재 64개, 향후 수백개가 목표이고, 머신별 최대 Pod 수는 500개라고 한다. 클러스터별 최대 머신수는 5000개이고, 클러스터별 최대 Pod의 수는 50만개이다. Pod의 엔드투엔드 스타트업 시간은 5초 이하가 목표이고, 스케쥴링의 스루풋은 초당 100개의 Pod이 목표라고 한다. 최대 클러스터 포화 시간은 90 분이 목표이다.
 
+### 클라우드별 테스팅 환경
 또한, 클라우드 프로바이더별로 Kubernetes 확장성의 테스팅 환경은 다음 문서를 참고한다.
 
 - [Scalability Testing/Analysis Environment and Goals](https://github.com/kubernetes/community/blob/master/sig-scalability/configs-and-limits/provider-configs.md)
@@ -179,5 +182,6 @@ Kubernetes의 확장성에 관한 자세한 내용은 [Kubernetes Scaling and Pe
 > Built on the JSON templating language Jsonnet, ksonnet provides an organizational structure and specialized features for managing configurations across different clusters and environments.
 
 - https://github.com/ksonnet/ksonnet
+- [쿠버네티스 리소스 배포와 관리를 위한 ksonnet](http://bcho.tistory.com/1302?fbclid=IwAR2KJYAo7TBUTFynZ1NFY0xF7T2R6RJBS77wRlj8u5RoBUyGtbWlnMFSBbs)
 
 이상으로, 간략히 TGIK 에피소드 1을 살펴보았다.
