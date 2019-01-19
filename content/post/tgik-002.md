@@ -93,7 +93,7 @@ kuard-dbdd7955d-wzcf4   1/1       Running   0          2m        192.168.49.7   
 
 보다시피, Kubernetes에서 Pod은 자신의 고유 IP를 가지고 있고, Pod의 IP가 Node의 IP와는 다르다는 것에 주목한다. 이는 Kubernetes의 전신인 구글의 Borg 또는 Borg에서 영감을 받은 Mesos, 또는 단순히 여러 도커가 실행되는 기타 노드 클러스터와는 다른 점이라고 한다. Borg에서는 많은 워크로드들이 IP를 공유했었다고 한다. 이는 여러가지 문제와 복잡성을 야기했다. 이를 테면, IP를 공유하기 때문에 포트를 할당받을 수 있는데, Borg는 어느 컨테이너에 어떤 포트가 액세스하는지 알아야만 했고 관리가 복잡해졌다고 한다. 영상에서는 다소 길게 설명하고 있는데, [Large-scale cluster management at Google with Borg](https://pdos.csail.mit.edu/6.824/papers/borg.pdf) 페이퍼의 **8. Lessons and future work**에서 다음과 같이 언급하고 있다.
 
->  **One IP address per machine complicates things** 머신마다 하나의 IP 주소가 일을 복잡하게 만든다. Borg에서 시스템의 모든 작업은 호스트의 단일 IP 주소를 사용하므로 호스트의 포트 공간을 공유한다. 이는 여러가지 어려움을 야기한다. Borg는 포트를 리소스로 예약해야 한다. 태스크는 필요한 포트 수를 미리 선언하고, 시작시 어떤 포트를 사용할 지 알아야만 한다. BorgleIP어 정의 네트워킹의 등장으로 인해 Kubernetes는 이러한 복잡성을 제거하는, 보다 사용자 친화적인 접근 방식을 취할 수 있다. 즉, 모든 포드 및 서비스는 고유한 IP 주소를 가지므로, 인프라에서 선택한 포트에 개발자의 소프트웨어를 맞추기 보다는 개발자가 포트를 선택할 수 있고, 포트 관리의 인프라 복잡성을 제거한다.
+>  **One IP address per machine complicates things** 머신마다 하나의 IP 주소가 일을 복잡하게 만든다. Borg에서 시스템의 모든 작업은 호스트의 단일 IP 주소를 사용하므로 호스트의 포트 공간을 공유한다. 이는 여러가지 어려움을 야기한다. Borg는 포트를 리소스로 예약해야 한다. 태스크는 필요한 포트 수를 미리 선언하고, 시작시 어떤 포트를 사용할 지 알아야만 한다. Linux 네임스페이스, VM, IPv6 및 소프트웨어 정의 네트워킹의 등장으로 인해 Kubernetes는 이러한 복잡성을 제거하는, 보다 사용자 친화적인 접근 방식을 취할 수 있다. 즉, 모든 포드 및 서비스는 고유한 IP 주소를 가지므로, 인프라에서 선택한 포트에 개발자의 소프트웨어를 맞추기 보다는 개발자가 포트를 선택할 수 있고, 포트 관리의 인프라 복잡성을 제거한다.
 
 **Note**: Node IP는 다음과 같이 확인할 수 있다. `type`에는 `ExternalIP` 또는 `InternalIP` 등의 값으로 조회할 수 있다.
 
@@ -148,10 +148,10 @@ ubuntu@ip-10-0-23-3:~/.kube$ curl 192.168.3.140:8080/env/api
   - ~/.kube/config
   - /etc/kubernetes/admin.config
 
-데모 영상에 나온 질문에 답변을 다음과 같이 간단히 요약하였다. 
+데모 영상에 나온 질문 몇가지에 대한 답변을 다음과 같이 간단히 요약하였다. 
 
 - AWS 네이티브 라우팅을 이용해서 Kubernetes 클러스터의 노드가 아니어도 클러스터 네트워크에 조인하여 연결될 수 있다.
-- Pod을 일반적인 호스트처럼 바로 IP 어드레싱을 할 수 있지만, 대부분 Service나 Isto 서비스 메쉬를 통한다. 물론, Service 없이 할 수도 있다. 그러나 자체의 서비스 디스커버리 매커니즘이 필요할 것이다.
+- Pod을 일반적인 호스트처럼 바로 IP 어드레싱을 할 수 있지만, 대부분 Service나 Isto 서비스 메쉬를 통한다. 물론, Service 없이 할 수도 있다. 그러나 자체의 진보된 서비스 디스커버리 매커니즘이 필요할 것이다.
 
 # CNI
 다음으로 CNI에 대해 설명하고 잇다. CNI는 Kubernetes 컨텍스트가 아니더라도, 많은 컨테이너가 있고 그들 사이의 네트워킹을 구성해야 한다면, 표준 인터페이스로 사용할 수 있다. 
@@ -264,7 +264,7 @@ Service와 Pop은 서로에 대해 알지 못하나 Pod의 `label`로 Service와
 
 ## ExternalName
 
-`ExternalName` 타입은 Kubernetes의 자체 서비스 디스커버리을 사용하되, Kubernetes 외부의 이름을 가리키는 Service를 생성한다. Kubernetes 내부와 외부를 매핑시켜줄 때 사용한다. (알다시피, [external-dns](https://github.com/kubernetes-incubator/external-dns)를 애드온을 연동하게 되면, AWS, GCP 등의 DNS와 매핑된다.)
+`ExternalName` 타입은 Kubernetes의 자체 서비스 디스커버리을 사용하되, Kubernetes 외부의 이름을 가리키는 Service를 생성한다. Kubernetes 내부와 외부를 매핑시켜줄 때 사용한다. (알다시피, [external-dns](https://github.com/kubernetes-incubator/external-dns)를 애드온을 연동하게 되면 AWS, GCP 등의 DNS와 매핑된다.)
 
 ## None
 
