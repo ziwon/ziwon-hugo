@@ -148,7 +148,7 @@ ubuntu@ip-10-0-23-3:~/.kube$ curl 192.168.3.140:8080/env/api
   - ~/.kube/config
   - /etc/kubernetes/admin.config
 
-데모 영상에 나온 질문에 답변을 다음과 같이 같단히 요약하였다. 
+데모 영상에 나온 질문에 답변을 다음과 같이 간단히 요약하였다. 
 
 - AWS 네이티브 라우팅을 이용해서 Kubernetes 클러스터의 노드가 아니어도 클러스터 네트워크에 조인하여 연결될 수 있다.
 - Pod을 일반적인 호스트처럼 바로 IP 어드레싱을 할 수 있지만, 대부분 Service나 Isto 서비스 메쉬를 통한다. 물론, Service 없이 할 수도 있다. 그러나 자체의 서비스 디스커버리 매커니즘이 필요할 것이다.
@@ -220,7 +220,7 @@ contexts:
 current-context: calico-context
 ```
 
-컨테이너로 해야할 어떤 작업이 있을 때마다 플러그인이 호출된다고 한다. 컨테이너의 여러 인터페이스에 대해 여러 개의 플러그인을 구성할 수 있다. 예를 들면, 컨테이너를 런칭할 때, 도커는 내부에 네트워크 네임스페이스를 셋업하는데, CNI는 도커의 모든 네트워크 설정을 가져와 도커와 마찬가지로 네임스페이스 설정을 한 뒤에 Kubernetes의 플러그형 시스템으로 확장하는 역할을 한다고 한다. (매우 간략하게 설명하게 넘어간다.)
+컨테이너로 해야할 어떤 작업이 있을 때마다 플러그인이 호출된다고 한다. 컨테이너의 여러 인터페이스에 대해 여러 개의 플러그인을 구성할 수 있다. 예를 들면, 컨테이너를 런칭할 때, 도커는 내부에 네트워크 네임스페이스를 셋업하는데, CNI는 도커의 모든 네트워크 설정을 가져와 도커와 마찬가지로 네임스페이스 설정을 한 뒤에 Kubernetes의 플러그형 시스템으로 확장하는 역할을 한다고 한다. (CNI에 대해 좀 더 기대했으나 위와 같이 간략하게 설명하고 있다.)
 
 
 `/opt/cni/bin`으로 이동하면, 여러가지 CNI 배포 패키지들을 볼 수 있다.
@@ -264,7 +264,7 @@ Service와 Pop은 서로에 대해 알지 못하나 Pod의 `label`로 Service와
 
 ## ExternalName
 
-`ExternalName` 타입은 Kubernetes의 자체 서비스 디스커버리을 사용하되, Kubernetes 외부의 이름을 가리키는 Service를 생성한다. Kubernetes 내부와 외부를 매핑시켜줄 때 사용한다. (알다시피, [external-dns[(https://github.com/kubernetes-incubator/external-dns)를 애드온을 연동하게 되면, AWS, GCP 등의 DNS와 매핑된다.)
+`ExternalName` 타입은 Kubernetes의 자체 서비스 디스커버리을 사용하되, Kubernetes 외부의 이름을 가리키는 Service를 생성한다. Kubernetes 내부와 외부를 매핑시켜줄 때 사용한다. (알다시피, [external-dns](https://github.com/kubernetes-incubator/external-dns)를 애드온을 연동하게 되면, AWS, GCP 등의 DNS와 매핑된다.)
 
 ## None
 
