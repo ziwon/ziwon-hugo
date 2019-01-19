@@ -91,7 +91,7 @@ kuard-dbdd7955d-v8lj2   1/1       Running   0          2m        192.168.3.139  
 kuard-dbdd7955d-wzcf4   1/1       Running   0          2m        192.168.49.7    ip-10-0-8-176.ap-northeast-2.compute.internal
 ```
 
-보다시피, Kubernetes에서 Pod은 자신의 고유 IP를 가지고 있고, Pod의 IP가 Node의 IP와는 다르다는 것에 주목한다. 이는 Kubernetes의 전신인 구글의 Borg 또는 Borg에서 영감을 받은 Mezzos, 또는 단순히 여러 도커가 실행되는 기타 노드 클러스터와는 다른 점이라고 한다. Borg에서는 많은 워크로드들이 IP를 공유했었다고 한다. 이는 여러가지 문제와 복잡성을 야기했다. 이를 테면, IP를 공유하기 때문에 포트를 할당받을 수 있는데, Borg는 어느 컨테이너에 어떤 포트가 액세스하는지 알아야만 했고 관리가 복잡해졌다고 한다. 영상에서는 다소 길게 설명하고 있는데, [Large-scale cluster management at Google with Borg](https://pdos.csail.mit.edu/6.824/papers/borg.pdf) 페이퍼의 **8. Lessons and future work**에서 다음과 같이 언급하고 있다.
+보다시피, Kubernetes에서 Pod은 자신의 고유 IP를 가지고 있고, Pod의 IP가 Node의 IP와는 다르다는 것에 주목한다. 이는 Kubernetes의 전신인 구글의 Borg 또는 Borg에서 영감을 받은 Mesos, 또는 단순히 여러 도커가 실행되는 기타 노드 클러스터와는 다른 점이라고 한다. Borg에서는 많은 워크로드들이 IP를 공유했었다고 한다. 이는 여러가지 문제와 복잡성을 야기했다. 이를 테면, IP를 공유하기 때문에 포트를 할당받을 수 있는데, Borg는 어느 컨테이너에 어떤 포트가 액세스하는지 알아야만 했고 관리가 복잡해졌다고 한다. 영상에서는 다소 길게 설명하고 있는데, [Large-scale cluster management at Google with Borg](https://pdos.csail.mit.edu/6.824/papers/borg.pdf) 페이퍼의 **8. Lessons and future work**에서 다음과 같이 언급하고 있다.
 
 >  **One IP address per machine complicates things** 머신마다 하나의 IP 주소가 일을 복잡하게 만든다. Borg에서 시스템의 모든 작업은 호스트의 단일 IP 주소를 사용하므로 호스트의 포트 공간을 공유한다. 이는 여러가지 어려움을 야기한다. Borg는 포트를 리소스로 예약해야 한다. 태스크는 필요한 포트 수를 미리 선언하고, 시작시 어떤 포트를 사용할 지 알아야만 한다. BorgleIP어 정의 네트워킹의 등장으로 인해 Kubernetes는 이러한 복잡성을 제거하는, 보다 사용자 친화적인 접근 방식을 취할 수 있다. 즉, 모든 포드 및 서비스는 고유한 IP 주소를 가지므로, 인프라에서 선택한 포트에 개발자의 소프트웨어를 맞추기 보다는 개발자가 포트를 선택할 수 있고, 포트 관리의 인프라 복잡성을 제거한다.
 
