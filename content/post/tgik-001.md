@@ -1,7 +1,7 @@
 +++
 date          = "2019-01-13T17:12:00+00:00"
 draft         = false
-title         = "TGI Kubernetes:001 A Quick Tour"
+title         = "TGI Kubernetes 001: A Quick Tour"
 tags          = ["Kubernetes"]
 categories    = ["tgik"]
 slug          = "tgik-001"
@@ -12,7 +12,7 @@ nocomment     = false
 
 # TGIK: Thanks God It's Kubernetes
 
-유튜브를 검색하다, 지난 2017년부터 Kubernetes라는 주제로 Heptio에서 매주 금요일마다 라이브 스트리밍을 하고 있다는 것을 알게 되었다. 아무래도 제한적인 실무 경험이나 개인적인 스터디만으로는 한계가 있기 때문에, 하나씩 팔로우업 해보고자 한다.
+유튜브를 검색하다가, 지난 2017년부터 Kubernetes라는 주제로 Heptio에서 매주 금요일마다 라이브 스트리밍을 하고 있다는 것을 알게 되었다. 아무래도 제한적인 실무 경험이나 개인적인 스터디만으로는 한계가 있기 때문에, 하나씩 팔로우업 해보고자 한다.
  
  - [TGIK 깃헙 리포지토리](https://github.com/heptio/tgik)
  - [TGIK 유트브 공식채널](https://www.youtube.com/playlist?list=PLvmPtYZtoXOENHJiAQc6HmV2jmuexKfrJ)

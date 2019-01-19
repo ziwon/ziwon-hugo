@@ -14,7 +14,7 @@ nocomment     = false
 
 [두 번째 에피소드](https://github.com/heptio/tgik/tree/master/episodes/002)는 네트워킹과 서비스에 관해 다룬다. 관련 링크나 노트는 없다. 
 
-결국, heptio-quickstart를 AWS에 올리고 따라해보았다. GCP UI나 커맨드라인 결과가 조금 다른 것으로 인해 혼란의 여지가 있을 것 같다. CloudFormation 기반으로 Kubernetes 컴포넌트들을 하나씩 설치해가는 내용도 충분히 살펴볼만하다. 
+> 결국, heptio-quickstart를 AWS에 올리고 따라해보았다. 아무래도 GCP UI나 커맨드라인 결과가 조금 다른 것으로 인해 혼란의 여지가 있을 것 같다. QuickStart이긴 하나, CloudFormation 기반으로 Kubernetes 컴포넌트들을 설치해가는 스크립트를 하나하나씩 살펴보는 것도 유의미해보인다. 
 
 <center>•••</center>
 
@@ -118,10 +118,10 @@ Connecting to 192.168.49.6:8080 (192.168.49.6:8080)
 다음으로, 마스터 노드에 SSH 접속하여 `kubectl` 명령의 동작 여부를 살펴본다.  
 
 ```shell
-SH_KEY="~/.ssh/id_rsa"; ssh -i $SSH_KEY -o ProxyCommand="ssh -i \"${SSH_KEY}\" ubuntu@13.209.11.49 nc %h %p" ubuntu@10.0.23.3
+SSH_KEY="~/.ssh/id_rsa"; ssh -i $SSH_KEY -o ProxyCommand="ssh -i \"${SSH_KEY}\" ubuntu@13.209.11.49 nc %h %p" ubuntu@10.0.23.3
 ```
 
-```
+```shell
 $ kubectl get po -o wide
 NAME                    READY     STATUS    RESTARTS   AGE       IP              NODE                                            NOMINATED NODE
 kuard-dbdd7955d-4kdbr   1/1       Running   0          25m       192.168.3.140   ip-10-0-8-254.ap-northeast-2.compute.internal   <none>
@@ -137,7 +137,8 @@ kuard-dbdd7955d-wzcf4   1/1       Running   0          25m       192.168.49.7   
 ```
 
 다음과 같이 Node 인스턴스에서 Pod에 접속이 되는 것을 확인할 수 있다.
-```
+
+```shell
 ubuntu@ip-10-0-23-3:~/.kube$ curl 192.168.3.140:8080/env/api
 {"commandLine":["/kuard"],"env":{"HOME":"/","HOSTNAME":"kuard-dbdd7955d-4kdbr","KUBERNETES_PORT":"tcp://10.96.0.1:443","KUBERNETES_PORT_443_TCP":"tcp://10.96.0.1:443","KUBERNETES_PORT_443_TCP_ADDR":"10.96.0.1","KUBERNETES_PORT_443_TCP_PORT":"443","KUBERNETES_PORT_443_TCP_PROTO":"tcp","KUBERNETES_SERVICE_HOST":"10.96.0.1","KUBERNETES_SERVICE_PORT":"443","KUBERNETES_SERVICE_PORT_HTTPS":"443","PATH":"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"}}
 ```
@@ -508,6 +509,7 @@ kubernetes-dashboard-84fff45879-cmmtp                                    1/1    
 iptable을 살펴보자. calico가 관리하는 iptable은 `cali`라고 주석이 달려 있다.
 
 ```shell
+$ iptables -L
 Chain INPUT (policy ACCEPT)
 target     prot opt source               destination         
 cali-INPUT  all  --  anywhere             anywhere             /* cali:Cz_u1IQiXIMmKD4c */
@@ -756,13 +758,13 @@ $ iptables-save | less
 ...
 ```
 
-다음과 같이 ip `10.97.169.67`은 `KUBE-SVC-CUXC5A3HHHVSSN62` 체인으로 점프한다.
+다음과 같이 ip `10.97.169.67`은 `KUBE-SVC-CUXC5A3HHHVSSN62`으로 점프한다.
 
 ```shell
 -A KUBE-SERVICES -d 10.97.169.67/32 -p tcp -m comment --comment "default/kuard: cluster IP" -m tcp --dport 80 -j KUBE-SVC-CUXC5A3HHHVSSN62
 ```
 
-`KUBE-SVC-CUXC5A3HHHVSSN62` 체인을 살펴보면, 랜덤 확률별로 각각의 체인으로 점프하는 것을 알 수 있다.
+`KUBE-SVC-CUXC5A3HHHVSSN62`을 살펴보면, 랜덤 확률별로 각각의 규칙으로 점프하는 것을 알 수 있다.
 
 ```shell
 -A KUBE-SVC-CUXC5A3HHHVSSN62 -m comment --comment "default/kuard:" -m statistic --mode random --probability 0.10000000009 -j KUBE-SEP-IY5EMZGCCC7HUEGX
