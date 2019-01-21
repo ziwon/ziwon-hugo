@@ -23,7 +23,7 @@ nocomment     = false
 먼저, 10개의 `kuard` `Pod`를 띄운다.
 
 ```shell
-kubectl run --replicas=10 --image=gcr.io/kuar-demo/kuard-amd64:1 kuard
+$ kubectl run --replicas=10 --image=gcr.io/kuar-demo/kuard-amd64:1 kuard
 deployment.apps "kuard" created
 
 $ kubectl get pods
@@ -508,6 +508,8 @@ kubernetes-dashboard-84fff45879-cmmtp                                    1/1    
 
 iptable을 살펴보자. calico가 관리하는 iptable은 `cali`라고 주석이 달려 있다.
 
+<details>
+<summary>`iptables -L`</summary>
 ```shell
 $ iptables -L
 Chain INPUT (policy ACCEPT)
@@ -736,6 +738,7 @@ target     prot opt source               destination
 cali-from-wl-dispatch  all  --  anywhere             anywhere             /* cali:Ee9Sbo10IpVujdIY */
 ACCEPT     all  --  anywhere             anywhere             /* cali:nSZbcOoG1xPONxb8 */ /* Configured DefaultEndpointToHostAction */
 ```
+</details>
 
 다음으로, 포워딩 테이블을 살펴보자.
 
