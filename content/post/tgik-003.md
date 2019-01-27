@@ -32,7 +32,7 @@ nocomment     = false
 
 여러 가지 타입의 마이크로 서비스가 있을 수 있다.
 
-- **Implementation Detail** (어플리케이션의 세부 구현, 모놀리틱 서비스가 나뉘어 각가의 모듈로 세부 구현된 서비스 )
+- **Implementation Detail** (어플리케이션의 세부 구현, 모놀리틱 서비스가 나뉘어 각각의 모듈로 세부 구현된 서비스 )
 - **Shared Artificat, Priavete Instance** (MySQL 데이터베이스처럼 개인 인스턴스를 하나씩 가지고 개발)
 - **Shared Instance** (큰 조직의 공유 인스턴스, 다른 곳의 여러 팀과 팀이 사용하는 단일 서비스)
 - **Big-S Servie** (회사 외부로 확장된 완전히 구현된 Saas 모델, 예. SendGrid)
@@ -132,7 +132,7 @@ customresourcedefinition.apiextensions.k8s.io/handlers.config.istio.io created
 
 다음으로, 데모 리소스를 설치한다. `install` 디렉토리에는 상호 TLS 인증용(`istio-demo-auth.yaml`)과 비인증용(`istio-demo.yaml`) 두 가지 파일이 있는데, `istio-demo-auth.yaml`를 사용한다.
 
-> 덧붙여서 학습용 목적의 개인 클러스터의 경우, 워커 노드의 리소스가 매우 작기 때문에, 기본 요구 사항에 맞는 노드를 찾지 못해 Pod의 스케쥴링 `Pending` 이 발생할 수 있다. 일단, 데모이니 생략하기로 한다. `install/kubernetes/istio-demo.yaml` 파일의 13565 라인에서 13568 라인까지를 삭제한다.
+> 덧붙여서 학습용 목적의 개인 클러스터의 경우, 워커 노드의 리소스가 매우 작기 때문에, 기본 요구 사항에 맞는 노드를 찾지 못해 Pod의 스케쥴링 `Pending` 이 발생할 수 있다. 일단, 데모이니 생략하기로 한다. (또는 리밋을 걸어도 무방) `install/kubernetes/istio-demo.yaml` 파일의 13565 라인에서 13568 라인까지를 삭제한다.
 
 ```yaml
           - name: PILOT_CACHE_SQUASH
@@ -501,7 +501,7 @@ serviceAccount: istio-pilot-service-account
 - 추후 RBAC이 활성화 되었을 때 k8s TPR이 생성되지 않는 동일한 [327번 이슈](https://github.com/istio/istio/issues/327) 확인
 
 
-## 기타 자료
+## 기타 링크
 
 - https://github.com/subicura/istio-demo
 - https://www.katacoda.com/courses/istio/deploy-istio-on-kubernetes
