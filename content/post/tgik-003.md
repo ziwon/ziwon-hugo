@@ -16,16 +16,6 @@ nocomment     = false
 
 <center>•••</center>
 
-> 아래의 배포 작업 작업처럼, 여러 클러스터와 네임스페이스를 빠르게 스위칭할 필요가 있는데, 다음의 툴을 사용하면 좀 더 편하게 진행할 수 있다.
-
-- `alias k=kubectl`
-- [kubectx, kubens](https://github.com/ahmetb/kubectx)
-- [kns](https://github.com/blendle/kns)
-
-> - `kubectl-aliases[https://github.com/ahmetb/kubectl-aliases]`
-
-<center>•••</center>
-
 # Service Network
 
 앞서 자신이 발표한 자료를 참고하여, 서비스 네트워크에 대해 간략히 언급한다. 해당 슬라이드는 [The Operations Dividend - Joe Beda (LinuxCon North America 2016)](http://slides.eightypercent.net/linuxcon-ops-dividend/index.html)를 참고한다.
@@ -57,14 +47,15 @@ nocomment     = false
 Istio를 적당한 디렉토리에 다운 받는다.
 
 ```shell
-mkdir -p ~/Workspace/TGIK/003
-cd ~/Workspace/TGIK/003
-curl -L https://git.io/getLatestIstio | sh -
+$ mkdir -p ~/Workspace/TGIK/003
+$ cd ~/Workspace/TGIK/003
+$ curl -L https://git.io/getLatestIstio | sh -
 ```
 
 다운 받은 후에는 Path를 잡아줘야 하는데, `kubectl`, `helm` 등과 마찬가지로 다음과 같이 그냥 `/usr/local/bin`에 복사한다.
+
 ```shell
-cp ./bin/istioctl /usr/local/bin
+$ cp ./bin/istioctl /usr/local/bin
 ```
 
 먼저, Istio의 CRD(Custom Resource Definition)을 생성한다.
@@ -313,7 +304,7 @@ destinationrule.networking.istio.io/istio-telemetry created
 설치 후에는 서비스 목록을 확인한다.
 
 ```shell
-$ k get svc -n istio-system
+$ kubectl get svc -n istio-system
 NAME                     TYPE           CLUSTER-IP       EXTERNAL-IP                                                                    PORT(S)                                                                                                                   AGE
 grafana                  ClusterIP      10.103.36.168    <none>                                                                         3000/TCP                                                                                                                  1m
 istio-citadel            ClusterIP      10.105.126.133   <none>                                                                         8060/TCP,9093/TCP                                                                                                         1m
@@ -336,7 +327,7 @@ zipkin                   ClusterIP      10.108.3.146     <none>                 
 다음과 같이, Istio 설치가 완료되었다.
 
 ```shell
-$ k get po -n istio-system
+$ kubectl get po -n istio-system
 NAME                                     READY   STATUS      RESTARTS   AGE
 grafana-7f6cd4bf56-lqgck                 1/1     Running     0          2m
 istio-citadel-7dd558dcf-m2qjf            1/1     Running     0          2m
@@ -494,7 +485,7 @@ $ kubectl port-forward -n istio-system $(kubectl get pod -n istio-system -l app=
 - [`istio-pilot-service-account` 서비스 계정 추가](https://www.youtube.com/watch?v=WnDG-5cvEew&feature=youtu.be&t=3230)
 
 ```shell
-k edit deployment istio-mixer
+$ kubectl edit deployment istio-mixer
 serviceAccount: istio-pilot-service-account
 ```
 
