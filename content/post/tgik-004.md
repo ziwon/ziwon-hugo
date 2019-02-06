@@ -1251,7 +1251,7 @@ kube-system   weave-net-nrsvs                                 2/2     Running   
 ```
 
 ## Service Account
-다음과 같이 모든 네임스페이스에는 기본적으로 `default` 서비스 계정이 존재한다. 쿠버네티스에 RBAC이 있기 전에 클러스터에 접근하는 방법이 Service Account였기 때문이다. 프로그램
+다음과 같이 모든 네임스페이스에는 기본적으로 `default` 서비스 계정이 존재한다. 쿠버네티스에 RBAC이 있기 전에 클러스터에 접근하는 방법이 Service Account였기 때문이다.
 
 ```shell
 $ kubectl get sa --all-namespaces
@@ -1272,9 +1272,7 @@ kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"templat
 helm init --service-account tiller --upgrade
 ```
 
-그래서 기존의 `default` 서비스 계정 등, 서비스 계정에 관한 RBAC 정책이 이슈가 될 수 있는데, 다음 문서는 서비스 계정에 대한 Heptio사의 베스트 프랙티스이다. 기본적으로 개별 서비스 계정을 만들어 권한을 부여할 것을 권하고 있다.
-
-- [How to: RBAC best practices and workarounds](http://docs.heptio.com/content/tutorials/rbac.html)
+그래서 기존의 `default` 서비스 계정 등 서비스 계정에 관한 RBAC 정책이 이슈가 될 수 있는데, 다음 문서는 서비스 계정에 대한 [Heptio사의 RBAC 베스트 프랙티스]([How to: RBAC best practices and workarounds](http://docs.heptio.com/content/tutorials/rbac.html))에서는 개별 서비스 계정을 만들어 권한을 부여하는 것을 좀 더 안전한 프랙티스로 권하고 있다.
 
 ## 관련 링크
 - [RSA 인증서 (Certification) 와 전자서명 (Digital Sign)의 원리](https://rsec.kr/?p=426)
