@@ -11,7 +11,7 @@ nocomment     = false
 +++
 
 
-[네번째 에피소드](https://github.com/heptio/tgik/tree/master/episodes/004)는 쿠버네티스의 RBAC을 중심으로 인증(Authorization)과 권한(Authentication)에 대해 설명하고 있다. 쿠버네티스의 RBAC에 대해 충분히 이해하고 있다면, 이번 TGIK는 스킵하고 [Adding users on "Quick Start for Kubernetes on AWS"](https://www.linkedin.com/pulse/adding-users-quick-start-kubernetes-aws-jakub-scholz)만 봐도 좋을 듯하다. 개인적으로 쿠버네티스 RBAC에 대해서는 CNCF의 [Role based access control (RBAC) policies in Kubernetes](https://www.youtube.com/watch?v=CnHTCTP8d48) 웨비나를 추천하고 싶다. 
+[네번째 에피소드](https://github.com/heptio/tgik/tree/master/episodes/004)는 쿠버네티스의 RBAC을 중심으로 인증(Authorization)과 권한(Authentication)에 대해 설명하고 있다. 영상에서도 [Adding users on "Quick Start for Kubernetes on AWS"](https://www.linkedin.com/pulse/adding-users-quick-start-kubernetes-aws-jakub-scholz) 블로그 내용을 참고해서 사용자 계정을 추가하고 있기 때문에, RBAC에 대해 충분한 이해가 있다면 해당 아티클만 보아도 좋을 듯 하다.  RBAC에 대한 기본적인 개념과 쿠버네티스에서의 RBAC 정책에 대해 좀 더 알고자 한다면 CNCF의 [Role based access control (RBAC) policies in Kubernetes](https://www.youtube.com/watch?v=CnHTCTP8d48) 웨비나를 추천한다. 
 
 <center>•••</center>
 
