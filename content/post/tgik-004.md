@@ -1,8 +1,8 @@
 +++
 date          = "2019-02-05T11:55:00+09:00"
-draft         = true
+draft         = false
 title         = "TGI Kubernetes 004: RBAC"
-tags          = ["Kubernetes", "Heptio", "RBAC",]
+tags          = ["Kubernetes", "RBAC",]
 categories    = ["tgik"]
 slug          = "tgik-004"
 notoc         = true
@@ -10,15 +10,18 @@ socialsharing = true
 nocomment     = false
 +++
 
-[네번째 에피소드](https://github.com/heptio/tgik/tree/master/episodes/004)는 쿠버네티스의 RBAC을 중심으로 인증(Authorization)과 권한(Authentication)에 대해 설명하고 있다.
+
+[네번째 에피소드](https://github.com/heptio/tgik/tree/master/episodes/004)는 쿠버네티스의 RBAC을 중심으로 인증(Authorization)과 권한(Authentication)에 대해 설명하고 있다. 쿠버네티스의 RBAC에 대해 충분히 이해하고 있다면, 이번 TGIK는 스킵하고 [Adding users on "Quick Start for Kubernetes on AWS"](https://www.linkedin.com/pulse/adding-users-quick-start-kubernetes-aws-jakub-scholz)만 봐도 좋을 듯하다. 개인적으로 쿠버네티스 RBAC에 대해서는 CNCF의 [Role based access control (RBAC) policies in Kubernetes](https://www.youtube.com/watch?v=CnHTCTP8d48) 웨비나를 추천하고 싶다. 
+
+<center>•••</center>
 
 ## KubeConfig 
 
 `kubeconfig` 파일의 기본 위치는 `$HOME/.kube/config`이며, `KUBECONFIG` 환경변수 또는 `--kubeconfig` 옵션으로 지정할 수 있다. 
 
-앞선 TGIK 데모에서는 Heptio의 QuickStart를 사용해 쿠버네티스 클러스터를 생성할 때, 클러스터 작업을 실행하기 위해 다음과 같은 방법으로 마스터 노드에서 복사한 `kubeconfig` 파일을 로컬에 캐시하였다.
+앞선 TGIK 데모에서는 Heptio의 QuickStart를 사용해 쿠버네티스 클러스터를 생성할 때, 클러스터 작업을 실행하기 위해 다음과 같은 방법으로 마스터 노드에서 복사한 `kubeconfig` 파일을 로컬에 복사하였다.
 
-QuickStart에서 CloudFormation으로 프로비저닝할 때, 로컬 캐시 복사를 위한 커맨드가 다음과 같이 자동으로 생성되는데, 보다시피 `nc` 명령을 이용해 netcat 링크를 만들어 내부 마스터 서버에 접속하고 있다. (`netcat`을 이용하지 않고, `-W` 옵션으로도 클라이언트의 입출력을 마스터 호스트로 전달할 수 있다.)
+QuickStart에서 CloudFormation으로 프로비저닝할 때, 로컬 복사를 위한 커맨드가 다음과 같이 자동으로 생성되는데, 보다시피 `nc` 명령을 이용해 netcat 링크를 만들어 내부 마스터 서버에 접속하고 있다. (`netcat`을 이용하지 않고, `-W` 옵션으로도 클라이언트의 입출력을 마스터 호스트로 전달할 수 있다.)
 
 ```shell
 SSH_KEY="path/to/laptop.pem"; scp -i $SSH_KEY -o ProxyCommand="ssh -i \"${SSH_KEY}\" ubuntu@13.209.9.190 nc %h %p" ubuntu@10.0.21.21:~/kubeconfig ./kubeconfig
@@ -48,13 +51,13 @@ users:
   	client-key-data: <base64-encoded-private-key>
 ```
 
-보다시피, yaml 파일 형식이며, `certificate-authority-data`, `client-certificate-data`, `client-key-data` 에서 보듯인증서 및 개인키의 값들은 base64로 인코딩되어 있다. 
+보다시피, yaml 파일 형식이며, `certificate-authority-data`, `client-certificate-data`, `client-key-data`처럼 인증서 및 개인키는 base64로 인코딩되어 있다. 
 
 ### certificate-authority-data
 
-첫 번째 base64로 인코딩된 데이터는 API 서버의 TLS 인증서를 발급한 CA이다. 대부분의 TLS 연결은 기본적으로 `/etc/ssl`애서 신뢰하는 인증 기간 목록을 찾는데, 쿠버네티스의 경우 `kubeconfig` 파일의 `certificate-authority-data` 항목에서 API 서버의 TLS 인증서를 발급한 CA(certificate authority, 인증 기관)을 기술하고 있다.
+첫 번째 base64로 인코딩된 데이터는 API 서버의 TLS 인증서를 발급한 CA(certificate authority, 인증 기관)이다. 대부분의 TLS 연결은 기본적으로 `/etc/ssl`에서 신뢰하는 CA를 찾는데, 쿠버네티스의 경우 `kubeconfig` 파일의 `certificate-authority-data` 에 API 서버의 TLS 인증서를 발급한 Root CA을 기술하고 있다.
 
-루트 CA외에 API 서버에서 인자로 전달되는 인증서 및 키 데이터는 다음과 같다. (쿠버네티스 1.13 기준)
+Root CA외에 API 서버에서 인자로 전달되는 인증서, 공개키, 개인키 데이터는 다음과 같다. (쿠버네티스 1.13.x 기준)
 
 ```shell
 $ kube-apiserver 
@@ -86,9 +89,11 @@ $ kube-apiserver
     --tls-private-key-file=/etc/kubernetes/pki/apiserver.key
 ```
 
-TLS 연결을 위한 인증서와 개인키는 각각 `--tls-cert-file`, `--tls-private-key-file` 인자를 통해 전달되고 있다. 그리고 API 서버의 `--client-ca-file` 인자는 `/etc/kubernetes/pki/ca.crt` 파일로 전달되고 있는데, 이는 앞서 살펴본 `kubeconfig`의 `certificate-authority-data`와 동일하고, 이는 쿠버네티스의 Root CA이다. 
+보다시피 API 서버의 경우, TLS 연결을 위한 인증서와 개인키는 각각 `--tls-cert-file`, `--tls-private-key-file` 인자를 통해 전달되고 있다. 그리고 API 서버의 `--client-ca-file` 인자는 `/etc/kubernetes/pki/ca.crt` 파일로 전달되고 있는데, 이는 쿠버네티스의 Root CA이며, 이는 앞서 살펴본 `kubeconfig`의 `certificate-authority-data`와 동일하다.
 
-모든 쿠버네티스 클러스터에는 쿠버네티스 컨트롤 플레인 또는 사용자에게 인증서를 제공하는데 사용할 수 있는 클러스터 내장 인증 기관(certificate authority)이 있다. CA는 API 컴포넌트에서 API 서버의 인증서를 확인하고, API 서버가 kubelet 클라이언트 인증서를 확인하는데 사용한다. 이를 지원하기 위해 CA 인증서 번들은 클러스터의 모든 노드에 분산되며 `default` 서비스 계정에 연결된 시크릿으로서 배포된다. 쿠버네티스에는 기본적으로 세 가지 Root CA가 필요하다. 이들은 `/etc/kubernetes/pki`에 저장된다. ([참고](https://kubernetes.io/docs/setup/certificates/))
+모든 쿠버네티스 클러스터에는 쿠버네티스 컨트롤 플레인 또는 사용자에게 인증서를 제공하는데 사용할 수 있는 클러스터 내장 인증 기관(certificate authority)이 있다. CA는 API 컴포넌트에서 API 서버의 인증서를 확인하고, API 서버가 kubelet 클라이언트 인증서를 확인하는데 사용한다. 이를 지원하기 위해 CA 인증서 번들은 클러스터의 모든 노드에 분산되며 `default` 서비스 계정에 연결된 시크릿으로서 배포된다. 쿠버네티스에는 기본적으로 세 가지 Root CA가 필요하다. 이들은 `/etc/kubernetes/pki`에 저장된다. 
+
+<center>
 
 | path       			| CN 					  | description                  |
 |----------------------|------------------------|------------------------------|
@@ -96,7 +101,12 @@ TLS 연결을 위한 인증서와 개인키는 각각 `--tls-cert-file`, `--tls-
 |etcd/ca.crt,key       |etcd-ca				  |For all etcd-related function |
 |front-proxy-ca.crt,key|kubernetes-front-proxy-ca|For the front-end proxy       |
 
-참고로 API 서버는 앞서 살펴본 것 외에도 인증과 관련된 다른 커맨드라인 인자를 지정할 수 있다. ([참고](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/))
+(참고 - [PKI Certificates and Requirements](https://kubernetes.io/docs/setup/certificates/))
+</center>
+
+
+이외에도 API 서버는 다음과 같이 인증과 관련된 다른 커맨드라인 인자를 지정할 수 있다. (참고 - [kube-apiserver
+](https://kubernetes.io/docs/reference/command-line-tools-reference/kube-apiserver/))
 
 ```txt
 --cert-dir string                           The directory where the TLS certs are located. If --tls-cert-file and --tls-private-key-file are provided, this flag will be ignored. (default "/var/run/kubernetes")
@@ -552,7 +562,7 @@ $ curl -k -v -XGET  -H "Accept: application/json;as=Table;v=v1beta1;g=meta.k8s.i
 ```
 </details>
 
-위 `curl` 명령을 `kubeconfig`에 기술된 인증서 정보없이 그대로 호출하게 되면, 다음과 같이 `403` 인증 오류가 반환된다. 
+위 `curl` 명령을 `kubeconfig`에 인증서없이 그대로 호출하게 되면, 다음과 같이 API 서버로부터 `403` 인증 오류가 반환된다. 
 
 ```json
 {
@@ -588,16 +598,16 @@ API 서버에 대해 보안 연결이 맺어져도 클라이언트 인증이 되
 
 - X509 Client Certs: 괜찮은 인증 방법이지만, 정기적으로 클라이언트 인증서 갱신 및 재배포를 처리해야 한다.
 - Static Token File: 일시적이지 않은 특성 때문에 추천하지 않는다.
-- Bootstrap Tokens: 위의 정적 토큰과 동일.
+- Bootstrap Tokens: 위의 정적 토큰과 동일하다.
 - Static Password File: API 서버를 재시작하지 않으면 패스워드를 변경할 수 없기 때문에 추천하지 않는다.
-- Service Account Tokens: 최종 사용자가 쿠버네티스 클러스터와 상호 작용하려는 경우 사용해서는 안되나, 쿠버네티스에서 실행되는 응용 프로그램 및 작업 부하에 대해서는 추천할 수 있는 인증 전략이다.
+- Service Account Tokens: 최종 사용자가 쿠버네티스 클러스터와 상호 작용하려는 경우 사용해서는 안되나, 쿠버네티스에서 실행되는 응용 프로그램 및 작업 부하에 대해서는 추천할 수 있는 인증 방법이다.
 - OpenID Connect Tokens: OIDC가 AWS IAM 등 ID 제공 업체와 통합되므로 최종 사용자를 위한 최상의 인증 방법이다.
 - Webhook Token Authentication: OIDC와 마찬가지로 Webhook으로 GitHub 개인 토큰을 통합하여 최종 사용자가 사용할 수 있는 인증 방법이다. 
 - Authentication Proxy: `X-Remote-User`와 같은 요청 헤더의 값을 설정하는 인증 프락시와 통합시에 사용하는 인증 방법이다.
 
 클라이언트 인증서를 생성하는 방법은 다음과 같다. (참고 - [Manage TLS Certificates in a Cluster](https://kubernetes.io/docs/tasks/tls/managing-tls-in-a-cluster/))
 
-데모에서는 클라이언트 인증을 위한 임의의 사용자 계정(예, ziwon)을 추가하는 예제를 보이고 있다.
+영상에서는 클라이언트 인증을 위한 임의의 사용자 계정(예, `users:ziwon`)을 추가하는 예제를 보이고 있다.
 
 먼저 개인키를 생성한다.
 
@@ -676,7 +686,7 @@ users:
     client-key-data: <base64-encoded-key-data>
 ```
 
-그러면 다음과 같이 API 서버에 대해 클라이언트 ID `users:ziwon` 로 접근이 되는 것을 볼 수 있다. 그러나 접근이 되더라도 권한(Authoriztion)을 부여받은 Role이 지정되지 않았다. 따라서, 클러스터 리소스 및 네임스페이스 리소스 접근시에 각각 해당하는 오류 응답을 확인하게 된다.
+그러면 다음과 같이 API 서버에 대해 클라이언트 ID `users:ziwon` 로 접근이 되는 것을 볼 수 있다. 그러나 접근이 되더라도 권한(Authoriztion)을 부여받은 Role이 지정되지 않았다. 따라서, 클러스터 리소스 및 네임스페이스 리소스 접근시 각각 오류 응답을 받게 된다.
 
 - 클러스터 객체 접근시
 
@@ -768,7 +778,7 @@ roles                                    rbac.authorization.k8s.io   true       
 - Role
 - RoleBinding
 
-쿠버네티스의 네임스페이스에 정의된 기본적인 `role`의 목록은 다음과 같다.
+쿠버네티스의 네임스페이스에 정의된 기본적인 `role` 목록은 다음과 같다.
 
 ```shell
 $ kubectl get role --all-namespaces
@@ -791,7 +801,7 @@ kube-system   weave-net                                        8h
 - ClusterRole
 - ClusterRoleBinding
 
-쿠버네티스의 클러스터에 정의된 기본적인 `clusterrole`의 목록은 다음과 같다.
+쿠버네티스의 클러스터에 정의된 기본적인 `clusterrole` 목록은 다음과 같다.
 
 ```shell
 $ kubectl get clusterrole
