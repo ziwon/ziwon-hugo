@@ -702,7 +702,7 @@ $ kubectl get pod
 Error from server (Forbidden): pods is forbidden: User "users:ziwon" cannot list resource "pods" in API group "" in the namespace "default"
 ```
 
-## Authorization
+## 권한 (Authorization)
 
 모든 쿠버네티스트 리소스는 다음과 같이 클러스터 객체와 네임스페이스 객체로 구분할 수 있다.
 
@@ -774,7 +774,7 @@ roles                                    rbac.authorization.k8s.io   true       
 
 다음과 같이 RBAC에 의한 리소스 접근시에 권한과 관련된 네임스페이스 객체와 클러스터 객체가 있다.
 
-### 네임스페이스
+### 네임스페이스 Role & RoleBinding
 - Role
 - RoleBinding
 
@@ -797,7 +797,7 @@ kube-system   system:controller:token-cleaner                  8h
 kube-system   weave-net                                        8h
 ```
 
-### 클러스터 
+### 클러스터 Role & RoleBinding
 - ClusterRole
 - ClusterRoleBinding
 
@@ -1250,8 +1250,35 @@ kube-system   weave-net-m2dn4                                 2/2     Running   
 kube-system   weave-net-nrsvs                                 2/2     Running   0          9h
 ```
 
+## Service Account
+다음과 같이 모든 네임스페이스에는 기본적으로 `default` 서비스 계정이 존재한다. 쿠버네티스에 RBAC이 있기 전에 클러스터에 접근하는 방법이 Service Account였기 때문이다. 프로그램
+
+```shell
+$ kubectl get sa --all-namespaces
+NAMESPACE     NAME                                 SECRETS   AGE
+default       default                              1         2d1h
+foo           default                              1         39h
+kube-public   default                              1         2d1h
+kube-system   default                              1         2d1h
+...
+```
+
+즉, 어플리케이션을 실행시키고 싶으면, 일종의 봇 아이텐티티를 지닌 어플리케이션 고유의 개별 서비스 계정을 주어서 클러스터의 다른 리소스들과 통신하게 할 수 있었다. 그러나 RBAC이 추가되고 베스트 프랙티스로써 알려지게 되면서 문제가 되는 것이, RBAC 측면에서 기존의 `default` 계정은 zero 인증과 권한을 가지게 된다는 것이다. 그 대표적인 예가 helm이다. 설치한 후에 RBAC 인증으로 인해 제대로 동작하지 않아 다음과 같은 서비스 계정을 만들고 RBAC 정책을 설정해주어야 한다.
+
+```shell
+kubectl create serviceaccount --namespace kube-system tiller
+kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
+helm init --service-account tiller --upgrade
+```
+
+그래서 기존의 `default` 서비스 계정 등, 서비스 계정에 관한 RBAC 정책이 이슈가 될 수 있는데, 다음 문서는 서비스 계정에 대한 Heptio사의 베스트 프랙티스이다. 기본적으로 개별 서비스 계정을 만들어 권한을 부여할 것을 권하고 있다.
+
+- [How to: RBAC best practices and workarounds](http://docs.heptio.com/content/tutorials/rbac.html)
+
 ## 관련 링크
 - [RSA 인증서 (Certification) 와 전자서명 (Digital Sign)의 원리](https://rsec.kr/?p=426)
+- [Using RBAC Authorization](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
 - [Adding users on "Quick Start for Kubernetes on AWS"](https://www.linkedin.com/pulse/adding-users-quick-start-kubernetes-aws-jakub-scholz)
 - [How to: RBAC best practices and workarounds](http://docs.heptio.com/content/tutorials/rbac.html)
 - [How Kubernetes certificate authorities work](https://jvns.ca/blog/2017/08/05/how-kubernetes-certificates-work/)
