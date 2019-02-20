@@ -2,7 +2,7 @@
 date          = "2019-02-11T11:55:00+09:00"
 draft         = false
 title         = "TGI Kubernetes 005: Pod Params and Probes"
-tags          = ["Kubernetes", "RBAC", "tgik"]
+tags          = ["Kubernetes", "probe", "tgik", "readiness", "liveness"]
 categories    = ["tgik"]
 slug          = "tgik-005"
 notoc         = true
