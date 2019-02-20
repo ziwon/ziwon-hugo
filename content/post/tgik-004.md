@@ -629,7 +629,7 @@ $ cat ziwon.csr | base64 | tr -d '\n'
 
 생성된 쿠버네티스 csr을 등록한다.
 
-```
+```shell
 $ cat << EOF | kubectl apply -f -
 apiVersion: certificates.k8s.io/v1beta1
 kind: CertificateSigningRequest
@@ -638,7 +638,7 @@ metadata:
 spec:
   groups:
   - system:authenticated
-  request: ...
+  request: <base64-encoded-csr>
   usages:
   - digital signature
   - key encipherment
@@ -661,7 +661,7 @@ $ kubectl get csr user-request-ziwon -o jsonpath='{.status.certificate}' | base6
 쿠버네티스 API 서버의 Root CA, 그리고 클라이언트의 공개키와 개인키를 이용해, 클라이언트 `kubeconfig` 파일을 생성한다.
 
 ```shell
-cat ziwon.crt | base64 | tr -d '\n'
+$ cat ziwon.crt | base64 | tr -d '\n'
 ```
 
 ```yaml
