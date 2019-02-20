@@ -276,6 +276,7 @@ status: {}
 위에서 `replicas`의 값을 5로 설정하였는데, Deployment는 ReplicaSet를 생성하고, ReplicaSet은 Pod을 생성한다. 알다시피, Probe에는 두 가지가 있는데, Readiness Probe는 트래픽을 받을 준비가 된 것이고, Liveness Probe는 서버가 정상적인지  기술힌다. 서버가 초기화 중이거나 또는 셧다운 중일 때는 Live이지만, Ready가 아닌 상태가 될 수 있다. Liveness Probe가 깨지면 그 Pod은 재시작된다. (예를 들어, 디비 커넥션 풀이 한도가 차서 서버에 더 이상 접속이 되지 않는 초보적인 오류의 경우, 해당 서버에 접속하여 수동으로 재시작하곤 하는데, Kubernetes에서는 자동으로 재시작되게 할 수 있다.) 그리고 Service에서 Readiness Probe에서 실패가 되고 있는 Pod들은 Endpoint 집합에서 축출하게 된다. 질문에서 잠깐 언급된 것처럼 Readiness Probe 상태가 실패인 것들을 오토스케일링 그룹 관점에서 축출하는 용도로는 사용하지 않는다고 한다. 
 
 다음은 Probe 설정에 관한 몇 가지 필드들이다.
+
 - `initialDelaySeconds`: liveness 또는 readiness 상태 프로브가 시작되기 전에 컨테이너가 시작된 후의 시간 (초)
 - `periodSeconds`: 프로브 수행 빈도 (초). 기본값은 10초. 최소값은 1초
 - `timeoutSeconds`: 프로브가 초과되는 시간 (초). 기본값은 1초. 최소값은 1초
@@ -283,6 +284,7 @@ status: {}
 - `failureThreshold`: Pod가 시작되고 프로브가 실패하면, 쿠버네티스는 failureThreshold 횟수 동안 실패를 시도한다. liveness 프로브의 경우, 포기는 포드를 다시 시작하는 것을 의미. 준비 상태 검사의 경우 포드는 Unready로 표시.  
 
 [HTTP probes](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.13/#httpgetaction-v1-core)에는 추가적인 필드가 있다.
+
 - `host`: 연결할 호스트 이름. 기본적으로 포드 IP로 설정. 
 - `scheme`: 호스트 연결에 사용할 스킴. 기본값은 HTTP
 - `path`: HTTP 서버에 액세스하기 위한 경로
