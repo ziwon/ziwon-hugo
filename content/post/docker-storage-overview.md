@@ -1,6 +1,6 @@
 +++
 date          = "2019-02-20T11:55:00+09:00"
-draft         = true
+draft         = false
 title         = "[번역] 도커 스토리지 소개"
 tags          = ["docker", "storage", "persistence", "data persistence", "volumes", "mounts", "bind mounts"]
 categories    = ["docker"]
@@ -10,7 +10,7 @@ socialsharing = true
 nocomment     = false
 +++
 
-> 도커상에서 어플리케이션 데이터를 다루는 방법에 대해 집중적으로 살펴보고자 한다. 원글의 출처는 [Storage overview](https://docs.docker.com/storage/)이다. 
+> 도커상에서 어플리케이션 데이터관리는 중요한 주제이므로 도커 공식 문서를 하나씩 번역해보며 그 내용을 집중적으로 살펴보고자 한다. 원글의 출처는 [Storage overview](https://docs.docker.com/storage/)이다.
 
 <center>•••</center>
 
