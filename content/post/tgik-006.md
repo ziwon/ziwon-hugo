@@ -1,8 +1,8 @@
 +++
 date          = "2019-02-22T10:25:00+09:00"
 draft         = false
-title         = "TGI Kubernetes 006: Kube Adm"
-tags          = ["Kubernetes", "kubeadm",]
+title         = "TGI Kubernetes 006: kubeadm"
+tags          = ["Kubernetes", "kubeadm", "single master"]
 categories    = ["tgik"]
 slug          = "tgik-006"
 notoc         = true
