@@ -10,7 +10,7 @@ socialsharing = true
 nocomment     = false
 +++
 
-[여섯 번째 에피소드](https://github.com/heptio/tgik/blob/master/episodes/006/README.md)는 `kubeadm`을 이용해서 쿠버네티스 클러스터를 설치하는 내용이다. 
+[여섯 번째 에피소드](https://github.com/heptio/tgik/blob/master/episodes/006/README.md)는 `kubeadm`을 이용해서 싱글 마스터 쿠버네티스 클러스터를 설치하는 내용이다. 말할 필요도 없이, 실제 프로덕션 수준의 고가용성 쿠버네티스 클러스터 셋업은 아래처럼 단순하지 않으니 어디까지나 참고만 하도록 한다.
 
 <center>•••</center>
 
@@ -770,3 +770,5 @@ ip-172-31-31-2     Ready    master   36m   v1.13.3
 - https://github.com/cookeem/kubeadm-ha
 - https://github.com/Lentil1016/kubeadm-ha
 - https://github.com/scholzj/terraform-aws-kubernetes
+
+<center><img src="https://d33wubrfki0l68.cloudfront.net/d1411cded83856552f37911eb4522d9887ca4e83/b94b2/images/kubeadm/kubeadm-ha-topology-stacked-etcd.svg"/></center>
