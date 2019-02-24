@@ -12,7 +12,7 @@ nocomment     = false
 
 도커 스토리지 목차는 다음과 같다.
 
-- [스토리지 소개](/post/docker-storage-overview/)
+- [스토리지 소개](/post/docker-storage-overview/) ([원문](https://docs.docker.com/storage/))
 - **[* 볼륨 사용](/post/docker-storage-volumes/) ([원문](https://docs.docker.com/storage/volumes/))**
 - 바인드 마운트
 - tmp 마운트
@@ -30,9 +30,9 @@ nocomment     = false
 
 # 볼륨 사용
 
-볼륨은 도커 컨테이너에 의해 생성되고 사용되는 데이터를 영속하기 위해 선호되는 메커니즘이다. 바인딩 마운트는 호스트 머신의 디렉토리 구조에 따라 달라지지만, 볼륨은 도커에 의해 완전히 관리된다. 볼륨은 바인딩 마운트에 비해 몇 가지 장점이 있다.
+볼륨은 도커 컨테이너에 의해 생성되고 사용되는 데이터를 영속하기 위해 선호되는 메커니즘이다. 바인드 마운트는 호스트 머신의 디렉토리 구조에 따라 달라지지만, 볼륨은 도커에 의해 완전히 관리된다. 볼륨은 바인드 마운트에 비해 몇 가지 장점이 있다.
 
-- 볼륨은 바인딩 마운트보다 백업 또는 마이그레이션이 더 쉽다.
+- 볼륨은 바인드 마운트보다 백업 또는 마이그레이션이 더 쉽다.
 - Docker CLI 명령이나 Docker API를 사용하여 볼륨을 관리할 수 있다.
 - 볼륨은 Linux 컨테이너와 Windows 컨테이너 모두에서 작동한다.
 - 볼륨은 여러 컨테이너 사이에서 더 안전하게 공유될 수 있다.
@@ -45,7 +45,7 @@ nocomment     = false
 
 컨테이너가 비영속적인 상태 데이터를 생성하는 경우, `tmpfs` 마운트를 사용하여 데이터를 어디에나 영속적으로 저장하지 않도록 하고, 컨테이너의 쓰기 가능한 레이어에 쓰기를 막아 컨테이너 성능을 향상시키는 것을 고려해볼 수 있다.
 
-볼륨은 `rprivate` 바인딩 전파를 사용하는데, 볼륨에 대한 바인딩 전파는 설정할 수 없다.
+볼륨은 `rprivate` 바인드 전파를 사용하는데, 볼륨에 대한 바인드 전파는 설정할 수 없다.
 
 ## -v 또는 --mount 플래그 선택
 
@@ -63,7 +63,7 @@ nocomment     = false
   - `bind`, `volume` 또는 `tmpfs`가 될 수 있는 마운트의 `type`. 여기 논하는 주제는 볼륨이므로, `type`은 항상 `volume`이다.
   - 마운트의 `source`. 이름을 지닌 볼륨의 경우, 이는 볼륨의 이름이다. 익명 볼륨의 경우 이 필드는 생략한다. `source` 또는 `src`로 지정할 수 있다.
   - `destination`는 파일이나 디렉토리가 컨테이너에 마운트되는 경로를 값으로 취한다. `destination`, `dst` 또는 `target`으로 지정할 수 있다.
-  - `readonly` 옵션이 있는 경우, [바인딩 마운트가 읽기 전용으로 컨테이너에 마운트](https://docs.docker.com/storage/volumes/#use-a-read-only-volume)된다.
+  - `readonly` 옵션이 있는 경우, [바인드 마운트가 읽기 전용으로 컨테이너에 마운트](https://docs.docker.com/storage/volumes/#use-a-read-only-volume)된다.
   - 한 번 이상 지정할 수 있는 `volume-opt` 옵션은 옵션 이름과 값으로 구성된 키밸류 쌍을 취한다.
 
 > **외부 CSV 파서에서 값을 이스케이프(escape)하기** <br/>
@@ -82,7 +82,7 @@ $ docker service create \
 
 ### -v와 --mount 양식의 차이
 
-바인딩 마운트와 달리, 볼륨의 모든 옵션은 `--mount`와 `-v` 플래그 모두에 대해 사용할 수 있다.
+바인드 마운트와 달리, 볼륨의 모든 옵션은 `--mount`와 `-v` 플래그 모두에 대해 사용할 수 있다.
 
 서비스가 포함된 볼륨을 사용할 때는 `--mount`만 지원된다.
 
