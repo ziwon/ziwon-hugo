@@ -1,6 +1,6 @@
 +++
 date          = "2019-02-24T16:59:00+09:00"
-draft         = true
+draft         = false
 title         = "[번역] 도커 볼륨"
 tags          = ["docker", "storage", "persistence", "volumes", "mounts"]
 categories    = ["docker"]
