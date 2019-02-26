@@ -1,6 +1,6 @@
 +++
 date          = "2019-02-11T11:55:00+09:00"
-draft         = false
+draft         = true
 title         = "[번역] docker run"
 tags          = ["docker"]
 categories    = ["docker"]
