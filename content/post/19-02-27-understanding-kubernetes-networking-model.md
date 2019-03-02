@@ -11,17 +11,114 @@ socialsharing = true
 nocomment     = false
 +++
 
-> 이 글은 원저자 **Kenvin Sookocheff** 님의 동의를 받아 한국어로 번역하였습니다. 원문의 출저는 [A Guide to the Kubernetes Networking Model](https://sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/)입니다.
+> 이 글은 원저자의 동의를 받아 한국어로 번역하였습니다. 원문의 출저는 **[A Guide to the Kubernetes Networking Model](https://sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/)** 입니다.
 
-
-Kubernetes was built to run distributed systems over a cluster of machines. The very nature of distributed systems makes networking a central and necessary component of Kubernetes deployment, and understanding the Kubernetes networking model will allow you to correctly run, monitor and troubleshoot your applications running on Kubernetes.
-
-쿠버네티스는 머신 클러스터에서 분산된 시스템을 실행하기 위해 만들어졌습니다. 분산 시스템의 그 특성으로 인해 네트워킹은 쿠버네티스 배포의 핵심적이고 필요한 컴포넌트이며, 쿠버네티스 네트워킹 모델을 이해하면 쿠버네티스에서 실행 중인 애플리케이션을 올바르게 실행하고, 모니터링하고, 문제를 해결할 수 있을 것입니다.
-
-Networking is a vast space with a lot of mature technologies. For people unfamiliar with the landscape, this can be uncomfortable because most people have existing preconceived notions about networking, and there are a lot of both new and old concepts to understand and fit together into a coherent whole. A non-exhaustive list might include technologies like network namespaces, virtual interfaces, IP forwarding, and network address translation. This guide intends to demystify Kubernetes networking by discussing each of Kubernetes dependent technologies along with descriptions on how those technologies are used to enable the Kubernetes networking model.
+쿠버네티스는 머신 클러스터에서 분산된 시스템을 실행하기 위해 만들어졌습니다. 분산 시스템의 그 특성으로 인해 네트워킹은 쿠버네티스 배포의 핵심적으로 필요한 컴포넌트가 되고, 쿠버네티스 네트워킹 모델을 이해하면 쿠버네티스에서 실행 중인 애플리케이션을 올바르게 실행하고, 모니터링하고, 문제를 해결할 수 있을 것입니다.
 
 네트워킹은 성숙한 기술을 많이 지닌 거대한 공간입니다. 이 풍경에 익숙하지 않은 사람들에게는 네트워킹은 불편할 수 있습니다. 왜냐하면 대부분의 사람들이 네트워킹에 대한 기존의 선입견을 가지고 있고, 일관성이 있는 전체로 이해하고 맞추어야 하는 새로운 개념들과 오래된 개념들이 많이 있기 때문입니다. 대략적인 목록으로 네트워크 네임스페이스, 가상 인터페이스, IP 전달 및 네트워크 주소 변환과 같은 것들입니다. 본 가이드는 쿠버네티스의 네트워킹 기술을 사용하기 위해 이러한 기술이 어떻게 사용되지는지에 대한 설명과 함께 쿠버네티스가 의존하는 기술 각각에 대해 논의함으로써 쿠버네티스 네트워킹을 설명하고자 합니다. 
 
-This guide is fairly long and divided in several sections. We start by discussing some basic Kubernetes terminology to ensure terms are being used correctly throughout the guide, then discuss the Kubernetes networking model and the design and implementation decisions that it imposes. This is followed by the longest and most interesting part of this guide: an in-depth discussion on how traffic is routed within Kubernetes using several different use cases.
+본 가이드는 상당히 길며 여러 섹션으로 나뉩니다. 먼저 쿠버네티스의 기본 용어 몇 가지를 논의하여 가이드 전체에서 용어가 올바르게 사용되는지 확인한 다음 쿠버네티스 네트워킹 모델과 이 모델이 내세우는 설계 및 구현 결정에 대해 논의합니다. 이는 본 가이드의 가장 길고 흥미로운 부분으로 서로 다른 사용 사례들을 살펴보며, 쿠버네티스 내에서 트래픽을 라우팅하는 방법에 대해 심도 있게 논의하게 될 것입니다.
 
-본 가이드는 상당히 길며 여러 섹션으로 나뉩니다. 먼저 쿠버네티스의 기본 용어 몇 가지를 논의하여 가이드 전체에서 용어가 올바르게 사용되는지 확인한 다음 쿠버네티스 네트워킹 모델과 이 모델이 내세우는 설계 및 구현 결정에 대해 논의합니다. 이는 본 가이드의 가장 길고 흥미로운 부분으로 서로 다른 사용 사례를 사용해서 쿠버네티스 내에서 트래픽을 라우팅하는 방법에 대한 심도있는 논의가 될 것입니다.
+## 목차
+
+- 1 쿠버네티스 기본
+- 2 쿠버네티스 네트워킹 모델
+- 3 컨테이너 대 컨테이너 네트워킹
+- 4 파드 대 파드 네트워킹
+- 5 파드 대 서비스 네트워킹
+- 6 인터넷 대 서비스 네트워킹
+	- 6.1 이그레스
+	- 6.2 인그레스
+- 7 마무리
+- 8 용어집
+
+## 1 쿠버네티스 기본
+
+쿠버네티스는 점점 더 크고 큰 기능으로 결합된 몇 가지 핵심 개념으로 만들어졌습니다. 이 섹션에서는 이러한 각 개념을 나열하고 논의를 용이하게 하는 간단한 개요를 제공합니다. 여기에 나열된 것보다 쿠버네티스에는 훨씬 더 많은 것이 있지만, 이 섹션은 입문서 역할로 독자가 이후 섹션에서 따라갈 수 있게 하는 것이 좋겠습니다. 이미 쿠버네티스에 익숙하다면 이 섹션을 건너 뛰어도 좋습니다.
+
+### 1.1 쿠버네티스 API 서버
+
+쿠버네티스에서는 모든 것이 쿠버네티스 API 서버 (`kube-apiserver`)가 제공하는 API 호출입니다. API 서버는 어플리케이션 클러스터의 원하는 상태를 유지하는 [etcd](https://github.com/coreos/etcd) 데이터스토어의 게이트웨이입니다. 쿠버네티스 클러스터의 상태를 업데이트하기 위해 API 서버에 원하는 상태를 기술하는 API 호출을 합니다.
+
+### 1.2 컨트롤러
+
+컨트롤러는 쿠버네티스를 구축하는 데 사용되는 코어 추상화입니다. API 서버를 사용하여 클러스터의 원하는 상태를 선언하면, 컨트롤러는 API 서버의 상태를 지속적으로 관찰하고 변경 사항에 대응하여 클러스터의 현재 상태가 원하는 상태와 일치하는지 확인합니다. 컨트롤러는 클러스터의 원하는 상태에 대해 클러스터의 현재 상태를 지속적으로 확인하는 간단한 루프를 사용하여 작동합니다. 차이점이 있는 경우, 컨트롤러는 현재 상태를 원하는 상태와 일치하도록 작업을 수행합니다. 의사 코드는 다음과 같습니다:
+
+```python
+while true:
+  X = currentState()
+  Y = desiredState()
+
+  if X == Y:
+    return  # 아무것도 하지 않음
+  else:
+    do(Y를 만들기 위한 태스크)
+```
+
+예를 들어, API 서버를 사용하여 새 파드를 만들면 쿠버네티스스케줄러 (컨트롤러)가 변경을 인지하고 클러스터에 파드를 배치할 위치를 결정합니다. 그런 다음 API 서버 (etcd의 도움으로)를 사용하여 상태 변경을 기록합니다. 그런 다음 `kubelet` (컨트롤러)은 새로운 변경을 인지하고, 클러스터 내에 파드에 도달할 수 있도록 필요한 네트워킹 기능을 설정합니다. 여기에서 두 개의 개별 컨트롤러가 클러스터의 실제 상태와 사용자의 의도가 일치하도록 두 가지 개별 상태 변경에 대응합니다.
+
+### 1.3 파드
+
+파드는 쿠버네티스의 원자이며 애플리케이션을 작성하기위한 가장 작은 배포 가능 객체입니다. 단일 파드는 클러스터에서 실행중인 워크로드를 나타내며 하나 이상의 도커 컨테이너, 필요한 저장소 및 고유한 IP 주소를 캡슐화합니다. 파드를 구성하는 컨테이너는 동일한 머신에 함께 배치되고 예약되도록 설계되었습니다.
+
+### 1.4 노드
+
+노드는 쿠버네티스 클러스터를 실행하는 머신입니다. 베어 메탈, 가상 머신, 또는 다른 어떤 것이 될 수 있습니다. 호스트라는 단어는 종종 노드와 교대로 사용됩니다. 저는 일관성을 가지고 노드라는 용어를 사용하려고 노력할 것이지만 때로 문맥에 따라 노드를 언급하기 위해 가상 머신이라는 단어를 사용할 것입니다.
+
+## 2. 쿠버네티스 네트워킹 모델
+
+쿠버네티스는 파드가 네트워크화되는 방법에 대해 독단적인 선택을 합니다. 특히, 쿠버네티스는 모든 네트워킹 구현에 대해 다음과 같은 요건을 명합니다.
+
+- 모든 파드는 NAT(네트워크 주소 변환)을 사용하지 않고 다른 모든 파드와 통신할 수 있습니다.
+- 모든 노드는 NAT없이 모든 파드와 통신할 수 있습니다.
+- 파드가 자신이 보는 IP는 다른 파드가 보는 것과 같은 것처럼 보이는 IP입니다.
+
+이러한 조건이 주어질 때, 해결해야할 네 가지의 분명한 네트워크 문제가 남아 있습니다.
+
+1. 컨테이너 대 컨테이너 네트워킹
+2. 파드 대 파드 네트워킹
+3. 파드 대 서비스 네트워킹
+4. 인터넷 대 서비스 네트워킹
+
+본 가이드의 나머지 부분에서는 이러한 각각의 문제와 그 해결책을 차례로 논의합니다.
+
+## 3. 컨테이너 대 컨테이너 네트워킹
+
+일반적으로 가상 머신의 네트워크 통신은 이더넷 장치와 직접 상호 작용하는 것으로 간주합니다 (그림 1 참조).
+
+<center>
+<img src="//sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/eth0.png"/>
+</center>
+
+실제로는 상황은 그보다 더 미묘합니다. Linux에서 실행 중인 각 프로세스는 자체 경로, 방화벽 규칙 및 네트워크 장치로 논리적 네트워킹 스택을 제공하는 [네트워크 네임스페이스](http://man7.org/linux/man-pages/man8/ip-netns.8.html) 내에서 통신한다. 본질적으로, 네트워크 네임스페이스는 네임스페이스 내의 모든 프로세스에 대해 새로운 네트워크 스택을 제공한다.
+
+리눅스 사용자는, `ip` 명령어를 사용해서 네트워크 네임스페이스를 생성할 수 있습니다. 예를 들면, 다음 명령은 `ns1` 이라 불리는 새로운 네트워크 네임스페이스를 생성하게 됩니다.
+
+```sh
+$ ip netns add ns1
+```
+
+네임스페이스가 생성될 때, `/var/run/netns` 아래에 마운트 지점이 만들어지므로, 네임스페이스에 연결된 프로세스가 없더라도 네임스페이스를 유지할 수 있습니다.
+
+`/var/run/nets` 아래에 모든 마운트 지점을 나열하거나 `ip` 명령을 사용하여 사용 가능한 네임스페이스 목록을 볼 수 있습니다.
+
+```sh
+$ ls /var/run/netns
+ns1
+$ ip netns
+ns1
+```
+
+기본적으로, 리눅스는 루트 네트워크 네임스페이스에 모든 프로세스를 할당하여 외부 세계에 대한 접근을 제공합니다 (그림 2 참조).
+
+<center>
+<img src="//sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/root-namespace.png">
+</center>
+
+도커 구조에서 보면, 파드는 네트워크 네임스페이스를 공유하는 도커 컨테이너 그룹으로 모델링됩니다. 파드 내의 컨테이너는 네트워크 네임스페이스를 통해 그 파드에 할당된 동일한 IP 주소와 포트 공간을 가지며, 동일한 네임스페이스에 있기 때문에 로컬 호스트를 통해 서로를 찾을 수 있습니다. 가상 머신의 각 파드에 네트워크 네임 스페이스를 생성할 수 있습니다. 이것은 도커를 사용하여 "앱 컨테이너"(사용자가 지정한 항목)가 도커의 `–net=container` 기능으로 해당 네임스페이스에 가입하는 동안 네트워크 네임스페이스를 열어 두는 "파드 컨테이너"로서 구현됩니다. 그림 3은 공유 네임스페이스 내에서 각 파드가 여러 개의 도커 컨테이너`(ctr*)` 로 구성되어 있는 방법을 보여주고 있습니다.
+
+<center>
+<img src="//sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/pod-namespace.png">
+</center>
+
+파드 내의 애플리케이션은 또한 파드의 일부로 정의되고 각 애플리케이션의 파일 시스템에 마운트할 수 있도록 만들어진 공유 볼륨에 액세스 할 수 있습니다.
