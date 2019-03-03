@@ -9,7 +9,7 @@ disqusShortname = "ziwon"
 pygmentsCodefences = true
 pygmentsUseClasses = true
 
-Paginate = 5
+Paginate = 10
 enableRobotsTXT = true
 
 [params.features]
