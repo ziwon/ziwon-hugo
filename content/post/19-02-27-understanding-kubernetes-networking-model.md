@@ -67,7 +67,7 @@ while true:
 
 ## 2. 쿠버네티스 네트워킹 모델
 
-쿠버네티스는 파드가 네트워크화되는 방법에 대해 독단적인 선택을 합니다. 특히, 쿠버네티스는 모든 네트워킹 구현에 대해 다음과 같은 요건을 명합니다.
+쿠버네티스는 파드가 네트워크화되는 방법에 대해 독단적인 선택을 합니다. 특히, 쿠버네티스는 모든 네트워킹 구현에 대해 다음과 같은 요건을 규정합니다.
 
 - 모든 파드는 NAT(네트워크 주소 변환)을 사용하지 않고 다른 모든 파드와 통신할 수 있습니다.
 - 모든 노드는 NAT없이 모든 파드와 통신할 수 있습니다.
@@ -87,7 +87,7 @@ while true:
 일반적으로 가상 머신의 네트워크 통신은 이더넷 장치와 직접 상호 작용하는 것으로 간주합니다 (그림 1 참조).
 
 <center>
-<img src="//sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/eth0.png"/>
+<img src="https://sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/eth0.png"/>
 </center>
 
 실제로는 상황은 그보다 더 미묘합니다. Linux에서 실행 중인 각 프로세스는 자체 경로, 방화벽 규칙 및 네트워크 장치로 논리적 네트워킹 스택을 제공하는 [네트워크 네임스페이스](http://man7.org/linux/man-pages/man8/ip-netns.8.html) 내에서 통신한다. 본질적으로, 네트워크 네임스페이스는 네임스페이스 내의 모든 프로세스에 대해 새로운 네트워크 스택을 제공한다.
@@ -112,13 +112,45 @@ ns1
 기본적으로, 리눅스는 루트 네트워크 네임스페이스에 모든 프로세스를 할당하여 외부 세계에 대한 접근을 제공합니다 (그림 2 참조).
 
 <center>
-<img src="//sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/root-namespace.png">
+<img src="https://sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/root-namespace.png">
 </center>
 
 도커 구조에서 보면, 파드는 네트워크 네임스페이스를 공유하는 도커 컨테이너 그룹으로 모델링됩니다. 파드 내의 컨테이너는 네트워크 네임스페이스를 통해 그 파드에 할당된 동일한 IP 주소와 포트 공간을 가지며, 동일한 네임스페이스에 있기 때문에 로컬 호스트를 통해 서로를 찾을 수 있습니다. 가상 머신의 각 파드에 네트워크 네임 스페이스를 생성할 수 있습니다. 이것은 도커를 사용하여 "앱 컨테이너"(사용자가 지정한 항목)가 도커의 `–net=container` 기능으로 해당 네임스페이스에 가입하는 동안 네트워크 네임스페이스를 열어 두는 "파드 컨테이너"로서 구현됩니다. 그림 3은 공유 네임스페이스 내에서 각 파드가 여러 개의 도커 컨테이너`(ctr*)` 로 구성되어 있는 방법을 보여주고 있습니다.
 
 <center>
-<img src="//sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/pod-namespace.png">
+<img src="https://sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/pod-namespace.png">
 </center>
 
 파드 내의 애플리케이션은 또한 파드의 일부로 정의되고 각 애플리케이션의 파일 시스템에 마운트할 수 있도록 만들어진 공유 볼륨에 액세스 할 수 있습니다.
+
+## 4. 파드 대 파드 네트워킹
+
+쿠버네티스에서는 모든 파드가 실제 IP 주소를 가지며 각 파드는 해당 IP 주소를 사용하는 다른 파드와 통신합니다. 당면 과제는 쿠버네티스가 동일한 물리적 노드 또는 클러스터의 다른 노드에 파드를 배포하는 것과 관계없이 어떻게 실제 IP를 사용해 파드 대 파드 통신을 가능케 하는지 이해하는 것입니다. 우리는 노드 간 통신을 위해 내부 네트워크를 오가는 복잡함을 피하기 위해 동일한 머신에 상주하는 파드를 고려해 봄으로써 이 논의를 시작합니다.
+
+파드의 관점에서 보면, 파드는 동일한 노드에 있는 다른 네트워크 네임스페이스와 통신해야 하는 자체적인 이더넷 네임스페이스에 존재합니다. 고맙게도 네임스페이스는 Linux [가상 이더넷 디바이스](http://man7.org/linux/man-pages/man4/veth.4.html) 또는 여러 네임스페이스에 분산될 수 있는 두 개의 가상 인터페이스로 구성된 veth 쌍을 사용하여 연결할 수 있습니다. 파드 네임스페이스를 연결하기 위해 veth 쌍의 한 쪽을 루트 네임스페이스에 할당하고 다른 한 쪽을 파드의 네트워크 네임스페이스에 할당할 수 있습니다. 각 veth 쌍은 패치 케이블처럼 작동하여 양쪽을 연결하고 이들 사이에 트래픽을 흐르게 합니다. 이 설정은 머신에 있는만큼 많은 팟에 복제할 수 있습니다. 그림 4는 VM의 각 파드를 루트 네임스페이스에 연결하는 veth 쌍을 보여줍니다.
+
+<center>
+<img src="https://sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/pod-veth-pairs.png"/>
+</center>
+
+이 시점에서 파드는 각각 하나의 네트워크 네임스페이스를 갖도록 설정하여 자신의 이더넷 디바이스 및 IP 주소가 있다고 믿게 하고, 노드의 루트 네임스페이스에 연결합니다. 이제 우리는 파드가 루트 네임스페이스를 통해 서로 통신하기를 원합니다. 이를 위해, 네트워크 브리지를 사용합니다.
+
+Linux 이더넷 브리지는 두 개 이상의 네트워크 세그먼트를 통합하는 데 사용되는 가상의 Layer 2 네트워킹 디바이스로, 투명하게 작동하여 두 네트워크를 서로 연결합니다. 브리지는 통과하는 데이터 패킷의 목적지를 검사하고 브리지에 연결된 다른 네트워크 세그먼트에 패킷 전달 여부를 결정하여 소스와 목적지 간에 포워딩 테이블을 유지함으로써 동작합니다. 브리징 코드는 네트워크의 각 이더넷 디바이스에 고유한 MAC 주소를 보고 데이터를 브리지하거나 제거할지를 결정합니다.
+
+브리지는 [ARP](https://en.wikipedia.org/wiki/Address_Resolution_Protocol) 프로토콜을 구현하여 주어진 IP 주소와 관련된 링크 레이어의 MAC 주소를 찾습니다. 브리지에서 데이터 프레임이 수신되면 브리지는 연결된 모든 디바이스(원래 송신자는 제외)로 프레임을 브로드캐스트하고 해당 프레임에 응답하는 디바이스는 룩업 테이블에 저장됩니다. 동일한 IP 주소를 가진 이후의 트래픽은 룩업 테이블을 사용하여 패킷을 포워딩할 올바른 MAC 주소를 찾습니다.
+
+<center>
+<img src="https://sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/pods-connected-by-bridge.png"/>
+</center>
+
+### 4.1 패킷의 일생: 파드 대 파드, 동일 노드
+
+각각의 파드를 자신의 네트워킹 스택으로 분리하는 네트워크 네임스페이스, 각 네임스페이스를 루트 네임스페이스에 연결하는 가상 이더넷 디바이스, 그리고 네임스페이스들을 하나로 연결하는 브리지가 주어지면, 마침내 동일한 노드의 파드 간에 트래픽을 보낼 준비가 됩니다. 이것은 그림 6에 설명되어 있습니다.
+
+<center>
+<img src="https://sookocheff.com/post/kubernetes/understanding-kubernetes-networking-model/pod-to-pod-same-node.gif"/>
+</center>
+
+그림 6에서, 파드 1은 파드의 기본 디바이스로 사용 가능한 자체 이더넷 디바이스 `eth0`에 패킷을 보냅니다. 파드 1의 경우, `eth0`는 가상 이더넷 디바이스를 통해 루트 네임스페이스 `veth0` (1)에 연결됩니다. 브리지 `cbr0`은 연결된 네트워크 세그먼트 `veth0`로 구성됩니다. 패킷이 브리지에 도달하면, 브리지는 ARP 프로토콜 (3)을 사용해서 `veth1`에 패킷을 전송할 올바른 네트워크 세그먼트를 결정합니다. 패킷이 가상 디바이스 `veth1`에 도달하면, 파드 2의 네임스페이스와 해당 네임스페이스 (4) 내의 `eth0` 디바이스로 직접 전달됩니다. 이 트래픽 흐름에서 각 파드는 `localhost`에서만 `eth0`과 통신하며, 트래픽은 올바른 파드로 라우팅됩니다. 네트워크를 사용하기 위한 개발을 개발자가 기대하는 기본 동작대로 경험하게 됩니다.
+
+쿠버네티스의 네트워킹 모델은 파드가 노드에서 IP 주소로 연결할 수 있어야 한다고 규정합니다. 즉, 파드의 IP 주소는 네트워크의 다른 파드에서 항상 보여지며, 각 파드는 다른 파드가 보는 것과 같은 자체 IP 주소를 봅니다. 이제 서로 다른 노드에 있는 파드들 간에 트래픽을 라우팅하는 문제에 대해 살펴 보겠습니다.
