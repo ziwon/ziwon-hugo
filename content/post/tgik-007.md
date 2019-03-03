@@ -12,7 +12,7 @@ nocomment     = false
 
 [일곱 번째 에피소드](https://github.com/heptio/tgik/blob/master/episodes/007/README.md)는 간단하게 쿠버네티스 컨트롤러를 만들어 보는 데모이다.
 
-데모 리포지토리가 오래되고 API 패키지명이 다르기도 하고 하여, `go mod`로 재작성하였다. 저장소에는 각 데모에 해당하는 컨트롤러의 소스가 각ㄲ `pod-watcher`와 `secret-controller`의 두 가지로 태깅되어있다.
+데모 리포지토리가 오래되고 API 패키지명이 다르기도 하고 하여, `go mod` 기반으로 재작성하였다. 저장소에는 데모에 해당하는 컨트롤러의 소스가 각각 `pod-watcher`와 `secret-controller`의 두 가지로 태깅되어 있다.
 
 - [ziwon/k8s-controller](https://github.com/ziwon/k8s-controller)
 
@@ -20,7 +20,7 @@ nocomment     = false
 
 - [ziwon/yak8s](https://github.com/ziwon/yak8s)
 
-## Pod-Watcher
+## Pod 컨트롤러
 
 먼저, 적당한 디렉토리에 저장소를 클론한다. 그리고 `pod-watcher`를 체크 아웃한다. (`go mod`에 대한 자세한 설명은 여기서는 생략합니다.)
 
@@ -108,7 +108,7 @@ Alias tip: gor *.go
 클러스터에 Pod를 하나 배포한다.
 
 ```sh
-make run-k8s
+$ make run-kuard
 kubectl run --restart=Never --image=gcr.io/kuar-demo/kuard-amd64:blue kuard
 pod/kuard created
 ```
@@ -228,11 +228,11 @@ func (c *K8SController) Run(stop <-chan struct{}) {
 }
 ```
 
-## 시크릿 컨트롤러
+## Secret Copy 컨트롤러
 
 다음으로 작성해 볼 컨트롤러는 시크릿 컨트롤러이다.
 
-예를 들어, 여러 개발자가 사용하는 쿠버네티스 클러스터를 셋업했고, 네임스페이스마다 개발자를 할당하여 뭔가를 한다고 할 때, 공유 데이터베이스를 사용하지 않고 개발자들에게 쿠버네티스 시크릿을 모든 개발자들의 네임스페이스에 전파하는 것이 이슈가 될 수 있다. 이를 해결하기 위해 이를테면, 일종의 시크릿을 배포하는 컨트롤러를 만들 수 있을 것이다. 
+예를 들어, 여러 개발자가 사용하는 쿠버네티스 클러스터를 셋업했고, 네임스페이스마다 개발자를 할당하여 뭔가를 한다고 할 때, 공유 데이터베이스를 사용하지 않고 개발자들에게 쿠버네티스 시크릿을 모든 개발자들의 네임스페이스에 전파하는 것이 이슈가 될 수 있다. 이를 해결하기 위해 이를테면, 일종의 시크릿을 각 네임스페이스에 복사하는 컨트롤러를 만들 수 있을 것이다. 
 
 
 자세한 소스 코드는 `secret-controller` 태그를 참고한다. 
@@ -339,14 +339,14 @@ Examples:
 위 가이드 메세지를 따라, , `--from-literal` 옵션으로, `--type`의 값은 `k8s.ziwon.dev/secretsync`이고, 이름이 `supersecret`인 시크릿을 생성한다.
 
 ```sh
-$ kubectl create --namespace=secretsync secret generic supersecret --from-literal=ziwon=awsome --type=k8s.ziwon.dev/secretsync
+$ kubectl create --namespace=secretsync secret generic supersecret --from-literal=ziwon=awesome --type=k8s.ziwon.dev/secretsync
 secret/supersecret created
 ```
 
 만들어진 시크릿은 다음과 같이 확인할 수 있다. 
 
 ```sh
-$ k get secrets
+$ kubectl get secrets
 NAME                  TYPE                                  DATA   AGE
 default-token-vhc89   kubernetes.io/service-account-token   3      12m
 supersecret           k8s.ziwon.dev/secretsync              1      11m
@@ -362,7 +362,7 @@ $ go run *.go
 2019/03/03 18:09:22 We should copy supersecret to namespace default
 ```
 
-이상, 간단하게 Pod Watcher 컨트롤러와 Secret Controller를 만들어 보았다.
+이상, 간단하게 Pod Watcher 컨트롤러와 Secret Copy 컨트롤러를 만들어 보았다.
 
 ## 기타 
 - [A Deep Dive Into Kubernetes Controllers](https://engineering.bitnami.com/articles/a-deep-dive-into-kubernetes-controllers.html)
