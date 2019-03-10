@@ -238,5 +238,5 @@ Cosmos는 릴리즈 시점에 매우 우수한 수직 확장성을 제공할 것
 무엇보다 Cosmos는 제품이 아니라 모듈식, 적응식, 상호교환이 가능한 도구들로 구성된 생태계입니다. 개발자 여러분들이 블록체인 기술에 대한 약속을 실현하기 위해 기존의 도구를 개선하고 새로운 도구를 만드는 노력에 동참하실 것을 권장합니다. 이러한 도구들은 분산된 인터넷과 미래의 글로벌 금융 시스템을 구축하는데 필요한 기반입니다.
 
 ### 더 읽어보기
-- [Cosmos 백서 (영문)](https://cosmos.network/whitepaper), [Cosmos 백서 (한글 번역)]((https://docs.google.com/document/d/1b-oPY0SkgJCu_z818-P2j2me3B_ZNpggYAen7LHNxQ8))
+- [Cosmos 백서 (영문)](https://cosmos.network/whitepaper), [Cosmos 백서 (한글 번역)](https://docs.google.com/document/d/1b-oPY0SkgJCu_z818-P2j2me3B_ZNpggYAen7LHNxQ8)
 - [Cosmos 개발 시작하기](https://cosmos.network/developers)
