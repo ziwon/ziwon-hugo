@@ -7,8 +7,8 @@ Download redlouge theme
 git submodule update --init --recursive
 ```
 
-Run hugo with a specific theme:
+Run hugo with a specific theme (ex. kiss):
 ```
-hugo server -t redlounge -w -v
+hugo server -t kiss -w -v --bind="0.0.0.0" -D
 ```
 

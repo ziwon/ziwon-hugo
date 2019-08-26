@@ -21,7 +21,7 @@ customCSS = ["css/custom.css", "css/syntax-hybrid.css"]
 [params.rss]
 
 includeContent = true # Includes whole content in rss
-authorName = "Philbert Yoon" # Site author's full name
+authorName = "Aron Yoon" # Site author's full name
 authorEmail = "yngpil.yoon@gmail.com"
 
 [params.info]
