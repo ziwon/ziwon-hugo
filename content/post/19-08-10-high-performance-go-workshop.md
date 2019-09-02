@@ -7954,5 +7954,296 @@ Trace viewer is listening on http://127.0.0.1:60301
 - Kavya Joshi, [Understanding Channels](https://www.youtube.com/watch?v=KBZlN0izeiY) (GopherCon 2017)
 - Francesc Campoy, [Using the Go execution tracer](https://www.youtube.com/watch?v=ySy3sR1LFCQ)
 
+# 6.메모리 및 가비지 콜렉터
 
+Go는 가비지 콜렉트되는 언어입니다. 이는 디자인 원칙이며 변치 않을 겁니다.
+
+가비지 콜렉트 언어인 Go 프로그램의 성능은 가비지 콜렉터와의 상호 작용에 의해 결정됩니다.
+
+선택한 알고리즘 다음으로는, 메모리 소비가 애플리케이션의 성능과 확장성을 결정하는 가장 중요한 요소입니다.
+
+이 섹션에서는 가비지 콜렉터의 작동, 프로그램의 메모리 사용량을 측정하는 방법 및 가비지 콜렉터 성능이 병목 지점일 경우 메모리 사용량을 낮추기 위한 전략에 대해 설명합니다.
+
+## 6.1 가비지 콜렉터 월드뷰 
+
+가비지 콜렉터의 목적은 프로그램에서 사용할 수 있는 무한한 양의 메모리가 있다는 환상을 보여주는 것입니다.
+
+이 설명에 동의하지 않을 수도 있지만, 가비지 콜렉터 디자이너의 작동 방식에 대한 기본 가정이 이렇습니다.
+
+스탑-더-월드 (STW, stop the world)인 마크 스윕 GC는 전체 실행 시간 측면에서 가장 효율적이며 일괄 처리, 시뮬레이션 등에 적합합니다. 그러나 시간이 지남에 따라 Go GC는 순수 스탑-더-월드 콜렉터에서 동시성 비압축 컬렉터(concurrent, non compacting, collector)로 이동했습니다. 이는 Go GC가 레이턴시가 짧은 서버 및 대화형 애플리케이션을 위해 설계되었기 때문입니다.
+
+Go GC의 설계는 최대 처리량보다 짧은 레이턴시를 선호합니다. 즉, 이후의 정리 비용을 줄이기 위해 할당 비용의 일부를 mutator로 옮깁니다.
+
+## 6.2 가비지 콜렉터 디자인
+
+Go GC의 설계는 수년에 걸쳐 변경되었습니다.
+
+- Go 1.0, tcmalloc에 크게 의존하는 스탑-더-월드 마크 스윕 콜렉터
+
+- Go 1.3, 힙의 큰 숫자를 포인터로 오인하지 않아, 메모리 누수가 발생하는, 완전 정밀 콜렉터
+
+- Go 1.5, 처리량보다 레이턴시에 중점을 둔 새로운 GC 설계
+
+- Go 1.6, 레이턴시가 짧은 더 큰 힙을 처리하는 GC 개선
+
+- Go 1.7, 리팩토링 위주의 작은 GC 개선
+
+- Go 1.8, STW 시간을 줄이기 위한 추가 작업, 이제 100 마이크로초 범위로 내려감.
+
+- Go 1.10+, 전체 GC 사이클을 트리거할 때 레이턴시를 낮추기 위한 순수 협업 (pure cooperative) 고루틴에서 벗어남.
+
+## 6.3 가비지 콜렉터 모니터링
+
+가비지 콜렉터가 얼마나 열심히 작동하는지 간단하게 알 수 있는 방법은 GC 로깅 출력을 활성화하는 것입니다.
+
+이 통계는 항상 수집되지만 일반적으로 억제되므로 GODEBUG 환경 변수를 설정하여 해당 통계를 표시할 수 있습니다.
+
+```sh
+% env GODEBUG=gctrace=1 godoc -http=:8080
+gc 1 @0.012s 2%: 0.026+0.39+0.10 ms clock, 0.21+0.88/0.52/0+0.84 ms cpu, 4->4->0 MB, 5 MB goal, 8 P
+gc 2 @0.016s 3%: 0.038+0.41+0.042 ms clock, 0.30+1.2/0.59/0+0.33 ms cpu, 4->4->1 MB, 5 MB goal, 8 P
+gc 3 @0.020s 4%: 0.054+0.56+0.054 ms clock, 0.43+1.0/0.59/0+0.43 ms cpu, 4->4->1 MB, 5 MB goal, 8 P
+gc 4 @0.025s 4%: 0.043+0.52+0.058 ms clock, 0.34+1.3/0.64/0+0.46 ms cpu, 4->4->1 MB, 5 MB goal, 8 P
+gc 5 @0.029s 5%: 0.058+0.64+0.053 ms clock, 0.46+1.3/0.89/0+0.42 ms cpu, 4->4->1 MB, 5 MB goal, 8 P
+gc 6 @0.034s 5%: 0.062+0.42+0.050 ms clock, 0.50+1.2/0.63/0+0.40 ms cpu, 4->4->1 MB, 5 MB goal, 8 P
+gc 7 @0.038s 6%: 0.057+0.47+0.046 ms clock, 0.46+1.2/0.67/0+0.37 ms cpu, 4->4->1 MB, 5 MB goal, 8 P
+gc 8 @0.041s 6%: 0.049+0.42+0.057 ms clock, 0.39+1.1/0.57/0+0.46 ms cpu, 4->4->1 MB, 5 MB goal, 8 P
+gc 9 @0.045s 6%: 0.047+0.38+0.042 ms clock, 0.37+0.94/0.61/0+0.33 ms cpu, 4->4->1 MB, 5 MB goal, 8 P
+```
+
+트레이스 출력은 GC 활동의 일반적인 측정값을 제공합니다. `gctrace = 1`의 출력 형식은 런타임 패키지 설명서에 설명되어 있습니다.
+
+DEMO: `GODEBUG=gctrace=1`을 활성화하여 `godoc`을 표시합니다.
+
+	프러덕션 환경에서 이 환경 변수를 사용하세요. 성능에 영향을 미치지 않습니다.
 	
+`GODEBUG=gctrace=1`은 문제가 있는 것을 알고 있을 때 사용하면 좋습니다. 그러나 Go 애플리케이션의 일반적인 원격 측정의 경우는 `net/http/pprof` 인터페이스를 사용하는 것을 추천합니다.
+
+```golang
+import _ "net/http/pprof"
+```
+
+`net/http/pprof` 패키지를 임포트하면 `/debug/pprof`에 핸들러를 다음과 같은 다양한 런타임 메트릭으로 등록합니다.
+
+- 실행 중인 모든 고루틴의 목록, `/debug/pprof/heap?debug=1`.
+- 메모리 할당 통계 리포트, `/debug/pprof/heap?debug=1`.
+
+	`net/http/pprof`는 기본 `http.ServeMux`에 등록됩니다.
+	`http.ListenAndServe(address, nil)`을 사용하면 이것이 표시되므로 주의하세요.
+	
+DEMO: `godoc -http=:8080`, `/debug/pprof`를 보여줍니다.
+
+
+### 6.3.1 가비지 콜렉터 튜닝
+
+Go 런타임은 GC, `GOGC`를 조정하기 위한 환경 변수를 제공합니다.
+
+GOGC의 공식은 다음과 같습니다.
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mstyle displaystyle="true">
+    <mi>g</mi>
+    <mi>o</mi>
+    <mi>a</mi>
+    <mi>l</mi>
+    <mo>=</mo>
+    <mi>r</mi>
+    <mi>e</mi>
+    <mi>a</mi>
+    <mi>c</mi>
+    <mi>h</mi>
+    <mi>a</mi>
+    <mi>b</mi>
+    <mi>l</mi>
+    <mi>e</mi>
+    <mo>&#x22C5;</mo>
+    <mrow>
+      <mo>(</mo>
+      <mn>1</mn>
+      <mo>+</mo>
+      <mfrac>
+        <mrow>
+          <mi>G</mi>
+          <mi>O</mi>
+          <mi>G</mi>
+          <mi>C</mi>
+        </mrow>
+        <mn>100</mn>
+      </mfrac>
+      <mo>)</mo>
+    </mrow>
+  </mstyle>
+</math>
+
+
+예를 들어, 현재 256MB 힙이 있고 `GOGC = 100 (기본값)` 인 경우 힙이 가득 차면 다음과 같이 증가합니다.
+
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mstyle displaystyle="true">
+    <mn>512</mn>
+    <mi>M</mi>
+    <mi>B</mi>
+    <mo>=</mo>
+    <mn>256</mn>
+    <mi>M</mi>
+    <mi>B</mi>
+    <mo>&#x22C5;</mo>
+    <mrow>
+      <mo>(</mo>
+      <mn>1</mn>
+      <mo>+</mo>
+      <mfrac>
+        <mn>100</mn>
+        <mn>100</mn>
+      </mfrac>
+      <mo>)</mo>
+    </mrow>
+  </mstyle>
+</math>
+
+- `GOGC` 값이 100보다 크면 힙이 더 빨리 커져서 GC에 대한 압력이 감소합니다.
+
+- `GOGC` 값이 100보다 작으면 힙이 느리게 커져 GC에 대한 압력이 증가합니다.
+
+기본값 100은 `just_a_guide`입니다. 프로덕션 부하로 애플리케이션을 프로파일링한 후 고유한 값을 선택해야 합니다.
+
+## 6.5 string과 []bytes
+
+Go에서, `string` 값은 변경할 수 없으며 `[]byte`는 변경할 수 있습니다.
+
+대부분의 프로그램은 `string` 작업을 선호하지만 대부분의 IO는 `[]byte`로 수행됩니다.
+
+가능하다면 `[]byte`에서 `string` 변환을 피하세요. 이는 일반적으로 값으로 `string` 또는 `[]byte` 중 한가지 표현을 선택함을 의미합니다. 네트워크나 디스크에서 데이터를 읽는 경우 종종 `[]byte`가 됩니다.
+
+`bytes` 패키지에는 `strings` 패키지와 동일한 작업 (`Split`, `Compare`, `HasPrefix`, `Trim` 등)이 많이 포함되어 있습니다.
+
+내부적으로, `strings`은 `bytes` 패키지와 동일한 어셈블리 프리미티브를 사용합니다.
+
+## 6.6 맵 키로 []byte 사용
+
+`string`을 맵 키로 사용하는 것이 매우 일반적이지만, 종종 `[]byte`를 사용합니다.
+
+컴파일러는 이 경우에 특별한 최적화를 구현합니다.
+
+```golang
+var m map[string]string
+v, ok := m[string(bytes)]
+```
+
+이렇게 하면 맵 룩업 시에 바이트 슬라이스를 문자열로 변환하지 않아도 됩니다. 다음과 같은 코딩할 경우 작동하지 않는데, 아주 특이하죠.
+
+```golang
+key := string(bytes)
+val, ok := m[key]
+```
+
+> 이게 아직도 사실인지 확인해 봅시다. []byte를 string 맵 키로 사용하는 이 두 가지 방법을 비교하는 벤치마크를 작성해보세요.
+
+
+## 6.7 문자열 연결 피하기
+
+Go 문자열은 불변입니다. 두 개의 문자열을 결합하면 세 번째 문자열이 생성됩니다. 다음 중 가장 빠른 것은 무엇일까요?
+
+```golang
+		s := request.ID
+		s += " " + client.Addr().String()
+		s += " " + time.Now().String()
+		r = s
+```
+
+```golang
+		var b bytes.Buffer
+		fmt.Fprintf(&b, "%s %v %v", request.ID, client.Addr(), time.Now())
+		r = b.String()
+```
+
+```golang
+		r = fmt.Sprintf("%s %v %v", request.ID, client.Addr(), time.Now())
+```
+
+```golang
+		b := make([]byte, 0, 40)
+		b = append(b, request.ID...)
+		b = append(b, ' ')
+		b = append(b, client.Addr().String()...)
+		b = append(b, ' ')
+		b = time.Now().AppendFormat(b, "2006-01-02 15:04:05.999999999 -0700 MST")
+		r = string(b)
+```
+
+```golang
+		var b strings.Builder
+		b.WriteString(request.ID)
+		b.WriteString(" ")
+		b.WriteString(client.Addr().String())
+		b.WriteString(" ")
+		b.WriteString(time.Now().String())
+		r = b.String()
+```
+
+DEMO: `go test -bench=. ./examples/concat`
+
+## 6.8 길이가 알려진 경우, 슬라이스를 미리 할당
+
+`Append`는 편리하지만, 낭비입니다.
+
+슬라이스는 최대 1024개의 요소를 두 배로 늘린 후 그 후 약 25% 증가합니다. 요소를 하나 더 추가한 후에 `b`의 용량은 얼마일까요?
+
+```golang
+func main() {
+	b := make([]int, 1024)
+	b = append(b, 99)
+	fmt.Println("len:", len(b), "cap:", cap(b))
+}
+```
+
+Append 패턴을 사용하면 많은 데이터를 복사하며 많은 가비지를 만들 수 있습니다.
+
+슬라이스의 길이를 미리 알고 있으면, 복사를 피하고, 대상이 정확히 맞는 크기인지 확인하기 위해 대상을 미리 할당합니다. 
+
+**이전**
+
+```golang
+var s []string
+for _, v := range fn() {
+        s = append(s, v)
+}
+return s
+```
+
+**이후**
+
+```golang
+vals := fn()
+s := make([]string, len(vals))
+for i, v := range vals {
+        s[i] = v
+}
+return s
+```
+
+## 6.9 sync.Pool 사용
+
+동기화 패키지는 공통 객체를 재사용하는데 사용되는 `sync.Pool` 타입과 함께 제공됩니다.
+
+`sync.Pool`에는 고정 크기 또는 최대 용량이 없습니다. GC가 발생할 때까지 추가하고 가져와 무조건 비웁니다. 이는 [설계를 따른 것](https://groups.google.com/forum/#!searchin/golang-dev/gc-aware/golang-dev/kJ_R6vYVYHU/LjoGriFTYxMJ)입니다.
+
+> 가비지 콜렉션이 너무 빠르거나 가비지 콜렉션이 너무 늦으면 Pool을 비우기에 적절한 시간은 가비지 콜렉션 중이어야 합니다. 즉, Pool 타입의 세만틱스는 각 가비지 콜렉션에서 비어져야 한다는 것입니다. — 러스 콕스
+
+```golang
+var pool = sync.Pool{New: func() interface{} { return make([]byte, 4096) }}
+
+func fn() {
+	buf := pool.Get().([]byte) // takes from pool or calls New
+	// do work
+	pool.Put(buf) // returns buf to the pool
+}
+```
+
+## 6.10 연습문제
+
+- `godoc`(또는 다른 프로그램)을 사용해서 `GODEBUG=gctrace=1`을 사용한 `GOGC` 변경 내용을 관찰하세요.
+
+- byte의 string(byte) 맵 키를 벤치마크해보세요.
+
+- 서로 다른 연결(concat) 방법의 메모리 할당을 벤치마크해보세요
