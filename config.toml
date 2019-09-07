@@ -19,9 +19,8 @@ disqusOnDemand = false  # Load Disqus comments on click
 customCSS = ["css/style-kiss.css", "css/custom.css", "css/syntax-ocean.css"]
 
 [params.rss]
-
 includeContent = true # Includes whole content in rss
-authorName = "Aron Yoon" # Site author's full name
+authorName = "Youngpil Yoon" # Site author's full name
 authorEmail = "yngpil.yoon@gmail.com"
 
 [params.info]
