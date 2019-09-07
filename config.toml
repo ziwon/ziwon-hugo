@@ -16,7 +16,7 @@ enableRobotsTXT = true
 disqusOnDemand = false  # Load Disqus comments on click
 
 [params.assets]
-customCSS = ["css/style-kiss.css", "css/custom.css", "css/syntax-atom-one-dark.css"]
+customCSS = ["css/style-kiss.css", "css/custom.css", "css/syntax-github.css"]
 
 [params.rss]
 
