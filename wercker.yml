@@ -11,7 +11,7 @@ build:
         version: "0.50"
         config: config.toml
         flags: --buildDrafts=false
-        theme: kiss
+        theme: ["hugo-notice", "kiss"]
   after-steps:
     - install-packages:
         packages: git curl

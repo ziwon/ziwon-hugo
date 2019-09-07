@@ -1,7 +1,7 @@
 baseurl = "https://ziwon.github.io/"
 languageCode = "en"
 title = "人生は短くて使える時間も限られてる。"
-theme = "kiss"
+theme = ["hugo-notice", "kiss"]
 copyright = "<a href=\"https://github.com/ziwon\">Youngpil Yoon</a>"
 googleAnalytics = "UA-129419926-1"
 disqusShortname = "ziwon"
@@ -16,7 +16,7 @@ enableRobotsTXT = true
 disqusOnDemand = false  # Load Disqus comments on click
 
 [params.assets]
-customCSS = ["css/style-kiss.css", "css/custom.css", "css/syntax-github.css"]
+customCSS = ["css/style-kiss.css", "css/custom.css", "css/syntax-nord.css"]
 
 [params.rss]
 
