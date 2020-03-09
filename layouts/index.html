@@ -2,10 +2,13 @@
 {{ partial "nav" . }}
 <section class="section">
   <div class="container">
-    {{ $paginator := .Paginate (where .Pages "Params.hidden" "ne" true) }}
+    {{- $pctx := . -}}
+    {{- if .IsHome -}}{{ $pctx = .Site }}{{- end -}}
+    {{- $pages := $pctx.RegularPages -}}
+    {{ $paginator := .Paginate (where $pages "Params.hidden" "ne" true) }}
     {{ range sort .Paginator.Pages }}
     <article>
-      <h1 class="title"><a href="{{ .Permalink }}">{{ .Title }}</a>{{ if .Draft }} ::Draft{{ end }}</h1>
+      <h1 class="title"><a href="{{ .Permalink }}">{{ .Title }}{{ partial "taxonomies_count" . }}</a>{{ if .Draft }} ::Draft{{ end }}</h1>
     </article>
     {{ end }}
   </div>

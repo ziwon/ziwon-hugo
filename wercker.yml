@@ -8,7 +8,7 @@ build:
         code: |
             git submodule update --init --recursive
     - arjen/hugo-build:
-        version: "0.50"
+        version: "0.65.3"
         config: config.toml
         flags: --buildDrafts=false
         theme: ["hugo-notice", "kiss"]

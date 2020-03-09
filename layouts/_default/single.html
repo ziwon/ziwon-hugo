@@ -24,13 +24,13 @@
     <!-- Post Pagination -->
     <nav class="post-nav">
         {{ with .NextInSection }}
-        <a class="prev" href="{{ .URL }}">
+        <a class="prev" href="{{ .Permalink }}">
             < <span class="prev-text nav-default">{{ .Title }}</span>
                 <span class="prev-text nav-mobile">{{ T "prevPost" }}</span>
         </a>
         {{- end }}
         {{ with .PrevInSection }}
-        <a class="next" href="{{ .URL }}">
+        <a class="next" href="{{ .Permalink }}">
             <span class="next-text nav-default">{{ .Title }}</span>
             <span class="next-text nav-mobile">{{ T "nextPost" }}</span>
             >

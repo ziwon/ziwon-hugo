@@ -1,0 +1,19 @@
+{{ partial "header" . }}
+{{ partial "nav" . }}
+<section class="section">
+  <div class="container">
+    {{ $paginator := .Paginate (where .Data.Pages "Params.hidden" "ne" true) }}
+    {{ range sort .Paginator.Pages }}
+    <article>
+      <div class="tags is-6 is-pulled-right">
+        {{ if .Params.tags }}
+        {{ partial "tags" .Params.tags }}
+        {{ end }}
+      </div>
+      <h1 class="title"><a href="{{ .Permalink }}">{{ .Title }}</a>{{ if .Draft }} ::Draft{{ end }}</h1>
+    </article>
+    {{ end }}
+  </div>
+</section>
+{{ partial "pager" . }}
+{{ partial "footer" . }}

@@ -1,8 +1,8 @@
 baseurl = "https://ziwon.github.io/"
 languageCode = "en"
-title = "人生は短くて使える時間も限られてる。"
+title = "ziwon.github.io"
 theme = ["hugo-notice", "kiss"]
-copyright = "<a href=\"https://github.com/ziwon\">Youngpil Yoon</a>"
+copyright = "<a href=\"https://github.com/ziwon\">Yeongpil Yoon</a>"
 googleAnalytics = "UA-129419926-1"
 disqusShortname = "ziwon"
 
@@ -20,7 +20,7 @@ customCSS = ["css/style-kiss.css", "css/custom.css", "css/syntax-github.css"]
 
 [params.rss]
 includeContent = true # Includes whole content in rss
-authorName = "Youngpil Yoon" # Site author's full name
+authorName = "Yeongpil Yoon" # Site author's full name
 authorEmail = "yngpil.yoon@gmail.com"
 
 [params.info]
@@ -28,6 +28,7 @@ adsense = "" # Adsense ID (ID only, without ca-pub-)
 enableSocial = false # Adds OpenGraph and Twitter cards
 homeTitle = "" # Title for home page
 poweredby = true # Adds powered by Hugo and Kiss below Copyright section
+copyCode = true
 related = true # Includes related articles
 
 [params.opengraph.facebook]
@@ -52,3 +53,10 @@ tag ="tags"
 
 [blackfriday]
 hrefTargetBlank = true
+
+#[params.sections_left]
+#"/tags" = "Tags"
+#"https://example.com" = "Example"
+
+#[params.sections_right]
+#"http://example.com/special-page" = "Example"

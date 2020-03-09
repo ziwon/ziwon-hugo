@@ -1,6 +1,6 @@
 +++
 date          = "2019-09-03T20:07:00+09:00"
-draft         = false
+draft         = true
 title         = "[번역] 고성능 Go Workshop"
 tags          = ["Go", "Golang", "High Performance"]
 categories    = ["Programming"]
@@ -1175,9 +1175,7 @@ defer profile.Start(profile.MemProfile).Stop()
 2018/08/25 14:41:15 profile: memory profiling disabled, /var/folders/by/3gf34_z95zg05cyj744_vhx40000gn/T/profile312088211/mem.pprof
 ```
 
-<div>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%px" height="100%px">
-<script type="text/ecmascript">
+<div><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%px" height="100%px"><script type="text/ecmascript">
 /**
  *  SVGPan library 1.2.2
  * ======================

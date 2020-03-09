@@ -1,6 +1,6 @@
 +++
 date          = "2019-03-07T09:04:00+09:00"
-draft         = false
+draft         = true
 title         = "Cosmos란 무엇인가"
 tags          = ["blockchain", "cosmos", "tendermint"]
 categories    = ["blockchain"]
