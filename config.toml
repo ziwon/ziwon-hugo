@@ -54,9 +54,9 @@ tag ="tags"
 [blackfriday]
 hrefTargetBlank = true
 
-#[params.sections_left]
-#"/tags" = "Tags"
-#"https://example.com" = "Example"
+[params.sections_left]
+"http://keybase.io/ziwon" = "keybase"
 
-#[params.sections_right]
-#"http://example.com/special-page" = "Example"
+[params.sections_right]
+"https://desync.quip.com" = "docs"
+
