@@ -60,3 +60,5 @@ hrefTargetBlank = true
 [params.sections_right]
 "https://desync.quip.com" = "docs"
 
+[markup.goldmark.renderer]
+unsafe= true
