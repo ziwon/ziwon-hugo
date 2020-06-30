@@ -43,7 +43,7 @@ page = "" # Twitter Page username. If not set, params.social.twitter will be use
 twitter = "theluno"
 github = "ziwon"
 email = "yngpil.yoon@gmail.com"
-instagram = "ziwon.y"
+instagram = "yngpil"
 
 [params.social.config]
 platforms = ["twitter","github","email","instagram"]
